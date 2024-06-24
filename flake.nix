@@ -3,10 +3,20 @@
     description = "Server Flake";
 
     inputs = {
-        nixpkgs.url = "nixpkgs/nixos-23.11";
+        nixpkgs.url = "nixpkgs/nixos-24.05";
+        nixpkgs-23-11.url = "nixpkgs/nixos-23.11";
         nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
-        home-manager.url = "github:nix-community/home-manager/release-23.11";
+	nur.url = "github:nix-community/NUR";
+
+	nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+	nixos-06cb-009a-fingerprint-sensor = {
+            url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
+            inputs.nixpkgs.follows = "nixpkgs-23-11";
+        };
+
+        home-manager.url = "github:nix-community/home-manager/release-24.05";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
         nixos-wsl = {
@@ -24,7 +34,7 @@
         };
 
         nixvim = {
-            url = "github:nix-community/nixvim/nixos-23.11";
+            url = "github:nix-community/nixvim/nixos-24.05";
             inputs.nixpkgs.follows = "nixpkgs";
         };
     };
@@ -41,7 +51,7 @@
               pkgs = nixpkgs.legacyPackages.${system};
               pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
           in 
-          nixpkgs.lib.nixosSystem {
+          lib.nixosSystem {
               inherit system;
               specialArgs = {
                   inherit inputs;
@@ -63,19 +73,23 @@
               pkgs = nixpkgs.legacyPackages.${system};
               pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
           in 
-          nixpkgs.lib.nixosSystem {
+          lib.nixosSystem {
               inherit system;
               specialArgs = {
                   inherit inputs;
                   inherit pkgs-unstable;
               };
               modules = [
-                  inputs.disko.nixosModules.default
-                  (import ./hosts/lixos/disko.nix)
+                  #inputs.disko.nixosModules.default
+                  #(import ./hosts/lixos/disko.nix)
+		  inputs.nur.nixosModules.nur
+		  inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t470s
+		  inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
+                  inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
 
-                  inputs.impermanence.nixosModules.impermanence
+                  #inputs.impermanence.nixosModules.impermanence
 
-                  ./hosts/lixos/configuration.nix 
+                  ./hosts/lixos
                   inputs.nixvim.nixosModules.nixvim
               ];
           };
@@ -84,8 +98,6 @@
             system = "aarch64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
             pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-        in
-        nixpkgs.lib.nixosSystem {
             inherit system;
             specialArgs = {
                 inherit inputs;
@@ -100,8 +112,8 @@
               ./hosts/nixpi/configuration.nix 
               inputs.nixvim.nixosModules.nixvim
             ];
-        };
-    }; */
+        }; */
+    }; 
 
       #homeConfigurations = {
       #   osmo = home-manager.lib.homeManagerConfiguration {
