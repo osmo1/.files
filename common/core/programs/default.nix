@@ -7,6 +7,7 @@
             tmux
             zip
     	    unzip
+	    tree
         ])
 
         ++

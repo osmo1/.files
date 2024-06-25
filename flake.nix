@@ -46,21 +46,18 @@
           inherit (nixpkgs) lib;
 	  configLib = import ./lib { inherit lib; };
 	  nixosModules = import ./modules/nixos;
-	  specialArgs = { inherit inputs outputs configLib nixpkgs; };
+	  #normalArgs = { inherit inputs outputs configLib; };
       in {
       nixosConfigurations = {
-          none =	
+          /*none =	
           let
               system = "x86_64-linux";
               pkgs = nixpkgs.legacyPackages.${system};
-              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+              #pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
           in 
           lib.nixosSystem {
               inherit system;
-              specialArgs = {
-                  inherit inputs;
-                  inherit pkgs-unstable;
-              };
+              #inherit specialArgs;
               modules = [
                   inputs.disko.nixosModules.default
                   (import ./hosts/none/disko.nix)
@@ -70,19 +67,17 @@
                   ./hosts/none/configuration.nix 
                   inputs.nixvim.nixosModules.nixvim
               ];
-          };
+          };*/
           lixos =	
           let
               system = "x86_64-linux";
               pkgs = nixpkgs.legacyPackages.${system};
-              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	      pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
           in 
           lib.nixosSystem {
               inherit system;
-              specialArgs = {
-                  inherit inputs;
-                  inherit pkgs-unstable;
-              };
+ /*normalArgs*/
+	      specialArgs = { inherit pkgs pkgs-unstable configLib inputs; };
               modules = [
                   #inputs.disko.nixosModules.default
                   #(import ./hosts/lixos/disko.nix)

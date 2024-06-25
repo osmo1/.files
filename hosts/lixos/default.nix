@@ -95,7 +95,7 @@
         packages = with pkgs; [
             kate
             wireguard-tools
-	    (librewolf.override { cfg.enablePlasmaBrowserIntegration = true; })
+	    (librewolf-wayland.override {  cfg.enablePlasmaBrowserIntegration = true; })
 	    anki
 	    bitwarden
         ];
@@ -221,9 +221,6 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
-  # Install firefox.
-  programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
