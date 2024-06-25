@@ -3,13 +3,15 @@
 {
     imports =
     [
-    	../../common/core
         ./hardware-configuration.nix
-        #../../modules/nixvim.nix
+    	../../common/core
+	../../common/optional/plasma
+	../../common/optional/printing.nix
     ];
 
     system.stateVersion = "24.05";
 
+    #TODO: Find a better place for this
     boot = {
     	loader = {
 	    systemd-boot.enable = true;
@@ -38,68 +40,9 @@
 	];
 	loader.timeout = 0;
     };
-    /*boot.initrd.postDeviceCommands = lib.mkAfter ''
-        mkdir /btrfs_tmp
-        mount /dev/root_vg/root /btrfs_tmp
-        if [[ -e /btrfs_tmp/root ]]; then
-            mkdir -p /btrfs_tmp/old_roots
-            timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
-            mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
-        fi
-
-        delete_subvolume_recursively() {
-            IFS=$'\n'
-            for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-          delete_subvolume_recursively "/btrfs_tmp/$i"
-            done
-            btrfs subvolume delete "$1"
-        }
-
-        for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +14); do
-            delete_subvolume_recursively "$i"
-        done
-
-        btrfs subvolume create /btrfs_tmp/root
-        umount /btrfs_tmp
-    '';
-
-    fileSystems."/persist".neededForBoot = true;
-    environment.persistence."/persist/system" = {
-        hideMounts = true;
-        directories = [
-            "/etc/nixos"
-            "/etc/ssh"
-            "/var/log"
-            "/var/lib/nixos"
-            "/var/lib/samba"
-            "/var/lib/docker"
-            "/var/lib/systemd/coredump"
-            "/var/lib/nixos-containers/"
-            # { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
-        ];
-        files = [
-            "/etc/machine-id"
-            # { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
-        ];
-    };*/
 
     networking.hostName = "lixos";
-    time.timeZone = "Europe/Helsinki";
 
-    
-
-    users.users.osmo = {
-        isNormalUser = true;
-        initialPassword = "osmo";
-        extraGroups = [ "networkmanager" "wheel" ];
-        packages = with pkgs; [
-            kate
-            wireguard-tools
-	    (librewolf-wayland.override {  cfg.enablePlasmaBrowserIntegration = true; })
-	    anki
-	    bitwarden
-        ];
-    };
 
     /*systemd.services.fprintd = {
         wantedBy = [ "multi-user.target" ];
@@ -136,112 +79,4 @@
 	session required pam_env.so conffile=/etc/pam/environment readenv=0
 	session required pam_unix.so
     '';*/
-
-
-
-#    home-manager = {
-#	extraSpecialArgs = {inherit inputs;};
-#	users = {
-#	    "osmo" = import ./home.nix;
-#	};
-#    };
-    
-    /*systemd.tmpfiles.rules = [
-        "d /persist/home 0777 root root -"
-        "d /persist/home/osmo 0770 osmo users -"
-    ];*/
-
-    environment.sessionVariables = {
-        FLAKE = "/home/osmo/.files";
-    };
- 
-    security.sudo.extraConfig = ''
-	      Defaults lecture = never
-    '';
-
-    nix.settings.experimental-features = [ "nix-command" "flakes"];
-
-  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "fi_FI.UTF-8";
-    LC_IDENTIFICATION = "fi_FI.UTF-8";
-    LC_MEASUREMENT = "fi_FI.UTF-8";
-    LC_MONETARY = "fi_FI.UTF-8";
-    LC_NAME = "fi_FI.UTF-8";
-    LC_NUMERIC = "fi_FI.UTF-8";
-    LC_PAPER = "fi_FI.UTF-8";
-    LC_TELEPHONE = "fi_FI.UTF-8";
-    LC_TIME = "fi_FI.UTF-8";
-  };
-
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    xkb = {
-        layout = "fi";
-    	variant = "winkeys";
-    };
-  };
-
-  # Configure console keymap
-  console.keyMap = "fi";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = true;
-
 }
