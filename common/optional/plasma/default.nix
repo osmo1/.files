@@ -1,4 +1,4 @@
-{ configLib, ... }:
+{ configLib, pkgs, ... }:
 {
   imports = (configLib.scanPaths ./.)
   	++ [ ../sound.nix ];
@@ -8,7 +8,10 @@
   services.xserver.enable = false;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm = {
+  	enable = true;
+	wayland.enable = true;
+  };
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
@@ -18,4 +21,8 @@
     	variant = "winkeys";
     };
   };
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    oxygen
+  ];
+
 }

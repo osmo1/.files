@@ -19,6 +19,12 @@
         home-manager.url = "github:nix-community/home-manager/release-24.05";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+        plasma-manager = {
+            url = "github:nix-community/plasma-manager";
+            inputs.nixpkgs.follows = "nixpkgs";
+      	    inputs.home-manager.follows = "home-manager";
+        };
+
         nixos-wsl = {
             url = "github:nix-community/NixOS-WSL";
             inputs.nixpkgs.follows = "nixpkgs";
@@ -46,7 +52,6 @@
           inherit (nixpkgs) lib;
 	  configLib = import ./lib { inherit lib; };
 	  nixosModules = import ./modules/nixos;
-	  #normalArgs = { inherit inputs outputs configLib; };
       in {
       nixosConfigurations = {
           /*none =	
@@ -73,11 +78,11 @@
               system = "x86_64-linux";
               pkgs = nixpkgs.legacyPackages.${system};
 	      pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	      specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
           in 
           lib.nixosSystem {
               inherit system;
- /*normalArgs*/
-	      specialArgs = { inherit pkgs pkgs-unstable configLib inputs; };
+	      inherit specialArgs;
               modules = [
                   #inputs.disko.nixosModules.default
                   #(import ./hosts/lixos/disko.nix)
@@ -85,6 +90,12 @@
 		  inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t470s
 		  inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
                   inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
+
+		  home-manager.nixosModules.home-manager{
+			home-manager.extraSpecialArgs = specialArgs;
+          	  }
+
+		  inputs.plasma-manager.homeManagerModules.plasma-manager
 
                   #inputs.impermanence.nixosModules.impermanence
 

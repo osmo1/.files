@@ -1,7 +1,9 @@
-{ inputs, outputs, lib, configLib, ... }: {
-  imports = (configLib.scanPaths ./.);
-    #++ [ inputs.home-manager.nixosModules.home-manager ]
+{ inputs, outputs, lib, pkgs, configLib, ... }: {
+  imports = (configLib.scanPaths ./.)
+    ++ [ inputs.home-manager.nixosModules.home-manager ];
     #++ (builtins.attrValues outputs.nixosModules);
+  
+  home.packages = [ pkgs.lazygit ];
 
   security.sudo.extraConfig = ''
     Defaults timestamp_timeout=120 # only ask for password every 2h
@@ -13,7 +15,7 @@
   
   time.timeZone = lib.mkDefault "Europe/Helsinki";
 
-  i18n.defaultLocale = lib.mkDefault "en_FI.UTF-8";
+  i18n.defaultLocale = lib.mkDefault "fi_FI.UTF-8";
 
   i18n.extraLocaleSettings = lib.mkDefault {
     LC_ADDRESS = "fi_FI.UTF-8";
@@ -24,7 +26,7 @@
     LC_NUMERIC = "fi_FI.UTF-8";
     LC_PAPER = "fi_FI.UTF-8";
     LC_TELEPHONE = "fi_FI.UTF-8";
-    LC_TIME = "en_FI.UTF-8";
+    LC_TIME = "fi_FI.UTF-8";
   };
 
   environment.sessionVariables = {
