@@ -3,6 +3,7 @@
 {
     imports =
     [
+    	../../common/core
         ./hardware-configuration.nix
         #../../modules/nixvim.nix
     ];
@@ -93,6 +94,10 @@
         extraGroups = [ "networkmanager" "wheel" ];
         packages = with pkgs; [
             kate
+            wireguard-tools
+	    (librewolf.override { cfg.enablePlasmaBrowserIntegration = true; })
+	    anki
+	    bitwarden
         ];
     };
 
@@ -149,24 +154,6 @@
     environment.sessionVariables = {
         FLAKE = "/home/osmo/.files";
     };
-    environment.systemPackages = 
-        (with pkgs; [
-            neovim 
-            git
-            tmux
-            wireguard-tools
-            zip
-	    (librewolf.override { cfg.enablePlasmaBrowserIntegration = true; })
-	    anki
-	    bitwarden
-        ])
-
-        ++
-
-        (with pkgs-unstable; [
-            nh
-        ]);
-
  
     security.sudo.extraConfig = ''
 	      Defaults lecture = never

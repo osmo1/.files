@@ -42,7 +42,9 @@
 
     outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... } @ inputs: 
       let
-          lib = nixpkgs.lib;
+          inherit (nixpkgs) lib;
+	  configLib = import ./lib { inherit lib; };
+	  nixosModules = import ./modules/nixos;
       in {
       nixosConfigurations = {
           none =	
