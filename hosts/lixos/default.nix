@@ -4,6 +4,7 @@
     imports =
     [
         ./hardware-configuration.nix
+        ./home.nix
     	../../common/core
 	../../common/optional/plasma
 	../../common/optional/printing.nix

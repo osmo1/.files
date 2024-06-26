@@ -3,7 +3,6 @@
     ++ [ inputs.home-manager.nixosModules.home-manager ];
     #++ (builtins.attrValues outputs.nixosModules);
   
-  home.packages = [ pkgs.lazygit ];
 
   security.sudo.extraConfig = ''
     Defaults timestamp_timeout=120 # only ask for password every 2h
@@ -11,7 +10,10 @@
     # Defaults env_keep + =SSH_AUTH_SOCK
   '';
 
-  #home-manager.extraSpecialArgs = { inherit inputs outputs; };
+  home-manager.extraSpecialArgs = { 
+  	inherit inputs outputs;
+  	plasma-manager = inputs.plasma-manager;
+  };
   
   time.timeZone = lib.mkDefault "Europe/Helsinki";
 
