@@ -9,5 +9,6 @@
 	    thunderbird
 	    whatsapp-for-linux
 	    libsForQt5.dragon
+	    capitaine-cursors
         ];
 }
