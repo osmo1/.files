@@ -1,7 +1,11 @@
 { configLib, pkgs, ... }:
 {
-  imports = (configLib.scanPaths ./.)
-  	++ [ ../sound.nix ];
+  /*imports = (configLib.scanPaths ./.)
+  	++ [ ../sound.nix ];*/
+  imports = [
+	../sound.nix
+	./packages.nix
+  ];
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.

@@ -14,5 +14,6 @@
 
         (with pkgs-unstable; [
             nh
+	    fzf
         ]);
 }
