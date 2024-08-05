@@ -1,0 +1,1 @@
+sudo nix run --extra-experimental-features 'nix-command flakes'  'github:nix-community/disko#disko-install' -- --write-efi-boot-entries --flake .#testeri --disk main /dev/vda --disk secondary /dev/vdb

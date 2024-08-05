@@ -17,7 +17,7 @@
   
   time.timeZone = lib.mkDefault "Europe/Helsinki";
 
-  i18n.defaultLocale = lib.mkDefault "fi_FI.UTF-8";
+  i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
 
   i18n.extraLocaleSettings = lib.mkDefault {
     LC_ADDRESS = "fi_FI.UTF-8";

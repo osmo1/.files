@@ -132,6 +132,34 @@
                 inputs.nixvim.nixosModules.nixvim
             ];
         };
+
+	testeri =
+          let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
+	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
+            inherit system;
+	        inherit specialArgs;
+            modules = [
+                ./hosts/testeri
+
+                inputs.disko.nixosModules.default 
+		{
+			disko.devices.disk.main.device = "/dev/vda";
+			disko.devices.disk.secondary.device = "/dev/vdb";
+		}
+                (import ./hosts/testeri/disko.nix)
+                inputs.impermanence.nixosModules.impermanence
+
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+            ];
+        };
+
         };
     };
 }
