@@ -1,17 +1,17 @@
 {
 
-    description = "Server Flake";
+    description = "My all purpose flake";
 
     inputs = {
         nixpkgs.url = "nixpkgs/nixos-24.05";
         nixpkgs-23-11.url = "nixpkgs/nixos-23.11";
         nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
-	nur.url = "github:nix-community/NUR";
+	    nur.url = "github:nix-community/NUR";
 
-	nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+	    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-	nixos-06cb-009a-fingerprint-sensor = {
+	    nixos-06cb-009a-fingerprint-sensor = {
             url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
             inputs.nixpkgs.follows = "nixpkgs-23-11";
         };
@@ -46,90 +46,120 @@
     };
 
 
-    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... } @ inputs: 
+    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... } @ inputs:
       let
-	  inherit (self) outputs;
-          inherit (nixpkgs) lib;
-	  configLib = import ./lib { inherit lib; };
-	  nixosModules = import ./modules/nixos;
+	    inherit (self) outputs;
+        inherit (nixpkgs) lib;
+        configLib = import ./lib { inherit lib; };
+        nixosModules = import ./modules/nixos;
       in {
       nixosConfigurations = {
-          /*none =	
+        # Desktops
+          /*none =
           let
-              system = "x86_64-linux";
-              pkgs = nixpkgs.legacyPackages.${system};
-              #pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-          in 
-          lib.nixosSystem {
-              inherit system;
-              #inherit specialArgs;
-              modules = [
-                  inputs.disko.nixosModules.default
-                  (import ./hosts/none/disko.nix)
-
-                  inputs.impermanence.nixosModules.impermanence
-
-                  ./hosts/none/configuration.nix 
-                  inputs.nixvim.nixosModules.nixvim
-              ];
-          };*/
-          lixos =	
-          let
-              system = "x86_64-linux";
-              pkgs = nixpkgs.legacyPackages.${system};
-	      pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	      specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
-          in 
-          lib.nixosSystem {
-              inherit system;
-	      inherit specialArgs;
-              modules = [
-                  #inputs.disko.nixosModules.default
-                  #(import ./hosts/lixos/disko.nix)
-		  inputs.nur.nixosModules.nur
-		  inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t470s
-		  inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
-                  inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
-
-		  home-manager.nixosModules.home-manager{
-			home-manager.extraSpecialArgs = specialArgs;
-			home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
-          	  }
-
-
-                  #inputs.impermanence.nixosModules.impermanence
-
-                  ./hosts/lixos
-                  inputs.nixvim.nixosModules.nixvim
-              ];
-          };
-    /* nixpi = 
-        let
-            system = "aarch64-linux";
+            system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
             pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+            specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
+              inherit system;
+	          inherit specialArgs;
+              modules = [
+                ./hosts/none
+                #inputs.disko.nixosModules.default
+                #(import ./hosts/none/disko.nix)
+                #inputs.impermanence.nixosModules.impermanence
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+
+                home-manager.nixosModules.home-manager{
+                    home-manager.extraSpecialArgs = specialArgs;
+                    home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+                }
+              ];
+          };*/
+          lixos =
+          let
+              system = "x86_64-linux";
+              pkgs = nixpkgs.legacyPackages.${system};
+              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
+              inherit system;
+	          inherit specialArgs;
+              modules = [
+                ./hosts/lixos
+                #inputs.disko.nixosModules.default
+                #(import ./hosts/lixos/disko.nix)
+                #inputs.impermanence.nixosModules.impermanence
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+
+                home-manager.nixosModules.home-manager{
+                    home-manager.extraSpecialArgs = specialArgs;
+                    home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+                }
+
+                inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t470s
+                inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.open-fprintd
+                inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
+              ];
+          };
+          # Servers
+          serveri =
+          let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
+	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
             inherit system;
-            specialArgs = {
-                inherit inputs;
-                inherit pkgs-unstable;
-            };
+	        inherit specialArgs;
             modules = [
-              inputs.disko.nixosModules.default
-              (import ./hosts/nixpi/disko.nix)
+                ./hosts/serveri
 
-              inputs.impermanence.nixosModules.impermanence
+                inputs.disko.nixosModules.default
+                (import ./hosts/serveri/disko.nix)
+                inputs.impermanence.nixosModules.impermanence
 
-              ./hosts/nixpi/configuration.nix 
-              inputs.nixvim.nixosModules.nixvim
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
             ];
-        }; */
-    }; 
+        };
 
-      #homeConfigurations = {
-      #   osmo = home-manager.lib.homeManagerConfiguration {
-      #     inherit pkgs;
-      #     modules = [ ./home.nix ];
-      #   };
-      #};
+	testeri =
+          let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
+	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
+            inherit system;
+	        inherit specialArgs;
+            modules = [
+                ./hosts/testeri
+
+                inputs.disko.nixosModules.default 
+		{
+			disko.devices.disk.main.device = "/dev/vda";
+			disko.devices.disk.secondary.device = "/dev/vdb";
+		}
+                (import ./hosts/testeri/disko.nix)
+                inputs.impermanence.nixosModules.impermanence
+
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+            ];
+        };
+
+        };
     };
 }
