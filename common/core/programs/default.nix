@@ -9,6 +9,7 @@
     	    unzip
 	    tree
 	    sops
+	    git-agecrypt
         ])
 
         ++
