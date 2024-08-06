@@ -17,6 +17,7 @@ in
 		};
 		secrets = {
 			test = {};
+			"syncthing/testeri/key" = {};
 		};
 	};
       environment.persistence."/persist" = {
