@@ -5,6 +5,9 @@
     ++ [
     	../../common/core
 	      ../../common/optional/impermanence.nix
+	      ../../common/optional/notes.nix
+	      #../../common/optional/sddm.nix
+	#../../common/optional/dwl
       #../../common/optional/podman.nix
       #../../common/optional/samba.nix
     ];
@@ -23,9 +26,10 @@
 	};	
 	initrd.luks.devices.crypted.device = "/dev/disk/by-partlabel/disk-secondary-encrypted-root";
     };
+
   services.spice-vdagentd.enable = true; 
     users.users = {
-        osmo.openssh.authorizedKeys.keys = ["ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHJ/M6rFAFiOJjaFdLsltTsNXQGwQQloLbmgPG4K5VcxAqXI5Mztjyobh8L3R1oasO5lnsRGhrc0YvoLeuMga3YpAEtnew1UK+YwmM6otNGZd+2rqpyBWEjR2Cgt71bimT5lXf5xHfxjBcw6UbBvlDEj6tgi3mJusx+6hPcWSC4uj1wOA== osmo@osmo-masiina"];
+        osmo.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJY+rfJIZgXJXSso1p6P3eDUplsG51j1tZ5K8D0f5bpM osmo@osmo.zip"];
         #monitor.openssh.authorizedKeys.keys = ["ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAGuCGoEj++ljHdu52zkWdZcizDCm+ljQEeuS5JSKhpDzqU3nOSLyNUKHkqJhoy9oUips+Lq4BV98PYDex8yiEFuIQFr9ZNq+0bdXPrwfonHtaqskBNWVqHyo41dD6pRI91z9WKc6Gm80HRUVVOrdbam9cyt+/V9HJALobdVglHF82HkQg== osmo@serveri"];
     };
 

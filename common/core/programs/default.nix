@@ -8,6 +8,7 @@
             zip
     	    unzip
 	    tree
+	    sops
         ])
 
         ++
