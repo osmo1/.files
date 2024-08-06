@@ -23,7 +23,7 @@
     guiAddress = "192.168.11.178:8384";
     settings = {
       devices = {
-     #   "serveri" = { id = "(builtins.readFile config.sops.secrets.'syncthing/serveri/id'.path)"; };
+        "serveri" = { id = (builtins.readFile ../../.secrets/syncthing/serveri-id); };
       };
       folders = {
         "koulu" = {         # Name of folder in Syncthing, also the folder ID
@@ -33,7 +33,8 @@
       };
       gui = {
         user = "osmo";
-	password = "(builtins.readFile config.sops.secrets.'syncthing/password'.path)";
+	password = "osmo";
+	#password = (builtins.readFile ../../.secrets/syncthing-password);
       };
     };
   };
