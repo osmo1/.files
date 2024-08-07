@@ -43,10 +43,18 @@
             url = "github:nix-community/nixvim/nixos-24.05";
             inputs.nixpkgs.follows = "nixpkgs";
         };
+	sops-nix = {
+	  url = "github:mic92/sops-nix";
+	  inputs.nixpkgs.follows = "nixpkgs";
+	};
+    	secrets = {
+	  url = "git+ssh://git@codeberg.org/osmo1/.secrets.git?ref=main&shallow=1";
+	  flake = false;
+	};
     };
 
 
-    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... } @ inputs:
+    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, ... } @ inputs:
       let
 	    inherit (self) outputs;
         inherit (nixpkgs) lib;
@@ -153,7 +161,6 @@
 		}
                 (import ./hosts/testeri/disko.nix)
                 inputs.impermanence.nixosModules.impermanence
-
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim

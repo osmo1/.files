@@ -8,6 +8,8 @@
             zip
     	    unzip
 	    tree
+	    sops
+	    git-agecrypt
         ])
 
         ++

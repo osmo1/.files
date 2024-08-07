@@ -1,0 +1,5 @@
+[config]
+".secrets/syncthing/serveri-id" = ["age17y9h3jjnztqcn9nmy47v42zgs5y54q2qpeyn60zd2h7fl7cg8ptsh4cfz5"]
+"test.txt" = ["age17y9h3jjnztqcn9nmy47v42zgs5y54q2qpeyn60zd2h7fl7cg8ptsh4cfz5"]
+".secrets/syncthing-password" = ["age17y9h3jjnztqcn9nmy47v42zgs5y54q2qpeyn60zd2h7fl7cg8ptsh4cfz5"]
+".secrets/syncthing/password" = ["age17y9h3jjnztqcn9nmy47v42zgs5y54q2qpeyn60zd2h7fl7cg8ptsh4cfz5"]

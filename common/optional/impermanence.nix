@@ -124,6 +124,7 @@
       environment.persistence."/persist" = {
 	    directories = [
 	      "/etc/nixos"
+	      "/etc/ssh"
 	      "/var/lib/nixos"
 	      #"/home/osmo/"
 	    ];
