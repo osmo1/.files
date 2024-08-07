@@ -1,5 +1,5 @@
-{ config, ... }: {
-  sops.secrets = {
+{ config, pkgs, ... }: {
+  /*sops.secrets = {
 	"syncthing/${config.networking.hostName}/key" = {
 		path = "/home/osmo/.config/syncthing/key.pem";
 		owner = config.users.users.osmo.name;
@@ -23,7 +23,7 @@
     guiAddress = "192.168.11.178:8384";
     settings = {
       devices = {
-        "serveri" = { id = (builtins.readFile ../../.secrets/syncthing/serveri-id); };
+        "serveri" = { id = builtins.readFile ../../.secrets/syncthing/serveri-id; };
       };
       folders = {
         "koulu" = {         # Name of folder in Syncthing, also the folder ID
@@ -38,5 +38,6 @@
       };
     };
   };
-    networking.firewall.allowedTCPPorts = [ 8384 ];
+    #networking.firewall.allowedTCPPorts = [ 8384 ];*/
+        users.users.osmo.packages = with pkgs; [syncthingtray];
 }
