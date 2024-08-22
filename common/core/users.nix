@@ -3,6 +3,9 @@ let
   secretsPath = builtins.toString inputs.secrets;
 in
 {
+    imports = [
+      ../../.secrets/password.nix
+    ];
     sops.secrets.password = {
 	neededForUsers = true;
 	path = "/persist/run/secrets-for-users/password";
