@@ -5,10 +5,9 @@
     ++ [
     	../../common/core
 	      ../../common/optional/impermanence.nix
-	      ../../common/optional/notes.nix
+	      ../../common/optional/podman.nix
 	      #../../common/optional/sddm.nix
 	#../../common/optional/dwl
-      #../../common/optional/podman.nix
       #../../common/optional/samba.nix
     ];
 
