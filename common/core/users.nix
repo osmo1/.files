@@ -1,4 +1,4 @@
-{ config, secrets, inputs, ... }:
+{ config, secrets, inputs, lib, configVars, ... }:
 let
   secretsPath = builtins.toString inputs.secrets;
 in
@@ -6,10 +6,7 @@ in
     imports = [
       ../../.secrets/password.nix
     ];
-    sops.secrets.password = {
-	neededForUsers = true;
-	path = "/persist/run/secrets-for-users/password";
-    };
+    
     users = {
         mutableUsers = false;
     	users.osmo = {
