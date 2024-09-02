@@ -479,10 +479,10 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1722956010,
-        "narHash": "sha256-AZ+PTSmPbFla3BhGOj9Pve503dpoqV2EQd0kCpPlLLc=",
+        "lastModified": 1725184440,
+        "narHash": "sha256-0vtxQEj/7vZdA6ZdOiIs+yl3drwg8+LiZtz7XSp36kI=",
         "ref": "main",
-        "rev": "98f0f810215dd85d6b7faeeb06b275950f2a209f",
+        "rev": "b25c32ed891fe16bc2c2b5620d0dc6e408315e69",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@codeberg.org/osmo1/.secrets.git"

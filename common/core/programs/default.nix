@@ -10,6 +10,8 @@
 	    tree
 	    sops
 	    git-agecrypt
+	    lazygit
+	    just
         ])
 
         ++

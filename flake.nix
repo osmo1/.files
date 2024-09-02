@@ -54,7 +54,7 @@
     };
 
 
-    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, ... } @ inputs:
+    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, secrets, ... } @ inputs:
       let
 	    inherit (self) outputs;
         inherit (nixpkgs) lib;
@@ -146,7 +146,7 @@
             system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
 	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets; };
           in
           lib.nixosSystem {
             inherit system;
@@ -167,6 +167,30 @@
             ];
         };
 
+	testeri2 =
+          let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
+	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets; };
+          in
+          lib.nixosSystem {
+            inherit system;
+	        inherit specialArgs;
+            modules = [
+                ./hosts/testeri
+
+                inputs.disko.nixosModules.default 
+		{
+			disko.devices.disk.main.device = "/dev/vda";
+		}
+                (import ./hosts/testeri/disko.nix)
+                inputs.impermanence.nixosModules.impermanence
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+            ];
+        };
         };
     };
 }
