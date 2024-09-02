@@ -45,7 +45,7 @@ in {
           "${cfg.dataLocation}/prowlarr:/config"
         ];
         ports = [
-          "${toString cfg.uiPortStart}:6969"
+          "${toString cfg.uiPortStart}:9696"
         ];
 	environment = {
 	  PUID = "1000";
@@ -254,12 +254,12 @@ in {
           "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
         };
       };
-      containers.overseerr = {
-        hostname = "overseerr";
-        image = "lscr.io/linuxserver/overseerr:${cfg.version}";
+      containers.jellyseerr = {
+        hostname = "jellyseerr";
+        image = "fallenbagel/jellyseerr:${cfg.version}";
 	
         volumes = [
-          "${cfg.dataLocation}/overseerr:/config"
+          "${cfg.dataLocation}/jellyseerr:/config"
         ];
         ports = [
           "${toString (cfg.uiPortStart + 700) }:5055"
@@ -268,6 +268,7 @@ in {
 	  PUID = "1000";
 	  PGID = "100";
           TZ = "${cfg.timeZone}";
+	  LOG_LEVEL = "debug";
         };
         extraOptions = [
         ];
@@ -283,26 +284,52 @@ in {
           "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
         };
       };
-      containers.qbittorrent = {
-        hostname = "qbittorrent";
-        image = "lscr.io/linuxserver/qbittorrent:${cfg.version}";
+      containers.deluge = {
+        hostname = "deluge";
+        image = "lscr.io/linuxserver/deluge:${cfg.version}";
 	
         volumes = [
-          "${cfg.dataLocation}/qbittorrent:/config"
+          "${cfg.dataLocation}/deluge:/config"
           "${cfg.dataLocation}/downloads:/downloads"
         ];
         ports = [
-          "${toString (cfg.uiPortStart + 800) }:8080"
+          "${toString (cfg.uiPortStart + 800) }:8112"
 	  "6881:6881"
 	  "6881:6881/udp"
+	  "58846:58846"
         ];
 	environment = {
 	  PUID = "1000";
 	  PGID = "100";
           TZ = "${cfg.timeZone}";
-	  UMASK = "002";
-	  WEBUI_PORT = "8080";
-	  TORRENTING_PORT = "6881";
+	  DELUGE_LOGLEVEL = "error";
+        };
+        extraOptions = [
+        ];
+	#TODO all of these homepages
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "Misc";
+          "homepage.name" = "Crafty";
+          "homepage.icon" = "crafty.png";
+          # TODO: Change this.
+          "homepage.href" = "https://crafty.osmo1.duckdns.org";
+          "homepage.description" = "Minecraft server";
+          "homepage.widget.type" = "minecraft";
+          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
+        };
+      };
+      containers.flaresolverr = {
+        hostname = "flaresolverr";
+        image = "ghcr.io/flaresolverr/flaresolverr:${cfg.version}";
+        volumes = [
+        ];
+        ports = [
+          "${toString (cfg.uiPortStart + 900) }:8191"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
         };
         extraOptions = [
         ];
@@ -323,14 +350,14 @@ in {
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
       "d ${cfg.dataLocation}/downloads 0770 osmo users - -"
-      "d ${cfg.dataLocation}/qbittorrent 0770 osmo users - -"
+      "d ${cfg.dataLocation}/deluge 0770 osmo users - -"
       "d ${cfg.dataLocation}/prowlarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/sonarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/radarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/lidarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/readarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/overseerr 0770 osmo users - -"
+      "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
       "d ${cfg.dataLocation}/media 0770 osmo users - -"
       "d ${cfg.dataLocation}/media/movies 0770 osmo users - -"
