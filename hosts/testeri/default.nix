@@ -6,6 +6,7 @@
     	../../common/core
 	      ../../common/optional/impermanence.nix
 	      ../../common/optional/podman.nix
+	      ../../common/optional/proton.nix
 	      #../../common/optional/sddm.nix
 	#../../common/optional/dwl
       #../../common/optional/samba.nix

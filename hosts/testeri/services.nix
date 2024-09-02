@@ -1,10 +1,10 @@
 {
     imports = [
-        ../../modules/containers
+        #../../modules/containers
 	#../../modules/containers/test.nix
     ];
 
-  services.containers = {
+  /*services.containers = {
     crafty = {
       enable = false;
       dataLocation = "/home/osmo/crafty";
@@ -23,7 +23,7 @@
       timeZone = "Europe/Helsinki";
       enableHomePage = false;
     };
-  };
+  };*/
 
 
     #services.docker.crafty = {
