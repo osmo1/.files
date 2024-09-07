@@ -56,7 +56,7 @@ function sync() {
 
 function help_and_exit() {
 	echo
-	echo "Remotely installs NixOS on a target machine using this nix-config."
+	echo "Remotely installs NixOS on a target machine using this .files."
 	echo
 	echo "USAGE: $0 -n <target_hostname> -d <target_destination> -k <ssh_key> [OPTIONS]"
 	echo
@@ -68,7 +68,7 @@ function help_and_exit() {
 	echo "                            Example: -k /home/${target_user}/.ssh/my_ssh_key"
 	echo
 	echo "OPTIONS:"
-	echo "  -u <target_user>          specify target_user with sudo access. nix-config will be cloned to their home."
+	echo "  -u <target_user>          specify target_user with sudo access. .files will be cloned to their home."
 	echo "                            Default='${target_user}'."
 	echo "  --port <ssh_port>         specify the ssh port to use for remote access. Default=${ssh_port}."
 	echo "  --impermanence            Use this flag if the target machine has impermanence enabled. WARNING: Assumes /persist path."
@@ -160,7 +160,7 @@ function nixos_anywhere() {
 	green "Preparing a temporary password for disko."
 	$ssh_root_cmd "/bin/sh -c 'echo passphrase > /tmp/disko-password'"
 
-	green "Generating hardware-config.nix for $target_hostname and adding it to the nix-config."
+	green "Generating hardware-config.nix for $target_hostname and adding it to the .files."
 	$ssh_root_cmd "nixos-generate-config --no-filesystems --root /mnt"
 	$scp_cmd root@"$target_destination":/mnt/etc/nixos/hardware-configuration.nix "${git_root}"/hosts/"$target_hostname"/hardware-configuration.nix
 
@@ -187,7 +187,7 @@ function update_sops_file() {
 		red "Invalid key type passed to update_sops_file. Must be either 'hosts' or 'users'."
 		exit 1
 	fi
-	cd "${git_root}"/../.secrets
+	cd "${git_root}"/../.
 
 	SOPS_FILE=".sops.yaml"
 	sed -i "{
@@ -199,7 +199,7 @@ function update_sops_file() {
 	# Inject a new hosts or user: entry
 	/&$key_type:/{n; p; s/\(.*- &\).*/\1$key_name $key/}
 	}" $SOPS_FILE
-	green "Updating .secrets/.sops.yaml"
+	green "Updating ./.sops.yaml"
 	cd -
 }
 
@@ -226,13 +226,13 @@ function generate_host_age_key() {
 		echo "$host_age_key"
 	fi
 
-	green "Updating .secrets/.sops.yaml"
+	green "Updating ./.sops.yaml"
 	update_sops_file "$target_hostname" "hosts" "$host_age_key"
 }
 
 #function generate_user_age_key() {
 #	echo "First checking if ${target_hostname} age key already exists"
-#	secret_file="${git_root}"/../.secrets/secrets.yaml
+#	secret_file="${git_root}"/.././secrets.yaml
 #	if ! sops -d --extract '["user_age_keys"]' "$secret_file" >/dev/null ||
 #		! sops -d --extract "[\"user_age_keys\"][\"${target_hostname}\"]" "$secret_file" >/dev/null 2>&1; then
 #		echo "Age key does not exist. Generating."
@@ -265,7 +265,7 @@ if [[ $updated_age_keys == 1 ]]; then
 	# Since we may update the sops.yaml file twice above, only rekey once at the end
 	just rekey
 	green "Updating flake input to pick up new .sops.yaml"
-	nix flake lock --update-input secrets
+	nix flake lock --update-input 
 fi
 
 if yes_or_no "Add ssh host fingerprints for github and codeberg? If this is the first time running this script on $target_hostname, this will be required for the following steps?"; then
@@ -278,33 +278,33 @@ if yes_or_no "Add ssh host fingerprints for github and codeberg? If this is the 
 	$ssh_cmd "mkdir -p $home_path/.ssh/; ssh-keyscan -t ssh-ed25519 codeberg.org github.com >>$home_path/.ssh/known_hosts"
 fi
 
-if yes_or_no "Do you want to copy your full .files and .secrets to $target_hostname?"; then
+if yes_or_no "Do you want to copy your full .files and . to $target_hostname?"; then
 	green "Adding ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	ssh-keyscan -p "$ssh_port" "$target_destination" >>~/.ssh/known_hosts || true
-	green "Copying full nix-config to $target_hostname"
+	green "Copying full .files to $target_hostname"
 	sync "$target_user" "${git_root}"/../.files
 	green "Copying full . to $target_hostname"
-	sync "$target_user" "${git_root}"/../.secrets
+	sync "$target_user" "${git_root}"/../.
 
 if yes_or_no "Do you want to rebuild immediately?"; then
-	green "Rebuilding nix-config on $target_hostname"
+	green "Rebuilding .files on $target_hostname"
 	#FIXME there are still a codeberg fingerprint request happening during the rebuild
-	#$ssh_cmd -oForwardAgent=yes "cd nix-config && sudo nixos-rebuild --show-trace --flake .#$target_hostname" switch"
-	$ssh_cmd -oForwardAgent=yes "cd nix-config && just rebuild"
+	#$ssh_cmd -oForwardAgent=yes "cd .files && sudo nixos-rebuild --show-trace --flake .#$target_hostname" switch"
+	$ssh_cmd -oForwardAgent=yes "cd .files && just rebuild"
 fi
 else
 	echo
 	green "NixOS was successfully installed!"
 	echo "Post-install config build instructions:"
-	echo "To copy nix-config from this machine to the $target_hostname, run the following command from ~/nix-config"
+	echo "To copy .files from this machine to the $target_hostname, run the following command from ~/.files"
 	echo "just sync $target_user $target_destination"
-	echo "To rebuild, sign into $target_hostname and run the following command from ~/nix-config"
-	echo "cd nix-config"
+	echo "To rebuild, sign into $target_hostname and run the following command from ~/.files"
+	echo "cd .files"
 	echo "just rebuild"
 	echo
 fi
 
-if yes_or_no "You can now commit and push the nix-config, which includes the hardware-configuration.nix for $target_hostname?"; then
+if yes_or_no "You can now commit and push the .files, which includes the hardware-configuration.nix for $target_hostname?"; then
 	(pre-commit run --all-files 2>/dev/null || true) &&
 		git add "$git_root/hosts/$target_hostname/hardware-configuration.nix" && (git commit -m "feat: hardware-configuration.nix for $target_hostname" || true) && git push
 fi
