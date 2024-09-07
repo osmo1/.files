@@ -187,7 +187,7 @@ function update_sops_file() {
 		red "Invalid key type passed to update_sops_file. Must be either 'hosts' or 'users'."
 		exit 1
 	fi
-	cd "${git_root}"/../.
+	cd "${git_root}"/../.secrets
 
 	SOPS_FILE=".sops.yaml"
 	sed -i "{
@@ -199,7 +199,7 @@ function update_sops_file() {
 	# Inject a new hosts or user: entry
 	/&$key_type:/{n; p; s/\(.*- &\).*/\1$key_name $key/}
 	}" $SOPS_FILE
-	green "Updating ./.sops.yaml"
+	green "Updating .secrets/.sops.yaml"
 	cd -
 }
 
@@ -226,13 +226,13 @@ function generate_host_age_key() {
 		echo "$host_age_key"
 	fi
 
-	green "Updating ./.sops.yaml"
+	green "Updating .secrets/.sops.yaml"
 	update_sops_file "$target_hostname" "hosts" "$host_age_key"
 }
 
 #function generate_user_age_key() {
 #	echo "First checking if ${target_hostname} age key already exists"
-#	secret_file="${git_root}"/.././secrets.yaml
+#	secret_file="${git_root}"/../.secrets/secrets.yaml
 #	if ! sops -d --extract '["user_age_keys"]' "$secret_file" >/dev/null ||
 #		! sops -d --extract "[\"user_age_keys\"][\"${target_hostname}\"]" "$secret_file" >/dev/null 2>&1; then
 #		echo "Age key does not exist. Generating."
@@ -265,7 +265,7 @@ if [[ $updated_age_keys == 1 ]]; then
 	# Since we may update the sops.yaml file twice above, only rekey once at the end
 	just rekey
 	green "Updating flake input to pick up new .sops.yaml"
-	nix flake lock --update-input 
+	nix flake lock --update-input secrets
 fi
 
 if yes_or_no "Add ssh host fingerprints for github and codeberg? If this is the first time running this script on $target_hostname, this will be required for the following steps?"; then
@@ -278,19 +278,19 @@ if yes_or_no "Add ssh host fingerprints for github and codeberg? If this is the 
 	$ssh_cmd "mkdir -p $home_path/.ssh/; ssh-keyscan -t ssh-ed25519 codeberg.org github.com >>$home_path/.ssh/known_hosts"
 fi
 
-if yes_or_no "Do you want to copy your full .files and . to $target_hostname?"; then
+if yes_or_no "Do you want to copy your full .files and .secrets to $target_hostname?"; then
 	green "Adding ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	ssh-keyscan -p "$ssh_port" "$target_destination" >>~/.ssh/known_hosts || true
 	green "Copying full .files to $target_hostname"
 	sync "$target_user" "${git_root}"/../.files
 	green "Copying full . to $target_hostname"
-	sync "$target_user" "${git_root}"/../.
+	sync "$target_user" "${git_root}"/../.secrets
 
 if yes_or_no "Do you want to rebuild immediately?"; then
 	green "Rebuilding .files on $target_hostname"
 	#FIXME there are still a codeberg fingerprint request happening during the rebuild
 	#$ssh_cmd -oForwardAgent=yes "cd .files && sudo nixos-rebuild --show-trace --flake .#$target_hostname" switch"
-	$ssh_cmd -oForwardAgent=yes "cd .files && just rebuild"
+	$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
 fi
 else
 	echo
@@ -299,8 +299,7 @@ else
 	echo "To copy .files from this machine to the $target_hostname, run the following command from ~/.files"
 	echo "just sync $target_user $target_destination"
 	echo "To rebuild, sign into $target_hostname and run the following command from ~/.files"
-	echo "cd .files"
-	echo "just rebuild"
+	echo "nh os switch"
 	echo
 fi
 
