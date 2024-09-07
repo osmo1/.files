@@ -1,6 +1,6 @@
 {}: {
   #TODO: this is very work in progress
-  containers.nextcloud = {
+  containers.mail = {
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.11.200";
@@ -22,15 +22,15 @@
 
         bindMounts = {
             "/data" = {
-                hostPath = "/home/osmo/nextcloud/site";
+                hostPath = "/home/osmo/mail/site";
                 isReadOnly = false;
             };
             "/data/data/osmo/files/" = {
-                hostPath = "/home/osmo/nextcloud/files";
+                hostPath = "/home/osmo/mail/files";
                 isReadOnly = false;
             };
             "/db" = {
-                hostPath = "/home/osmo/nextcloud/db";
+                hostPath = "/home/osmo/mail/db";
                 isReadOnly = false;
             };
             #"/syncthing" = {
@@ -49,8 +49,8 @@
 		  ensureCredentials = {
 		    # Do not use this in production. This will make passwords world-readable
 		    # in the Nix store
-		    "osmo@example.org".passwordFile = "${config.sops.secrets.'containers/maddy/user1'.path}";
-		    "postmaster@example.org".passwordFile = "${config.sops.secrets.'containers/maddy/postmaster'.path}";
+		    #"osmo@example.org".passwordFile = "${config.sops.secrets.'containers/maddy/user1'.path}";
+		    #"postmaster@example.org".passwordFile = "${config.sops.secrets.'containers/maddy/postmaster'.path}";
 		  };
 		};
 		openFirewall = true;
@@ -61,8 +61,8 @@
 		      agreed # indicate your agreement with Let's Encrypt ToS
 		      host ${config.services.maddy.primaryDomain}
 		      challenge dns-01
-		      ${cfg...}
 		      '';
+		      #${cfg...}
 		  };
 		  # Enable TLS listeners. Configuring this via the module is not yet
 		  # implemented, see https://github.com/NixOS/nixpkgs/pull/153372
@@ -101,6 +101,7 @@
 			    _mta-sts TXT "v=STSv1; id=1"
 			    _smtp._tls TXT "v=TLSRPTv1;rua=mailto:postmaster@example.org"
 			    default._domainkey TXT "${lib.concatStringsSep "\" \"" domainkeySplitted}"
+			    _autodiscover._tcp SRV 0 0 443 autoconfig
 			  '';
 			};
 			caddy = {                                  
@@ -157,14 +158,12 @@
 			    };
 			  };
 			};
-			services.nsd.zones."example.org.".data = ''
-			  [...]
-			  _autodiscover._tcp SRV 0 0 443 autoconfig
-			'';
 
 
 	 networking.firewall.allowedTCPPorts = [ 993 465 ];
-		  }
-		  };
+	};
+	};
+	};
+	};
   };
 }

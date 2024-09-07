@@ -5,8 +5,8 @@
     ++ [
     	../../common/core
 	      ../../common/optional/impermanence.nix
-	      ../../common/optional/podman.nix
-	      ../../common/optional/proton.nix
+	      #../../common/optional/podman.nix
+	      #../../common/optional/proton.nix
 	      #../../common/optional/sddm.nix
 	#../../common/optional/dwl
       #../../common/optional/samba.nix
@@ -14,7 +14,7 @@
 
     system.stateVersion = "24.05";
 
-    networking.hostName = "testeri";
+    networking.hostName = "testeri2";
 
     #TODO: Find a better place for this
     # common/core ?
@@ -24,7 +24,7 @@
 	systemd-boot.enable = true;
 	systemd-boot.consoleMode = "auto";
 	};	
-	initrd.luks.devices.crypted.device = "/dev/disk/by-partlabel/disk-secondary-encrypted-root";
+	initrd.luks.devices.crypted.device = "/dev/disk/by-partlabel/disk-main-crypted";
     };
 
   services.spice-vdagentd.enable = true; 
