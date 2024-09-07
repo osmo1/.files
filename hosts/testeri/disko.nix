@@ -44,6 +44,7 @@
       };
     };
     disk.secondary = {
+      device = "/dev/vdb";
       type = "disk";
       content = {
         type = "gpt";

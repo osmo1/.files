@@ -7,10 +7,10 @@
         wantedBy = ["initrd.target"];
         requires = [
 	#  "dev-disk-by\\x2dpartlabel-disk\\x2dsecondary\\x2dencrypted\\x2droot.device"
-	  "dev-disk-by\\x2dpartlabel-disk\\x2main\\x2dcrypted\\x2droot.device"
+	  "dev-disk-by\\x2dpartlabel-disk\\x2secondary\\x2dencrypted\\x2droot.device"
 	];
         after = [
-          "dev-disk-by\\x2dpartlabel-disk\\x2dmain\\x2dcrypted\\x2droot.device"
+          "dev-disk-by\\x2dpartlabel-disk\\x2dsecondary\\x2dencrypted\\x2droot.device"
           "systemd-cryptsetup@crypted.service"
         ];
         before = ["sysroot.mount"];

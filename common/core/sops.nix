@@ -20,13 +20,13 @@ in
 			"syncthing/testeri/key" = {};
 		};
 	};
-      environment.persistence."/persist" = {
+      /*environment.persistence."/persist" = {
 	    directories = [
 	      "/var/lib/sops-nix"
 	    ];
 	    files = [
 	    ];
-	  };
+	  };*/
 
   # Annoyingly sops-nix and impermanence don't work well together, this is a workaround for now.
   systemd.services.decrypt-sops = {
