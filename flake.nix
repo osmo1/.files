@@ -56,7 +56,7 @@
 
     outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, secrets, ... } @ inputs:
       let
-	    inherit (self) outputs;
+	inherit (self) outputs;
         inherit (nixpkgs) lib;
         configLib = import ./lib { inherit lib; };
         nixosModules = import ./modules/nixos;
@@ -117,6 +117,46 @@
                 inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules.python-validity
               ];
           };
+	  nix-wsl =
+          let
+              system = "x86_64-linux";
+              pkgs = nixpkgs.legacyPackages.${system};
+              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
+              inherit system;
+	          inherit specialArgs;
+              modules = [
+                ./hosts/nix-wsl
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+
+                nixos-wsl.nixosModules.wsl
+                home-manager.nixosModules.home-manager
+              ];
+          };
+	  cbt =
+          let
+              system = "x86_64-linux";
+              pkgs = nixpkgs.legacyPackages.${system};
+              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+          in
+          lib.nixosSystem {
+              inherit system;
+	          inherit specialArgs;
+              modules = [
+                ./hosts/cbt
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+
+                nixos-wsl.nixosModules.wsl
+                home-manager.nixosModules.home-manager
+              ];
+          };
           # Servers
           serveri =
           let
@@ -166,7 +206,6 @@
                 inputs.nixvim.nixosModules.nixvim
             ];
         };
-
 	testeri2 =
           let
             system = "x86_64-linux";
@@ -178,14 +217,14 @@
             inherit system;
 	        inherit specialArgs;
             modules = [
-                ./hosts/testeri
+                ./hosts/testeri2
 
                 inputs.disko.nixosModules.default 
 		{
 			disko.devices.disk.main.device = "/dev/vda";
 		}
-                (import ./hosts/testeri/disko.nix)
-                inputs.impermanence.nixosModules.impermanence
+                (import ./hosts/testeri2/disko.nix)
+                #inputs.impermanence.nixosModules.impermanence
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim

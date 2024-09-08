@@ -1,4 +1,4 @@
-{ lib, pkgs, configLib, configVars, ... }:
+{ lib, pkgs, unstable-pkgs, configLib, configVars, ... }:
 {
   imports = [ (configLib.relativeToRoot "common/core/users.nix") ];
 
@@ -40,7 +40,10 @@
     };*/
   };
 
-  environment.systemPackages = builtins.attrValues { inherit (pkgs) wget curl rsync; };
+  environment.systemPackages = builtins.attrValues {
+    inherit (pkgs) wget curl rsync neovim git just;
+    inherit (unstable-pkgs) nh;
+  };
 
   nix.settings = {
     experimental-features = [

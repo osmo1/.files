@@ -4,28 +4,9 @@ SOPS_FILE := "../.secrets/secrets.yaml"
 default:
   @just --list
 
-rebuild-pre: update-secrets
-  git add *.nix
-
-rebuild-post:
-  just check-sops
-
-# Add --option eval-cache false if you end up caching a failure you can't get around
-rebuild: rebuild-pre
-  scripts/system-flake-rebuild.sh
-
-# Requires sops to be running and you must have reboot after initial rebuild
-rebuild-full: rebuild-pre && rebuild-post
-  scripts/system-flake-rebuild.sh
-
-# Requires sops to be running and you must have reboot after initial rebuild
-rebuild-trace: rebuild-pre && rebuild-post
-  scripts/system-flake-rebuild-trace.sh
-
 update:
   nix flake update
 
-rebuild-update: update && rebuild
 
 diff:
   git diff ':!flake.lock'
@@ -48,7 +29,7 @@ check-sops:
 
 update-secrets:
   (cd ../.secrets && git fetch && git rebase) || true
-  nix flake lock --update-input .secrets
+  nix flake lock --update-input secrets
 
 iso:
   # If we dont remove this folder, libvirtd VM doesnt run with the new iso...
