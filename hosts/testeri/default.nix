@@ -6,7 +6,8 @@
     	../../common/core
 	      ../../common/optional/impermanence.nix
 	      ../../common/optional/podman.nix
-	      ../../common/optional/proton.nix
+	      ../../common/optional/vpn.nix
+	      #../../common/optional/proton.nix
 	      #../../common/optional/sddm.nix
 	#../../common/optional/dwl
       #../../common/optional/samba.nix
@@ -38,6 +39,7 @@
     # common/optional/ssh.nix ?
     services.openssh = {
     	enable = true;
+        ports = [ 22 ];
     	settings.PasswordAuthentication = false;
     	settings.KbdInteractiveAuthentication = false;
     	settings.PermitRootLogin = "no";
