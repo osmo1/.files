@@ -7,7 +7,6 @@ default:
 update:
   nix flake update
 
-rebuild-update: update && rebuild
 
 diff:
   git diff ':!flake.lock'
@@ -30,7 +29,7 @@ check-sops:
 
 update-secrets:
   (cd ../.secrets && git fetch && git rebase) || true
-  nix flake lock --update-input .secrets
+  nix flake lock --update-input secrets
 
 iso:
   # If we dont remove this folder, libvirtd VM doesnt run with the new iso...
