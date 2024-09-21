@@ -24,8 +24,6 @@ rekey:
     (pre-commit run --all-files || true) && \
     git add -u && (git commit -m "chore: rekey" || true) && git push \
   )
-check-sops:
-  scripts/check-sops.sh
 
 update-secrets:
   (cd ../.secrets && git fetch && git rebase) || true
@@ -53,3 +51,7 @@ sync USER HOST:
 
 sync-secrets USER HOST:
   rsync -av --filter=':- .gitignore' -e "ssh -l {{USER}}" . {{USER}}@{{HOST}}:.secrets/
+
+remote-override HOSTNAME TARGET USER KEY:
+  ./nixos-installer/override.sh -n {{HOSTNAME}} -d {{TARGET}} -k {{KEY}} -u {{USER}}
+
