@@ -13,9 +13,9 @@ rec {
   version = "1.0";
   dontBuild = true;
   src = fetchFromGitHub {
-    owner = "rototrash";
+    owner = "siddrs";
     repo = "tokyo-night-sddm";
-    rev = "ad5cb3d7bbffe530d9e63ee38601de3ccea6de20";
+    rev = "320c8e74ade1e94f640708eee0b9a75a395697c6";
     sha256 = "sha256-JRVVzyefqR2L3UrEK2iWyhUKfPMUNUnfRZmwdz05wL0=";
   };
   nativeBuildInputs = [
