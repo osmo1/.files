@@ -1,5 +1,9 @@
+{ inputs, ... }: {
+home-manager.users.osmo = { inputs, ... }:
+let
+  wallpapersPath = builtins.toString inputs.wallpapers;
+in
 {
-home-manager.users.osmo = {}: {
 xfconf.settings = {
 xsettings = {
   "Net/ThemeName" = "Tokyonight-Dark-BL";
@@ -153,118 +157,98 @@ xfce4-session = {
 };
 xfce4-panel = {
   "configver" = 2;
-  "panels" = [ 
-    1
-    {
-      "dark-mode" = true;
-      "panel-1/position" = "p=6;x=0;y=0";
-      "panel-1/length" = 100.0;
-      "panel-1/position-locked" = true;
-      "panel-1/icon-size" = 0;
-      "panel-1/size" = 20;
-      "panel-1/plugin-ids" = [ 1 2 3 4 5 6 9 10 11 12 13 14 ];
-      "panel-1/mode" = 0;
-      "panel-1/autohide-behavior" = 0;
-      "panel-1/enable-struts" = true;
-      "panel-1/nrows" = 1;
-      "panel-1/background-style" = 0;
-      "panel-1/enter-opacity" = 100;
-      "panel-1/leave-opacity" = 100;
-    }
+  "dark-mode" = true;
+  "panel-1/position" = "p=6;x=0;y=0";
+  "panel-1/length" = 100.0;
+  "panel-1/position-locked" = true;
+  "panel-1/icon-size" = 0;
+  "panel-1/size" = 20;
+  "panel-1/plugin-ids" = [ 1 7 2 3 4 5 6 9 10 11 12 13 14 ];
+  "panel-1/mode" = 0;
+  "panel-1/autohide-behavior" = 0;
+  "panel-1/enable-struts" = true;
+  "panel-1/nrows" = 1;
+  "panel-1/background-style" = 0;
+  "panel-1/enter-opacity" = 100;
+  "panel-1/leave-opacity" = 100;
+
+  "plugin-1/type" = "applicationsmenu";
+  "plugin-1/show-generic-names" = false;
+  "plugin-1/small" = false;
+  "plugin-1/button-title" = "";
+  "plugin-1/button-icon" = "distributor-logo-nixos";
+  "plugin-1/custom-menu" = false;
+
+  "plugin-3/type" = "separator";
+  "plugin-3/expand" = true;
+  "plugin-3/style" = 0;
+
+  "plugin-4/type" = "pager";
+
+  "plugin-5/type" = "separator";
+  "plugin-5/style" = 0;
+
+  "plugin-6/type" = "systray";
+  "plugin-6/square-icons" = true;
+  "plugin-6/known-legacy-items" = [
+    "ethernet network connection “wired connection 1” active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
+    "ethernet network connection “wired connection 1” active vpn connection active"
   ];
-  
-  "plugins/plugin-1" = {
-    "type" = "applicationsmenu";
-    "show-generic-names" = false;
-    "small" = false;
-    "button-title" = "";
-    "button-icon" = "distributor-logo-nixos";
-    "custom-menu" = false;
-  };
 
-  "plugins/plugin-3" = {
-    "type" = "separator";
-    "expand" = true;
-    "style" = 0;
-  };
+  "plugin-9/type" = "power-manager-plugin";
 
-  "plugins/plugin-4" = "pager";
+  "plugin-10/type" = "notification-plugin";
 
-  "plugins/plugin-5" = {
-    "type" = "separator";
-    "style" = 0;
-  };
+  "plugin-11/type" = "separator";
+  "plugin-11/style" = 0;
 
-  "plugins/plugin-6" = {
-    "type" = "systray";
-    "square-icons" = true;
-    "known-legacy-items" = [
-      "ethernet network connection “wired connection 1” active"
-      "ethernet network connection “wired connection 1” active vpn connection active"
-    ];
-  };
+  "plugin-12/type" = "clock";
+  "plugin-12/mode" = 2;
+  "plugin-12/digital-layout" = 3;
 
-  "plugins/plugin-9" = "power-manager-plugin";
-  "plugins/plugin-10" = "notification-plugin";
-  
-  "plugins/plugin-11" = {
-    "type" = "separator";
-    "style" = 0;
-  };
-  
-  "plugins/plugin-12" = {
-    "type" = "clock";
-    "mode" = 2;
-    "digital-layout" = 3;
-  };
+  "plugin-13/type" = "separator";
+  "plugin-13/style" = 0;
 
-  "plugins/plugin-13" = {
-    "type" = "separator";
-    "style" = 0;
-  };
+  "plugin-14/type" = "actions";
+  "plugin-14/button-title" = 3;
+  "plugin-14/custom-title" = "Logout";
+  "plugin-14/appearance" = 0;
+  "plugin-14/items" = [
+    "+lock-screen" "-switch-user" "-separator" "-suspend"
+    "-hibernate" "-hybrid-sleep" "-separator" "+shutdown"
+    "-restart" "-separator" "-logout" "+logout-dialog"
+  ];
 
-  "plugins/plugin-14" = {
-    "type" = "actions";
-    "button-title" = 3;
-    "custom-title" = "Logout";
-    "appearance" = 0;
-    "items" = [
-      "+lock-screen"
-      "-switch-user"
-      "-separator"
-      "-suspend"
-      "-hibernate"
-      "-hybrid-sleep"
-      "-separator"
-      "+shutdown"
-      "-restart"
-      "-separator"
-      "-logout"
-      "+logout-dialog"
-    ];
-  };
+  "plugin-2/type" = "tasklist";
+  "plugin-2/middle-click" = 1;
 
-  "plugins/plugin-2" = {
-    "type" = "tasklist";
-    "middle-click" = 1;
-  };
+  "plugin-7/type" = "launcher";
+  "plugin-7/items" = [ "17263165931.desktop" ];
 };
+
+
 xfce4-desktop = {
   "backdrop/screen0/monitorVirtual-1/workspace0/color-style" = 0;
   "backdrop/screen0/monitorVirtual-1/workspace0/image-style" = 5;
-  "backdrop/screen0/monitorVirtual-1/workspace0/last-image" = inputs.wallpapers.stolen.nixos-tokyonight.path;
+  "backdrop/screen0/monitorVirtual-1/workspace0/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
 
   "backdrop/screen0/monitorVirtual-1/workspace1/color-style" = 0;
   "backdrop/screen0/monitorVirtual-1/workspace1/image-style" = 5;
-  "backdrop/screen0/monitorVirtual-1/workspace1/last-image" = inputs.wallpapers.stolen.nixos-tokyonight.path;
+  "backdrop/screen0/monitorVirtual-1/workspace1/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
 
   "backdrop/screen0/monitorVirtual-1/workspace2/color-style" = 0;
   "backdrop/screen0/monitorVirtual-1/workspace2/image-style" = 5;
-  "backdrop/screen0/monitorVirtual-1/workspace2/last-image" = inputs.wallpapers.stolen.nixos-tokyonight.path;
+  "backdrop/screen0/monitorVirtual-1/workspace2/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
 
   "backdrop/screen0/monitorVirtual-1/workspace3/color-style" = 0;
   "backdrop/screen0/monitorVirtual-1/workspace3/image-style" = 5;
-  "backdrop/screen0/monitorVirtual-1/workspace3/last-image" = inputs.wallpapers.stolen.nixos-tokyonight.path;
+  "backdrop/screen0/monitorVirtual-1/workspace3/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
 };
 };
 };

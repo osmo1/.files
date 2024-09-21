@@ -1,16 +1,17 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, config, ... }:
+{
 imports = [ inputs.home-manager.nixosModules.home-manager ];
 
-home-manager.users.osmo = { pkgs, ... }: {
+home-manager.users.osmo = { pkgs, config, ... }: {
   gtk = {
     enable = true;
       iconTheme = {
-      name = "elementary-Xfce-dark";
-      package = pkgs.elementary-xfce-icon-theme;
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
     };
     theme = {
-      name = "zukitre-dark";
-      package = pkgs.zuki-themes;
+      name = "Tokyonight-Dark-BL";
+      package = pkgs.tokyonight-gtk-theme;
     };
     gtk3.extraConfig = {
       Settings = ''
@@ -23,6 +24,16 @@ home-manager.users.osmo = { pkgs, ... }: {
       '';
     };
   };
+xdg.configFile = {
+  "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
+  "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
+  "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
+};
+
+  xfconf.settings = {
+  
+  };
+
 };
 home-manager.backupFileExtension = "bu";
 }

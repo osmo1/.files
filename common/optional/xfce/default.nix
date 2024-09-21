@@ -2,6 +2,7 @@
   imports = (configLib.scanPaths ./.) ++ 
   [
 	  ../desktop
+	  ../thunar.nix
   ];
  services.xserver = {
     enable = true;
@@ -11,4 +12,5 @@
     };
   };
   services.displayManager.defaultSession = "xfce";
+  programs.xfconf.enable = true;
 }
