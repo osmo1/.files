@@ -7,6 +7,7 @@
 	      ../../common/optional/impermanence.nix
 	      ../../common/optional/podman.nix
 	      ../../common/optional/vpn.nix
+	      ../../common/optional/xfce
 	      #../../common/optional/proton.nix
 	      #../../common/optional/sddm.nix
 	#../../common/optional/dwl

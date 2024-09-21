@@ -133,7 +133,7 @@
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
 
-                nixos-wsl.nixosModules.wsl
+                inputs.nixos-wsl.nixosModules.wsl
                 home-manager.nixosModules.home-manager
               ];
           };
@@ -153,7 +153,6 @@
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
 
-                nixos-wsl.nixosModules.wsl
                 home-manager.nixosModules.home-manager
               ];
           };
