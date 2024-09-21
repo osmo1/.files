@@ -51,10 +51,14 @@
 	  url = "git+ssh://git@codeberg.org/osmo1/.secrets.git?ref=main&shallow=1";
 	  flake = false;
 	};
+	wallpapers = {
+	  url = "git+ssh://git@github.com/osmo1/.wallpapers.git?ref=main&shallow=1";
+	  flake = false;
+	};
     };
 
 
-    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, secrets, ... } @ inputs:
+    outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, secrets, wallpapers, ... } @ inputs:
       let
 	inherit (self) outputs;
         inherit (nixpkgs) lib;
@@ -185,7 +189,7 @@
             system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
 	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets; };
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers; };
           in
           lib.nixosSystem {
             inherit system;
@@ -203,6 +207,7 @@
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
+                home-manager.nixosModules.home-manager
             ];
         };
 	testeri2 =

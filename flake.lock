@@ -473,7 +473,8 @@
         "nur": "nur",
         "plasma-manager": "plasma-manager",
         "secrets": "secrets",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "wallpapers": "wallpapers"
       }
     },
     "secrets": {
@@ -564,6 +565,24 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "wallpapers": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726318972,
+        "narHash": "sha256-KtZt6J/wpmuKRM9sYPcgU5cNzPPILQFQ7svFqD+J9eE=",
+        "ref": "main",
+        "rev": "dffabc780da161a9e0ed4e2a9f2477f918f322bd",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/osmo1/.wallpapers.git"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/osmo1/.wallpapers.git"
       }
     }
   },
