@@ -240,7 +240,7 @@
             system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
 	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers; };
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers configVars; };
           in
           lib.nixosSystem {
             inherit system;
@@ -252,7 +252,6 @@
 		{
 			disko.devices.disk.main.device = "/dev/vda";
 		}
-                (import ./hosts/testeri/disko.nix)
                 inputs.impermanence.nixosModules.impermanence
 
                 inputs.nur.nixosModules.nur
@@ -265,7 +264,7 @@
             system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
 	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers; };
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers configVars; };
           in
           lib.nixosSystem {
             inherit system;
@@ -277,7 +276,6 @@
 		{
 			disko.devices.disk.main.device = "/dev/vda";
 		}
-                (import ./hosts/testeri/disko.nix)
                 inputs.impermanence.nixosModules.impermanence
 
                 inputs.nur.nixosModules.nur
