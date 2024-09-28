@@ -32,6 +32,7 @@ TODO
     - [ ] No need to touch hosts/${host} except for exceptions
     - [ ] Template host
  - [ ] Backup using borgbackup
+ - [ ] All required permanence declarations exist only when impermanence is enabled
 ### Personal
  - [ ] Masiina ready
  - [ ] New host klusteri (K3s)
