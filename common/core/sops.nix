@@ -17,16 +17,13 @@ in
 		};
 		secrets = {
 			test = {};
-			"syncthing/testeri/key" = {};
 		};
 	};
-      environment.persistence."/persist" = {
-	    directories = [
+      #environment = lib.mkIf config.fileSystems."/persist".neededForBoot {
+	    environment.persistence."/persist".directories = [
 	      "/var/lib/sops-nix"
 	    ];
-	    files = [
-	    ];
-	  };
+	  #};
 
   # Annoyingly sops-nix and impermanence don't work well together, this is a workaround for now.
   systemd.services.decrypt-sops = {
