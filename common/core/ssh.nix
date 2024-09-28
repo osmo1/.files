@@ -1,5 +1,4 @@
 { config, configLib, configVars, lib, ... }: {
-sops.secrets."nixos/${config.networking.hostName}" = {};
 
   home-manager.users.osmo = { inputs, pkgs, ... }: {
 programs.ssh = {
@@ -21,9 +20,25 @@ programs.ssh = {
     };
   };
 };
-    users.users.osmo.openssh.authorizedKeys.keyFiles = [ (configLib.relativeToRoot ".secrets/${config.networking.hostName}/ssh.pub") ];
+  sops.secrets."nixos/testeri/ssh/public" = {};
+  system.activationScripts."${configVars.username}-authorizedKeys".text = ''
+    mkdir -p "/etc/ssh/authorized_keys.d;
+    cp "${config.sops.secrets."nixos/testeri/ssh/public".path}" "/etc/ssh/authorized_keys.d/${configVars.username}";
+    chmod +r "/etc/ssh/authorized_keys.d/${configVars.username};
+  '';
+  
+      #environment = lib.mkIf config.fileSystems."/persist".neededForBoot {
+	    environment.persistence."/persist".files = [
+              "/etc/ssh/authorized_keys.d/${configVars.username}"
+	    ];
+	  #};
   sops.secrets = {
-    "nixos/${config.networking.hostName}/ssh/public".path = "/run/secrets/nixos/${config.networking.hostName}/ssh/public";
-    "nixos/${config.networking.hostName}/git/private".path = "/home/${configVars.username}/.ssh/git";
+    "nixos/${config.networking.hostName}/git/private" = {
+      path = "/home/${configVars.username}/.ssh/git";
+      owner = "osmo";
+      group = "users";
+      mode = "600";
+    };
   };
+  security.pam.sshAgentAuth.enable = true;
 }
