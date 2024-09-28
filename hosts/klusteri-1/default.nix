@@ -7,7 +7,7 @@
 	../../common/optional/disks/1-luks-btrfs.nix
 	../../common/optional/k3s.nix
 	      ../../common/optional/impermanence.nix
-	      ../../common/optional/podman.nix
+	      #../../common/optional/podman.nix
 	      #../../common/optional/vpn.nix
 	      #../../common/optional/xfce
 	      #../../common/optional/sddm.nix
@@ -29,15 +29,14 @@
 	systemd-boot.enable = true;
 	systemd-boot.consoleMode = "auto";
 	};	
-	initrd.luks.devices.crypted.device = "/dev/disk/by-partlabel/disk-main-crypted";
+	initrd.luks.devices.crypted.device = lib.mkForce "/dev/disk/by-partlabel/disk-main-crypted";
     };
+  
+
+
 
   services.spice-vdagentd.enable = true; 
   services.qemuGuest.enable = true;
-    users.users = {
-        osmo.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMxmJlx2nu+dLbe9j9KV8Mkza2pe1u8ipx7HUOtJ4zZy osmo@osmo.zip"];
-        #monitor.openssh.authorizedKeys.keys = ["ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAGuCGoEj++ljHdu52zkWdZcizDCm+ljQEeuS5JSKhpDzqU3nOSLyNUKHkqJhoy9oUips+Lq4BV98PYDex8yiEFuIQFr9ZNq+0bdXPrwfonHtaqskBNWVqHyo41dD6pRI91z9WKc6Gm80HRUVVOrdbam9cyt+/V9HJALobdVglHF82HkQg== osmo@serveri"];
-    };
 
     #TODO: Find a better place for this
     # common/optional/ssh.nix ?
