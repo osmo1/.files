@@ -10,13 +10,13 @@
 
 # Installation
 As this flake has secrets, you will need to make your own secrets repo and configure your secrets if you want to use this flake as is.
-## Local install
+### Local install
 TODO
-## Remote install
+### Remote install
 TODO
 
 # TODO
-## Global
+### Global
  - [ ] Installation instructions
  - [ ] Disko configuration to common/optional/disks
  - [ ] Boot into common/core
@@ -32,7 +32,7 @@ TODO
     - [ ] No need to touch hosts/${host} except for exceptions
     - [ ] Template host
  - [ ] Backup using borgbackup
-## Personal
+### Personal
  - [ ] Masiina ready
  - [ ] New host klusteri (K3s)
  - [ ] Serveri and oraakeli working

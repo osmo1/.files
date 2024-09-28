@@ -63,11 +63,12 @@
 	inherit (self) outputs;
         inherit (nixpkgs) lib;
         configLib = import ./lib { inherit lib; };
+        configVars = import ./vars { inherit lib; };
         nixosModules = import ./modules/nixos;
       in {
       nixosConfigurations = {
         # Desktops
-          /*none =
+          /*masiina =
           let
             system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
@@ -189,7 +190,7 @@
             system = "x86_64-linux";
             pkgs = nixpkgs.legacyPackages.${system};
 	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers; };
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers configVars; };
           in
           lib.nixosSystem {
             inherit system;
@@ -232,6 +233,56 @@
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
+            ];
+        };
+	klusteri-0 =
+          let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
+	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers; };
+          in
+          lib.nixosSystem {
+            inherit system;
+	        inherit specialArgs;
+            modules = [
+                ./hosts/klusteri-0
+
+                inputs.disko.nixosModules.default 
+		{
+			disko.devices.disk.main.device = "/dev/vda";
+		}
+                (import ./hosts/testeri/disko.nix)
+                inputs.impermanence.nixosModules.impermanence
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+                home-manager.nixosModules.home-manager
+            ];
+        };
+	klusteri-1 =
+          let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
+	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets wallpapers; };
+          in
+          lib.nixosSystem {
+            inherit system;
+	        inherit specialArgs;
+            modules = [
+                ./hosts/klusteri-0
+
+                inputs.disko.nixosModules.default 
+		{
+			disko.devices.disk.main.device = "/dev/vda";
+		}
+                (import ./hosts/testeri/disko.nix)
+                inputs.impermanence.nixosModules.impermanence
+
+                inputs.nur.nixosModules.nur
+                inputs.nixvim.nixosModules.nixvim
+                home-manager.nixosModules.home-manager
             ];
         };
         };

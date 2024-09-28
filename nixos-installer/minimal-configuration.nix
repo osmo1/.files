@@ -1,4 +1,7 @@
-{ lib, pkgs, unstable-pkgs, configLib, configVars, ... }:
+{ config, lib, pkgs, unstable-pkgs, configLib, configVars, inputs, ... }:
+let
+  secretsPath = builtins.toString inputs.secrets;
+in
 {
   imports = [ (configLib.relativeToRoot "common/core/users.nix") ];
 
@@ -41,8 +44,7 @@
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit (pkgs) wget curl rsync neovim git just;
-    inherit (unstable-pkgs) nh;
+    inherit (pkgs) wget curl rsync neovim git just git-agecrypt;
   };
 
   nix.settings = {
@@ -51,6 +53,23 @@
       "flakes"
     ];
     warn-dirty = false;
+  };
+	sops = {
+		defaultSopsFile = "${secretsPath}/secrets.yaml";
+		validateSopsFiles = false;
+		age = {
+			sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+			keyFile = "/var/lib/sops-nix/key.txt";
+			generateKey = true;
+		};
+		secrets = {
+			test = {};
+		};
+	};
+    users.users.osmo.openssh.authorizedKeys.keyFiles = [ (configLib.relativeToRoot ".secrets/${config.networking.hostName}/ssh.pub") ];
+  sops.secrets = {
+    "nixos/${config.networking.hostName}/ssh/public".path = "/run/secrets/nixos/${config.networking.hostName}/ssh/public";
+    "nixos/${config.networking.hostName}/git/private".path = "/home/${configVars.username}/.ssh/git";
   };
   system.stateVersion = "24.05";
 }

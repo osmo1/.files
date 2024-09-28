@@ -11,6 +11,7 @@
 	    sops
 	    git-agecrypt
 	    just
+	    lazygit
         ])
 
         ++
@@ -18,6 +19,5 @@
         (with pkgs-unstable; [
             nh
 	    fzf
-	    lazygit
         ]);
 }

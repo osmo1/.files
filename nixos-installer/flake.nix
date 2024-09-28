@@ -4,12 +4,21 @@
   inputs = {
     #nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/release-24.05";
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     # Declarative partitioning and formatting
     disko.url = "github:nix-community/disko";
+	sops-nix = {
+	  url = "github:mic92/sops-nix";
+	  inputs.nixpkgs.follows = "nixpkgs";
+	};
+    	secrets = {
+	  url = "git+ssh://git@codeberg.org/osmo1/.secrets.git?ref=main&shallow=1";
+	  flake = false;
+	};
   };
 
   outputs =
-    { self, nixpkgs, ... }@inputs:
+    { self, nixpkgs, nixpkgs-unstable, sops-nix, secrets, ... }@inputs:
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
@@ -24,16 +33,17 @@
       # FIXME: Specify arch eventually probably
       # This mkHost is way better: https://github.com/linyinfeng/dotfiles/blob/8785bdb188504cfda3daae9c3f70a6935e35c4df/flake/hosts.nix#L358
       newConfig =
-        hostname:
+        hostname: disks:
         (nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = minimalSpecialArgs;
           modules = [
             inputs.disko.nixosModules.disko	
+	    inputs.sops-nix.nixosModules.sops
 	    {
 			disko.devices.disk.main.device = "/dev/vda";
 		}
-            (configLib.relativeToRoot "hosts/${hostname}/disko.nix")
+            (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/optional/disks/${disks}.nix")
 
             ./minimal-configuration.nix
             { networking.hostName = hostname; }
@@ -49,6 +59,8 @@
         oraakeli = newConfig "oraakeli";
         testeri = newConfig "testeri";
         testeri2 = newConfig "testeri2";
+	klusteri-0 = newConfig "klusteri-0" "1-luks-btrfs";
+	klusteri-1 = newConfig "klusteri-1" "1-luks-btrfs";
 
         # Custom ISO
         #

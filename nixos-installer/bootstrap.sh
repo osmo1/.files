@@ -157,7 +157,7 @@ function nixos_anywhere() {
 	# when using luks, disko expects a passphrase on /tmp/disko-password, so we set it for now and will update the passphrase later
 	# via the config
 	green "Preparing a temporary password for disko."
-	$ssh_root_cmd "/bin/sh -c 'echo passphrase > /tmp/disko-password'"
+	$ssh_root_cmd "/bin/sh -c 'echo osmo > /tmp/disko-password'"
 
 	green "Generating hardware-config.nix for $target_hostname and adding it to the .files."
 	$ssh_root_cmd "nixos-generate-config --no-filesystems --root /mnt"
@@ -298,8 +298,8 @@ if yes_or_no "Do you want to copy your full .files and . to $target_hostname?"; 
 if yes_or_no "Do you want to rebuild immediately?"; then
 	green "Rebuilding .files on $target_hostname"
 	#FIXME there are still a codeberg fingerprint request happening during the rebuild
-	#$ssh_cmd -oForwardAgent=yes "cd .files && sudo nixos-rebuild --show-trace --flake .#$target_hostname" switch"
-	$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
+	$ssh_cmd -oForwardAgent=yes "cd .files && git-agecrypt init && sudo nixos-rebuild switch --show-trace --flake .#$target_hostname"
+	#$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
 fi
 else
 	echo

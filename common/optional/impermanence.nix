@@ -5,14 +5,14 @@
       systemd.services.restore-root = {
         description = "Rollback btrfs rootfs";
         wantedBy = ["initrd.target"];
-        requires = [
-	#  "dev-disk-by\\x2dpartlabel-disk\\x2dsecondary\\x2dencrypted\\x2droot.device"
-	  "dev-disk-by\\x2dpartlabel-disk\\x2secondary\\x2dencrypted\\x2droot.device"
-	];
+        requires = ( if config.disko.devices.disk.secondary 
+	  then [ "dev-disk-by\\x2dpartlabel-disk\\x2secondary\\x2dencrypted\\x2droot.device" ]
+	  else [ "dev-disk-by\\x2dpartlabel-disk\\x2main\\x2dcrypted.device" ]);
         after = [
-          "dev-disk-by\\x2dpartlabel-disk\\x2dsecondary\\x2dencrypted\\x2droot.device"
           "systemd-cryptsetup@crypted.service"
-        ];
+        ] ++ ( if config.disko.devices.disk.secondary
+	  then [ "dev-disk-by\\x2dpartlabel-disk\\x2secondary\\x2dencrypted\\x2droot.device" ]
+	  else [ "dev-disk-by\\x2dpartlabel-disk\\x2main\\x2dcrypted.device" ]);
         before = ["sysroot.mount"];
         unitConfig.DefaultDependencies = "no";
         serviceConfig.Type = "oneshot";
