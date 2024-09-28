@@ -46,27 +46,22 @@
                   type = "btrfs";
                   extraArgs = [ "-f" ]; # force overwrite
                   subvolumes = {
-                    "@root" = {
-                      mountpoint = "/";
-                      mountOptions = [
-                        "compress=zstd"
-                        "noatime"
-                      ];
-                    };
-                    "@persist" = {
-                      mountpoint = "/persist";
-                      mountOptions = [
-                        "compress=zstd"
-                        "noatime"
-                      ];
-                    };
-                    "@nix" = {
-                      mountpoint = "/nix";
-                      mountOptions = [
-                        "compress=zstd"
-                        "noatime"
-                      ];
-                    };
+		  "@" = {};
+                  "@/root" = {
+                    mountpoint = "/";
+                  };
+                  "@/nix" = {
+                    mountOptions = ["subvol=nix" "noatime"];
+                    mountpoint = "/nix";
+                  };
+                  "@/persist" = {
+                    mountOptions = ["subvol=persist" "noatime"];
+                    mountpoint = "/persist";
+                  };
+                  "@/home" = {
+                    mountOptions = ["subvol=home" "noatime"];
+                    mountpoint = "/home/osmo";
+                  };
                   };
                 };
               };
