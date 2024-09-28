@@ -20,7 +20,7 @@ in
     # configures the network interface(include wireless) via `nmcli` & `nmtui`
     networkmanager.enable = true;
   };
-
+  nix.trustedUsers = [ "root" "@wheel" ];
   services = {
     qemuGuest.enable = true;
     openssh = {
@@ -44,7 +44,7 @@ in
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit (pkgs) wget curl rsync neovim git just git-agecrypt;
+    inherit (pkgs) wget curl rsync neovim git just git-agecrypt sops;
   };
 
   nix.settings = {
@@ -66,10 +66,15 @@ in
 			test = {};
 		};
 	};
+    users.users.root.initialPassword = "osmo";
     users.users.osmo.openssh.authorizedKeys.keyFiles = [ (configLib.relativeToRoot ".secrets/${config.networking.hostName}/ssh.pub") ];
   sops.secrets = {
-    "nixos/${config.networking.hostName}/ssh/public".path = "/run/secrets/nixos/${config.networking.hostName}/ssh/public";
-    "nixos/${config.networking.hostName}/git/private".path = "/home/${configVars.username}/.ssh/git";
+    "nixos/${config.networking.hostName}/git/private" = {
+      path = "/home/${configVars.username}/.ssh/git";
+      owner = "osmo";
+      group = "users";
+      mode = "600";
+    };
   };
   system.stateVersion = "24.05";
 }

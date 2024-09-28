@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-#This was made for testing the after install process.
 # User variables
 target_hostname=""
 target_destination=""
@@ -158,7 +157,7 @@ function nixos_anywhere() {
 	# when using luks, disko expects a passphrase on /tmp/disko-password, so we set it for now and will update the passphrase later
 	# via the config
 	green "Preparing a temporary password for disko."
-	$ssh_root_cmd "/bin/sh -c 'echo passphrase > /tmp/disko-password'"
+	$ssh_root_cmd "/bin/sh -c 'echo osmo > /tmp/disko-password'"
 
 	green "Generating hardware-config.nix for $target_hostname and adding it to the .files."
 	$ssh_root_cmd "nixos-generate-config --no-filesystems --root /mnt"
@@ -169,6 +168,8 @@ function nixos_anywhere() {
 
 	echo "Updating ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	ssh-keyscan -p "$ssh_port" "$target_destination" >>~/.ssh/known_hosts || true
+
+	$scp_cmd ~/.ssh/config $target_user@$target_destination:~/.ssh
 
 	if [ -n "$persist_dir" ]; then
 		$ssh_root_cmd "cp /etc/machine-id $persist_dir/etc/machine-id || true"
@@ -251,6 +252,16 @@ function generate_host_age_key() {
 
 # Validate required options
 # FIXME: The ssh key and destination aren't required if only rekeying, so could be moved into specific sections?
+if [ -z "${target_hostname}" ] || [ -z "${target_destination}" ] || [ -z "${ssh_key}" ]; then
+	red "ERROR: -n, -d, and -k are all required"
+	echo
+	help_and_exit
+fi
+
+if yes_or_no "Run nixos-anywhere installation?"; then
+	nixos_anywhere
+fi
+
 if yes_or_no "Generate host (ssh-based) age key?"; then
 	generate_host_age_key
 	updated_age_keys=1
@@ -278,19 +289,27 @@ if yes_or_no "Add ssh host fingerprints for github and codeberg? If this is the 
 	$ssh_cmd "mkdir -p $home_path/.ssh/; ssh-keyscan -t ssh-ed25519 codeberg.org github.com >>$home_path/.ssh/known_hosts"
 fi
 
-if yes_or_no "Do you want to copy your full .files and .secrets to $target_hostname?"; then
+if yes_or_no "Do you want to copy your full .files and . to $target_hostname?"; then
 	green "Adding ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	ssh-keyscan -p "$ssh_port" "$target_destination" >>~/.ssh/known_hosts || true
 	green "Copying full .files to $target_hostname"
 	sync "$target_user" "${git_root}"/../.files
-	green "Copying full . to $target_hostname"
+	green "Copying full .secrets to $target_hostname"
 	sync "$target_user" "${git_root}"/../.secrets
 
 if yes_or_no "Do you want to rebuild immediately?"; then
 	green "Rebuilding .files on $target_hostname"
 	#FIXME there are still a codeberg fingerprint request happening during the rebuild
-	#$ssh_cmd -oForwardAgent=yes "cd .files && sudo nixos-rebuild --show-trace --flake .#$target_hostname" switch"
-	$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
+	# Extract the key locally
+	sops -d --extract '["nixos"]["'"${target_hostname}"'"]["git"]["private"]' ~/.secrets/secrets.yaml > ~/tmp/git
+	# Copy the key to the remote machine
+	$scp_cmd ~/tmp/git $target_user@$target_destination:~/.ssh
+	$ssh_cmd -oForwardAgent=yes "chmod 600 ~/.ssh/git"
+
+	# Remove the local temporary key file
+	rm ~/tmp/git
+	$ssh_cmd -oForwardAgent=yes "cd .files && git-agecrypt init && sudo nixos-rebuild switch --show-trace --flake .#$target_hostname"
+	#$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
 fi
 else
 	echo
@@ -299,6 +318,7 @@ else
 	echo "To copy .files from this machine to the $target_hostname, run the following command from ~/.files"
 	echo "just sync $target_user $target_destination"
 	echo "To rebuild, sign into $target_hostname and run the following command from ~/.files"
+	echo "cd .files"
 	echo "nh os switch"
 	echo
 fi
