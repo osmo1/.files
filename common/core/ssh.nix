@@ -20,10 +20,10 @@ programs.ssh = {
     };
   };
 };
-  sops.secrets."nixos/testeri/ssh/public" = {};
+  sops.secrets."nixos/${config.networking.hostName}/ssh/public" = {};
   system.activationScripts."${configVars.username}-authorizedKeys".text = ''
     mkdir -p "/etc/ssh/authorized_keys.d;
-    cp "${config.sops.secrets."nixos/testeri/ssh/public".path}" "/etc/ssh/authorized_keys.d/${configVars.username}";
+    cp "${config.sops.secrets."nixos/${config.networking.hostName}/ssh/public".path}" "/etc/ssh/authorized_keys.d/${configVars.username}";
     chmod +r "/etc/ssh/authorized_keys.d/${configVars.username};
   '';
   

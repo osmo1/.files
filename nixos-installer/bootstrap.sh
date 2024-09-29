@@ -303,6 +303,7 @@ if yes_or_no "Do you want to copy your full .files and .secrets to $target_hostn
 	sync "$target_user" "${git_root}"/../.files
 	green "Copying full .secrets to $target_hostname"
 	sync "$target_user" "${git_root}"/../.secrets
+	$ssh_cmd -oForwardAgent=yes "cd .files && git-agecrypt init"
 
 if yes_or_no "Do you want to rebuild immediately?"; then
 	green "Rebuilding .files on $target_hostname"
