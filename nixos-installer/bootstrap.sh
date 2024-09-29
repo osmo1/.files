@@ -128,7 +128,7 @@ function nixos_anywhere() {
 	# Clear the keys, since they should be newly generated for the iso
 	green "Wiping known_hosts of $target_destination"
 	sed -i "/$target_hostname/d; /$target_destination/d" ~/.ssh/known_hosts
-	sudo sed -i "/$target_hostname/d; /$target_destination/d" /root/.ssh/known_hosts
+	sudo sed -i "/$target_hostname/d; /$target_destination/d" /root/.ssh/known_hosts || true
 
 	green "Installing NixOS on remote host $target_hostname at $target_destination"
 

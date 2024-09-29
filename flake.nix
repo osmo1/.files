@@ -246,7 +246,7 @@
             inherit system;
 	        inherit specialArgs;
             modules = [
-                ./hosts/klusteri-0
+                ./hosts/klusteri-1
 
                 inputs.disko.nixosModules.default 
 		{

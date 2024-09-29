@@ -23,7 +23,7 @@ rekey:
     sops updatekeys -y secrets.yaml && \
     (pre-commit run --all-files || true) && \
     git add -u && (git commit -m "chore: rekey" || true) && git push \
-  )
+    )
 
 update-secrets:
   (cd ../.secrets && git fetch && git rebase) || true

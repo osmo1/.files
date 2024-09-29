@@ -20,19 +20,13 @@ programs.ssh = {
     };
   };
 };
-  sops.secrets."nixos/${config.networking.hostName}/ssh/public" = {};
-  system.activationScripts."${configVars.username}-authorizedKeys".text = ''
-    mkdir -p "/etc/ssh/authorized_keys.d;
-    cp "${config.sops.secrets."nixos/${config.networking.hostName}/ssh/public".path}" "/etc/ssh/authorized_keys.d/${configVars.username}";
-    chmod +r "/etc/ssh/authorized_keys.d/${configVars.username};
-  '';
-  
-      #environment = lib.mkIf config.fileSystems."/persist".neededForBoot {
-	    environment.persistence."/persist".files = [
-              "/etc/ssh/authorized_keys.d/${configVars.username}"
-	    ];
-	  #};
   sops.secrets = {
+    "nixos/${config.networking.hostName}/ssh/public" = {
+      path = "/etc/ssh/authorized_keys.d/${configVars.username}";
+      owner = "root";
+      group = "root";
+      mode = "644";
+    };
     "nixos/${config.networking.hostName}/git/private" = {
       path = "/home/${configVars.username}/.ssh/git";
       owner = "osmo";
