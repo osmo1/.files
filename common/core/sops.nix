@@ -20,10 +20,10 @@ in
 		};
 	};
       #environment = lib.mkIf config.fileSystems."/persist".neededForBoot {
-	    environment.persistence."/persist".directories = [
+	    /*environment.persistence."/persist".directories = [
 	      "/var/lib/sops-nix"
 	    ];
-	  #};
+	  #};*/
 
   # Annoyingly sops-nix and impermanence don't work well together, this is a workaround for now.
   systemd.services.decrypt-sops = {
