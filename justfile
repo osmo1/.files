@@ -23,7 +23,7 @@ rekey:
     sops updatekeys -y secrets.yaml && \
     (pre-commit run --all-files || true) && \
     git add -u && (git commit -m "chore: rekey" || true) && git push \
-  )
+    )
 
 update-secrets:
   (cd ../.secrets && git fetch && git rebase) || true
@@ -55,3 +55,5 @@ sync-secrets USER HOST:
 remote-override HOSTNAME TARGET USER KEY:
   ./nixos-installer/override.sh -n {{HOSTNAME}} -d {{TARGET}} -k {{KEY}} -u {{USER}}
 
+gitcrypt FILE:
+  git-agecrypt config add -r "$(cat ~/.config/sops/age/git-agecrypt.txt.pub)" -p {{FILE}}

@@ -8,12 +8,13 @@ target_user="osmo"
 ssh_key=""
 ssh_port="22"
 persist_dir=""
+tpm=""
 # Create a temp directory for generated host keys
 temp=$(mktemp -d)
 
-# Cleanup tatemporary directory on exit
+# Cleanup temporary directory on exit
 function cleanup() {
-	rm -rf "$temp"
+        rm -rf "$temp"
 }
 trap cleanup exit
 
@@ -71,6 +72,7 @@ function help_and_exit() {
 	echo "                            Default='${target_user}'."
 	echo "  --port <ssh_port>         specify the ssh port to use for remote access. Default=${ssh_port}."
 	echo "  --impermanence            Use this flag if the target machine has impermanence enabled. WARNING: Assumes /persist path."
+	echo "  --tpm                     Use this flag if the target machine has a tpm module and you want to use it."
 	echo "  --debug                   Enable debug mode."
 	echo "  -h | --help               Print this help."
 	exit 0
@@ -105,6 +107,9 @@ while [[ $# -gt 0 ]]; do
 		;;
 	--impermanence)
 		persist_dir="/persist"
+		;;	
+	--tpm)
+		tpm=$1
 		;;
 	--debug)
 		set -x
@@ -117,7 +122,6 @@ while [[ $# -gt 0 ]]; do
 	esac
 	shift
 done
-
 # SSH commands
 ssh_cmd="ssh -oport=${ssh_port} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $ssh_key -t $target_user@$target_destination"
 ssh_root_cmd=$(echo "$ssh_cmd" | sed "s|${target_user}@|root@|") # uses @ in the sed switch to avoid it triggering on the $ssh_key value
@@ -129,6 +133,7 @@ function nixos_anywhere() {
 	# Clear the keys, since they should be newly generated for the iso
 	green "Wiping known_hosts of $target_destination"
 	sed -i "/$target_hostname/d; /$target_destination/d" ~/.ssh/known_hosts
+	sudo sed -i "/$target_hostname/d; /$target_destination/d" /root/.ssh/known_hosts || true
 
 	green "Installing NixOS on remote host $target_hostname at $target_destination"
 
@@ -137,13 +142,13 @@ function nixos_anywhere() {
 	###
 	green "Preparing a new ssh_host_ed25519_key pair for $target_hostname."
 	# Create the directory where sshd expects to find the host keys
-	install -d -m755 "$temp/$persist_dir/etc/ssh"
+	install -d -m755 "$temp/etc/ssh"
 
 	# Generate host ssh key pair without a passphrase
-	ssh-keygen -t ed25519 -f "$temp/$persist_dir/etc/ssh/ssh_host_ed25519_key" -C root@"$target_hostname" -N ""
-
+	ssh-keygen -t ed25519 -f "$temp/etc/ssh/ssh_host_ed25519_key" -C root@"$target_hostname" -N ""
+	 
 	# Set the correct permissions so sshd will accept the key
-	chmod 600 "$temp/$persist_dir/etc/ssh/ssh_host_ed25519_key"
+	chmod 600 "$temp/etc/ssh/ssh_host_ed25519_key"
 
 	echo "Adding ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	# This will fail if we already know the host, but that's fine
@@ -156,23 +161,51 @@ function nixos_anywhere() {
 
 	# when using luks, disko expects a passphrase on /tmp/disko-password, so we set it for now and will update the passphrase later
 	# via the config
-	green "Preparing a temporary password for disko."
-	$ssh_root_cmd "/bin/sh -c 'echo passphrase > /tmp/disko-password'"
+	# green "Preparing a temporary password for disko."
+	
+ 	secret_file="${git_root}"/../.secrets/secrets.yaml
+	#if [ -n "$tpm" ]; then
+	#	#luks_passphrase=$(sops -d --extract '["nixos"]["klusteri-key"]' "$secret_file")
+	#	luks_passphrase=$(dd if=/dev/random bs=64 count=1 2>/dev/null | od -An -tx1 | tr -d ' \n')
+	#	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
+	#	$ssh_root_cmd "/bin/sh -c 'tpm2-initramfs-tool seal --data \$(cat /tmp/disko-password) --pcrs 0,2'"
+	#else
+		luks_passphrase=osmo
+ 	   	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
+	#fi
 
-	green "Generating hardware-config.nix for $target_hostname and adding it to the .files."
+	green "Generating hardware-config.nix for $target_hostname and adding it to the nix-config."
 	$ssh_root_cmd "nixos-generate-config --no-filesystems --root /mnt"
 	$scp_cmd root@"$target_destination":/mnt/etc/nixos/hardware-configuration.nix "${git_root}"/hosts/"$target_hostname"/hardware-configuration.nix
 
 	# --extra-files here picks up the ssh host key we generated earlier and puts it onto the target machine
-	SHELL=/bin/sh nix run github:nix-community/nixos-anywhere -- --ssh-port "$ssh_port" --extra-files "$temp" --flake .#"$target_hostname" root@"$target_destination"
+	SHELL=/bin/sh nix run github:nix-community/nixos-anywhere -- --phases disko,install --ssh-port "$ssh_port" --extra-files "$temp" --flake .#"$target_hostname" root@"$target_destination"
 
+	if [ -n "$tpm" ]; then
+	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
+	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=0+2 /dev/\$device_name'"
+	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 1'"
+	fi
+
+	$ssh_root_cmd "sudo reboot now"
+
+	# Ping the target every 2 seconds until it becomes reachable, then sleep 5 seconds
+	until ping -c 1 -W 1 "$target_destination" >/dev/null 2>&1; do
+	    echo "Waiting for $target_destination to become reachable..."
+	    sleep 2
+	done
+
+	echo "$target_destination is reachable, waiting an additional 5 seconds..."
+	sleep 5s
 	echo "Updating ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	ssh-keyscan -p "$ssh_port" "$target_destination" >>~/.ssh/known_hosts || true
 
 	if [ -n "$persist_dir" ]; then
+		$ssh_root_cmd "mkdir -p $persist_dir/etc/ssh/ || true"
 		$ssh_root_cmd "cp /etc/machine-id $persist_dir/etc/machine-id || true"
-		$ssh_root_cmd "cp -R /etc/ssh/ $persist_dir/etc/ssh/ || true"
+		$ssh_root_cmd "cp -R /etc/ssh/ $persist_dir/etc/ || true"
 	fi
+
 	cd -
 }
 
@@ -278,28 +311,36 @@ if [[ $updated_age_keys == 1 ]]; then
 fi
 
 if yes_or_no "Add ssh host fingerprints for github and codeberg? If this is the first time running this script on $target_hostname, this will be required for the following steps?"; then
-	if [ "$target_user" == "root" ]; then
-		home_path="/root"
-	else
-		home_path="/home/$target_user"
-	fi
 	green "Adding ssh host fingerprints for github and codeberg"
-	$ssh_cmd "mkdir -p $home_path/.ssh/; ssh-keyscan -t ssh-ed25519 codeberg.org github.com >>$home_path/.ssh/known_hosts"
+		#$ssh_cmd "sudo mkdir -p /root/.ssh/; ssh-keyscan -t ssh-ed25519 codeberg.org github.com >> /root/.ssh/known_hosts"
+		$ssh_cmd "mkdir -p /home/$target_user/.ssh/; ssh-keyscan -t ssh-ed25519 codeberg.org github.com >> /home/$target_user/.ssh/known_hosts"
 fi
 
-if yes_or_no "Do you want to copy your full .files and . to $target_hostname?"; then
+if yes_or_no "Do you want to copy your full .files and .secrets to $target_hostname?"; then
 	green "Adding ssh host fingerprint at $target_destination to ~/.ssh/known_hosts"
 	ssh-keyscan -p "$ssh_port" "$target_destination" >>~/.ssh/known_hosts || true
 	green "Copying full .files to $target_hostname"
 	sync "$target_user" "${git_root}"/../.files
 	green "Copying full .secrets to $target_hostname"
 	sync "$target_user" "${git_root}"/../.secrets
+	$ssh_cmd -oForwardAgent=yes "cd .files && git-agecrypt init"
 
 if yes_or_no "Do you want to rebuild immediately?"; then
 	green "Rebuilding .files on $target_hostname"
 	#FIXME there are still a codeberg fingerprint request happening during the rebuild
-	#$ssh_cmd -oForwardAgent=yes "cd .files && sudo nixos-rebuild --show-trace --flake .#$target_hostname" switch"
-	$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
+	sudo nixos-rebuild \
+	  --flake .\#$target_hostname \
+	  --target-host root@$target_destination \
+	  switch --use-remote-sudo \
+	  || true
+
+	#$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
+	#if [ -n "$tpm" ]; then
+	   # $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
+	  #  $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=0+2 /dev/\$device_name'"
+	 #   $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 1'"
+	#fi
+
 fi
 else
 	echo
