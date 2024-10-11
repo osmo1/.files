@@ -1,5 +1,4 @@
 {
-
     description = "My all purpose flake";
 
     inputs = {
@@ -127,7 +126,7 @@
               system = "x86_64-linux";
               pkgs = nixpkgs.legacyPackages.${system};
               pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib configVars; };
           in
           lib.nixosSystem {
               inherit system;
@@ -204,35 +203,10 @@
 			disko.devices.disk.secondary.device = "/dev/vdb";
 		}
                 (import ./hosts/testeri/disko.nix)
-                inputs.impermanence.nixosModules.impermanence
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
                 home-manager.nixosModules.home-manager
-            ];
-        };
-	testeri2 =
-          let
-            system = "x86_64-linux";
-            pkgs = nixpkgs.legacyPackages.${system};
-	        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-	        specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib secrets; };
-          in
-          lib.nixosSystem {
-            inherit system;
-	        inherit specialArgs;
-            modules = [
-                ./hosts/testeri2
-
-                inputs.disko.nixosModules.default 
-		{
-			disko.devices.disk.main.device = "/dev/vda";
-		}
-                (import ./hosts/testeri2/disko.nix)
-                #inputs.impermanence.nixosModules.impermanence
-
-                inputs.nur.nixosModules.nur
-                inputs.nixvim.nixosModules.nixvim
             ];
         };
 	klusteri-0 =
@@ -246,11 +220,11 @@
             inherit system;
 	        inherit specialArgs;
             modules = [
-                ./hosts/klusteri-1
+                ./hosts/klusteri-0
 
                 inputs.disko.nixosModules.default 
 		{
-			disko.devices.disk.main.device = "/dev/vda";
+			disko.devices.disk.main.device = "/dev/nvme0n1";
 		}
                 inputs.impermanence.nixosModules.impermanence
 
@@ -270,11 +244,11 @@
             inherit system;
 	        inherit specialArgs;
             modules = [
-                ./hosts/klusteri-0
+                ./hosts/klusteri-1
 
                 inputs.disko.nixosModules.default 
 		{
-			disko.devices.disk.main.device = "/dev/vda";
+			disko.devices.disk.main.device = "/dev/nvme0n1";
 		}
                 inputs.impermanence.nixosModules.impermanence
 
