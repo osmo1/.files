@@ -5,7 +5,6 @@
     ++ [
     	../../common/core
 	../../common/optional/disks/1-luks-btrfs.nix
-	../../common/optional/k3s.nix
 	      ../../common/optional/impermanence.nix
 	      #../../common/optional/podman.nix
 	      #../../common/optional/vpn.nix
