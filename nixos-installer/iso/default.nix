@@ -1,6 +1,5 @@
 { pkgs, lib, config, configLib, configVars, ... }:
 {
-  imports = [ (configLib.relativeToRoot "common/core/users.nix") ];
 
   # The default compression-level is (6) and takes too long on some machines (>30m). 3 takes <2m
   isoImage.squashfsCompression = "zstd -Xcompression-level 3";
@@ -20,6 +19,11 @@
   };
 
   users.users.root = { initialPassword = "osmo"; };
+
+environment.systemPackages = with pkgs; [
+  tpm2-tools
+  tpm2-tss
+];
 
   services = {
     qemuGuest.enable = true;

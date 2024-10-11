@@ -3,7 +3,10 @@ let
   secretsPath = builtins.toString inputs.secrets;
 in
 {
-  imports = [ (configLib.relativeToRoot "common/core/users.nix") ];
+  imports = [ 
+    (configLib.relativeToRoot "common/core/users.nix")
+  ];
+
 
   fileSystems."/boot".options = [ "umask=0077" ]; # Removes permissions and security warnings.
   boot.loader.efi.canTouchEfiVariables = true;
@@ -20,7 +23,7 @@ in
     # configures the network interface(include wireless) via `nmcli` & `nmtui`
     networkmanager.enable = true;
   };
-  nix.trustedUsers = [ "root" "@wheel" ];
+  nix.trustedUsers = [ "root" "osmo" "@wheel" ];
   services = {
     qemuGuest.enable = true;
     openssh = {
@@ -44,7 +47,7 @@ in
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit (pkgs) wget curl rsync neovim git just git-agecrypt sops;
+    inherit (pkgs) wget curl rsync neovim git just git-agecrypt sops tpm2-tools tpm2-tss;
   };
 
   nix.settings = {
