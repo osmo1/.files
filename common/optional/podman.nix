@@ -33,4 +33,7 @@
         export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
       fi
     '';
+    environment = if config.fileSystems."/persist".neededForBoot then {
+      persistence."/persist".directories = [ "/etc/containers/" ]; }
+      else {};
 }
