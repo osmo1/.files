@@ -186,9 +186,11 @@ function nixos_anywhere() {
 	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=0+2 /dev/\$device_name'"
 	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 1'"
 	fi
-
+	
+	echo "Rebooting now"
 	$ssh_root_cmd "sudo reboot now"
 
+	sleep 3
 	# Ping the target every 2 seconds until it becomes reachable, then sleep 5 seconds
 	until ping -c 1 -W 1 "$target_destination" >/dev/null 2>&1; do
 	    echo "Waiting for $target_destination to become reachable..."

@@ -1,11 +1,7 @@
 { configLib, pkgs, ... }:
 {
-  /*imports = (configLib.scanPaths ./.)
-  	++ [ ../sound.nix ];*/
-  imports = [
-	../sound.nix
-	./packages.nix
-  ];
+  imports = (configLib.scanPaths ./.)
+  	++ [ ../desktop ];
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
@@ -31,6 +27,7 @@
   home-manager.users.osmo = { inputs, ... }: {
 	imports = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
   	programs.plasma = {
+	     enable = true;
 	     overrideConfig = true;
 	     workspace = {
 		      lookAndFeel = "org.kde.breezedark.desktop";
@@ -38,7 +35,7 @@
 			theme = "capitaine-cursors";
 			size = 24;
 		      };
-		    iconTheme = "Papirus-Dark";
+		    iconTheme = "Papirus";
 	     };
 	     panels = [
 		# Bottom task-manager
@@ -60,7 +57,7 @@
 			    };
 			  }
 			];
-		},
+		}
 		# Top menubar
 		{
 			location = "top";
@@ -143,15 +140,6 @@
 	      "kwinrc"."Tiling/213a9620-187e-58a6-b80b-85d8fb95dfce"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
 	      "kwinrc"."Tiling/9af7dcb9-cc17-5e04-a97c-10654d6af592"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
 	      "kwinrc"."Xwayland"."Scale" = 1.25;
-	      "plasma-localerc"."Formats"."LANG" = "en_US.UTF-8";
-	      "plasma-localerc"."Formats"."LC_ADDRESS" = "fi_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_MEASUREMENT" = "en_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_MONETARY" = "en_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_NAME" = "fi_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_NUMERIC" = "en_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_PAPER" = "en_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_TELEPHONE" = "fi_FI.UTF-8";
-	      "plasma-localerc"."Formats"."LC_TIME" = "en_FI.UTF-8";
 	      "plasmanotifyrc"."Notifications"."PopupTimeout" = 1942;
 	    };
  		

@@ -97,16 +97,17 @@
               system = "x86_64-linux";
               pkgs = nixpkgs.legacyPackages.${system};
               pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib configVars; };
           in
           lib.nixosSystem {
               inherit system;
 	          inherit specialArgs;
               modules = [
                 ./hosts/lixos
-                #inputs.disko.nixosModules.default
-                #(import ./hosts/lixos/disko.nix)
-                #inputs.impermanence.nixosModules.impermanence
+                inputs.disko.nixosModules.default {
+			disko.devices.disk.main.device = "/dev/nvme0n1";
+		}
+                inputs.impermanence.nixosModules.impermanence
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
