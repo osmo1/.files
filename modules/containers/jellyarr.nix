@@ -31,6 +31,10 @@ in {
         type = types.str;
 	default = "osmo1.duckdns.org";
       };
+      mediaLocation = mkOption {
+        type = types.str;
+        default = "/mnt/media";
+      };
     };
   };
 
@@ -86,7 +90,7 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/qbittorrent:/config"
-          "${cfg.dataLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
           "${port}:8080"
@@ -158,13 +162,6 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "*arr";
-          "homepage.name" = "Flaresolverr";
-          "homepage.icon" = "flaresolverr";
-          "homepage.href" = "https://flaresolverr.${cfg.options.urlBase}";
-          "homepage.description" = "Solver Cloudflare captchas";
-        };
       };
       containers.sonarr =  let
       	port = toString (cfg.uiPortStart + 300);
@@ -174,8 +171,8 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/sonarr:/config"
-          "${cfg.dataLocation}/media/tv:/tv"
-          "${cfg.dataLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}/tv:/tv"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
           "${port}:8989"
@@ -203,8 +200,8 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/radarr:/config"
-          "${cfg.dataLocation}/media/movies:/movies"
-          "${cfg.dataLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}/movies:/movies"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
           "${port}:7878"
@@ -232,8 +229,8 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/lidarr:/config"
-          "${cfg.dataLocation}/media/music:/music"
-          "${cfg.dataLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}/music:/music"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
           "${port}:8686"
@@ -261,8 +258,8 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/readarr:/config"
-          "${cfg.dataLocation}/media/books:/books"
-          "${cfg.dataLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}/books:/books"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
           "${port}:8787"
@@ -290,8 +287,8 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/bazarr:/config"
-          "${cfg.dataLocation}/media/movies:/movies"
-          "${cfg.dataLocation}/media/tv:/tv"
+          "${cfg.options.mediaLocation}/movies:/movies"
+          "${cfg.options.mediaLocation}/tv:/tv"
         ];
         ports = [
           "${port}:6767"
@@ -319,8 +316,8 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/jellyfin:/config"
-          "${cfg.dataLocation}/media/movies:/data/movies"
-          "${cfg.dataLocation}/media/tv:/data/tvshows"
+          "${cfg.options.mediaLocation}/movies:/data/movies"
+          "${cfg.options.mediaLocation}/tv:/data/tvshows"
         ];
         ports = [
           "${port}:8096"
@@ -385,11 +382,6 @@ in {
       "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/movies 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/tv 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/books 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/music 0770 osmo users - -"
     ];
   };
 }

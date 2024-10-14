@@ -6,9 +6,9 @@
     	../../common/core
 	../../common/optional/disks/1-luks-btrfs.nix
 	      ../../common/optional/impermanence.nix
-	      ../../common/optional/vpn.nix
+	      ../../common/optional/podman.nix
+	      #../../common/optional/vpn.nix
 	      #../../common/optional/remote-crypt.nix
-	      #../../common/optional/podman.nix
 	      #../../common/optional/xfce
 	      #../../common/optional/sddm.nix
 	      #../../common/optional/proton.nix
