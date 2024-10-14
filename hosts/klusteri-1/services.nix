@@ -17,11 +17,14 @@
       };
     };
     jellyarr = {
-      enable = false;
+      enable = true;
       dataLocation = "/home/osmo/jellyarr";
-      uiPortStart = 2080;
+      uiPortStart = 1080;
       timeZone = "Europe/Helsinki";
       enableHomePage = false;
+      options = {
+	urlBase = "osmo1.duckdns.org";
+      };
     };
   };
 

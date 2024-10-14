@@ -17,7 +17,7 @@
       };
     };
     jellyarr = {
-      enable = true;
+      enable = false;
       dataLocation = "/home/osmo/jellyarr";
       uiPortStart = 1080;
       timeZone = "Europe/Helsinki";
@@ -25,6 +25,14 @@
       options = {
 	urlBase = "osmo1.duckdns.org";
       };
+    };
+    pihole = {
+      enable = true;
+      dataLocation = "/home/osmo/pihole";
+      version = "development";
+      uiPort = 480;
+      timeZone = "Europe/Helsinki";
+      enableHomePage = false;
     };
   };
 

@@ -18,6 +18,7 @@
                 # I created a blank default.nix in hosts/common/core/services to work around
                 (path != "default.nix") # ignore default.nix
                 && (lib.strings.hasSuffix ".nix" path) # include .nix files
+		&& (_type != "symlink")
               )
           )
           (builtins.readDir path)));
