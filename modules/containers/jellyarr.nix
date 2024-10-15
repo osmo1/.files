@@ -162,13 +162,6 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "*arr";
-          "homepage.name" = "Flaresolverr";
-          "homepage.icon" = "flaresolverr";
-          "homepage.href" = "https://flaresolverr.${cfg.options.urlBase}";
-          "homepage.description" = "Solver Cloudflare captchas";
-        };
       };
       containers.sonarr =  let
       	port = toString (cfg.uiPortStart + 300);

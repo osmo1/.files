@@ -21,18 +21,10 @@
       dataLocation = "/home/osmo/jellyarr";
       uiPortStart = 1080;
       timeZone = "Europe/Helsinki";
-      enableHomePage = false;
+      enableHomePage = true;
       options = {
 	urlBase = "osmo1.duckdns.org";
       };
-    };
-    pihole = {
-      enable = true;
-      dataLocation = "/home/osmo/pihole";
-      version = "development";
-      uiPort = 480;
-      timeZone = "Europe/Helsinki";
-      enableHomePage = true;
     };
     dockerproxy.enable = true;
     homepage = {
