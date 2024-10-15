@@ -24,6 +24,7 @@
       enableHomePage = false;
       options = {
 	urlBase = "osmo1.duckdns.org";
+	mediaLocation = "/mnt/media";
       };
     };
   };
