@@ -27,6 +27,7 @@
 	mediaLocation = "/mnt/media";
       };
     };
+    dockerproxy.enable = true;
   };
 
 
