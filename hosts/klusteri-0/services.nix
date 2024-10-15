@@ -32,7 +32,14 @@
       version = "development";
       uiPort = 480;
       timeZone = "Europe/Helsinki";
-      enableHomePage = false;
+      enableHomePage = true;
+    };
+    dockerproxy.enable = true;
+    homepage = {
+	enable = true;
+	version = "latest";
+	uiPort = 180;
+	dataLocation = "/home/osmo/homepage";
     };
   };
 
