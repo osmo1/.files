@@ -35,7 +35,7 @@
 			theme = "capitaine-cursors";
 			size = 24;
 		      };
-		    iconTheme = "Papirus";
+		    iconTheme = "breeze";
 	     };
 	     panels = [
 		# Bottom task-manager
@@ -50,7 +50,7 @@
 			    name = "org.kde.plasma.icontasks";
 			    config = {
 			      General.launchers = [
-			      	"applications:librewolf.desktop"
+			      	"applications:zen.desktop"
 				"applications:org.kde.konsole.desktop"
 				"applications:org.kde.dolphin.desktop"
 			      ];
@@ -114,8 +114,8 @@
 	      "kded5rc"."Module-device_automounter"."autoload" = false;
 	      "kded5rc"."PlasmaBrowserIntegration"."shownCount" = 1;
 	      "kdeglobals"."DirSelect Dialog"."DirSelectDialog Size" = "820,584";
-	      "kdeglobals"."General"."AccentColor" = "218,24,55";
-	      "kdeglobals"."General"."LastUsedCustomAccentColor" = "218,24,55";
+	      "kdeglobals"."General"."AccentColor" = "255,117,127";
+	      "kdeglobals"."General"."LastUsedCustomAccentColor" = "255,117,127";
 	      "kdeglobals"."KDE"."AnimationDurationFactor" = 0.5;
 	      "kdeglobals"."WM"."activeBackground" = "49,54,59";
 	      "kdeglobals"."WM"."activeBlend" = "252,252,252";

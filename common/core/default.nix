@@ -28,7 +28,6 @@
   # Enable networking
   networking.networkmanager.enable = true;
   nixpkgs = {
-    # you can add global overlays here
     #overlays = builtins.attrValues outputs.overlays;
     config = {
       allowUnfree = true;
