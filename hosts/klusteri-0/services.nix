@@ -26,12 +26,26 @@
 	urlBase = "osmo1.duckdns.org";
       };
     };
+    pihole = {
+	enable = true;
+	version = "development";
+	uiPort = 380;
+	dataLocation = "/home/osmo/pihole";
+	enableTraefik = true;
+	enableHomePage = true;
+    };
     dockerproxy.enable = true;
     homepage = {
 	enable = true;
 	version = "latest";
 	uiPort = 180;
 	dataLocation = "/home/osmo/homepage";
+    };
+    traefik = {
+	enable = true;
+	version = "v3.1";
+	uiPort = 280;
+	dataLocation = "/home/osmo/traefik";
     };
   };
 

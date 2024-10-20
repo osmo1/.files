@@ -26,6 +26,10 @@ in {
       type = types.bool;
       default = true;
     };
+    enableTraefik = mkOption {
+      type = types.bool;
+      default = true;
+    };
     options = {};
   };
 
@@ -47,16 +51,28 @@ in {
           TZ = "${cfg.timeZone}";
         };
         extraOptions = [
-	  "--network=bridge"
+	  "--network=default"
         ];
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Network";
-          "homepage.name" = "Pihole";
-          "homepage.icon" = "pihole";
-          # TODO: Change this.
-          "homepage.href" = "https://pihole.osmo1.duckdns.org";
-          "homepage.description" = "DNS blocking";
-        };
+labels =    (if cfg.enableHomePage == true then {
+      "homepage.group" = "Network";
+      "homepage.name" = "Pihole";
+      "homepage.icon" = "pihole";
+      "homepage.href" = "https://pihole.osmo1.duckdns.org"; # TODO: Change this.
+      "homepage.description" = "DNS blocking";
+    } else {} ) //
+
+    (if cfg.enableTraefik == true then {
+      "traefik.enable" = "true";
+      "traefik.http.routers.pihole.rule" = "Host(`pihole.testeri.duckdns.org`)";
+      "traefik.http.routers.pihole.entrypoints" = "websecure";
+      "traefik.http.routers.pihole.tls.certresolver" = "duckdns";
+      "traefik.http.services.pihole.loadbalancer.server.port" = "80";
+      # Redirect to /admin
+      #"traefik.http.middlewares.pihole-addprefix.addprefix.prefix" = "/admin";
+     # "traefik.http.routers.pihole.middlewares" = "pihole-addprefix";
+    } else {} );
+
+
       };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPort ];
