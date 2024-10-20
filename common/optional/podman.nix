@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }: {
     virtualisation = {
       oci-containers = { backend = "podman"; };
       containers.enable = true;
@@ -29,8 +29,8 @@
 	slirp4netns
         ]);
     environment.extraInit = ''
-      if [ -z "$DOCKER_HOST" -a -n "$XDG_RUNTIME_DIR" ]; then
-        export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
-      fi
-    '';
+	      if [ -z "$DOCKER_HOST" -a -n "$XDG_RUNTIME_DIR" ]; then
+		export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
+	      fi
+	    '';
 }

@@ -26,7 +26,16 @@ in {
       type = types.bool;
       default = true;
     };
-    #options = {};
+    options = {
+      urlBase = mkOption {
+        type = types.str;
+	default = "osmo1.duckdns.org";
+      };
+      mediaLocation = mkOption {
+        type = types.str;
+        default = "/mnt/media";
+      };
+    };
   };
 
   config =
@@ -36,255 +45,11 @@ in {
     portRange = "${toString startPort}-${toString endPort}:${toString startPort}-${toString endPort}/tcp";
     singlePortString = "${toString cfg.options.singlePort}:${toString cfg.options.singlePort}";
   in mkIf cfg.enable {
+    #services.containers.homepage = mkIf cfg.enableHomePage true;
     virtualisation.oci-containers = {
-      containers.prowlarr = {
-        hostname = "prowlarr";
-        image = "lscr.io/linuxserver/prowlarr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/prowlarr:/config"
-        ];
-        ports = [
-          "${toString cfg.uiPortStart}:9696"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      };
-      containers.sonarr = {
-        hostname = "sonarr";
-        image = "lscr.io/linuxserver/sonarr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/sonarr:/config"
-          "${cfg.dataLocation}/media/tv:/tv"
-          "${cfg.dataLocation}/downloads:/downloads"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 100) }:8989"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      }; 
-      containers.radarr = {
-        hostname = "radarr";
-        image = "lscr.io/linuxserver/radarr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/radarr:/config"
-          "${cfg.dataLocation}/media/movies:/movies"
-          "${cfg.dataLocation}/downloads:/downloads"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 200) }:7878"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      }; 
-      containers.lidarr = {
-        hostname = "lidarr";
-        image = "lscr.io/linuxserver/lidarr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/lidarr:/config"
-          "${cfg.dataLocation}/media/music:/music"
-          "${cfg.dataLocation}/downloads:/downloads"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 300) }:8686"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      };
-      containers.readarr = {
-        hostname = "readarr";
-        image = "lscr.io/linuxserver/readarr:develop";
-	
-        volumes = [
-          "${cfg.dataLocation}/readarr:/config"
-          "${cfg.dataLocation}/media/books:/books"
-          "${cfg.dataLocation}/downloads:/downloads"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 400) }:8787"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      };
-      containers.bazarr = {
-        hostname = "bazarr";
-        image = "lscr.io/linuxserver/bazarr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/bazarr:/config"
-          "${cfg.dataLocation}/media/movies:/movies"
-          "${cfg.dataLocation}/media/tv:/tv"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 500) }:6767"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      };
-      containers.jellyfin = {
-        hostname = "jellyfin";
-        image = "lscr.io/linuxserver/jellyfin:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/jellyfin:/config"
-          "${cfg.dataLocation}/media/movies:/data/movies"
-          "${cfg.dataLocation}/media/tv:/data/tvshows"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 600) }:8096"
-	  "7359:7359/udp"
-	  "1900:1900"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      };
-      containers.jellyseerr = {
-        hostname = "jellyseerr";
-        image = "fallenbagel/jellyseerr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/jellyseerr:/config"
-        ];
-        ports = [
-          "${toString (cfg.uiPortStart + 700) }:5055"
-        ];
-	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-	  LOG_LEVEL = "debug";
-        };
-        extraOptions = [
-        ];
-	#TODO all of these homepages
-        labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
-        };
-      };
-      containers.deluge = {
+      /*containers.deluge = let
+      	port = toString cfg.uiPortStart;
+      in {
         hostname = "deluge";
         image = "lscr.io/linuxserver/deluge:${cfg.version}";
 	
@@ -293,7 +58,7 @@ in {
           "${cfg.dataLocation}/downloads:/downloads"
         ];
         ports = [
-          "${toString (cfg.uiPortStart + 800) }:8112"
+          "${port}:8112"
 	  "6881:6881"
 	  "6881:6881/udp"
 	  "58846:58846"
@@ -306,25 +71,64 @@ in {
         };
         extraOptions = [
         ];
-	#TODO all of these homepages
         labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
+          "homepage.group" = "*arr";
+          "homepage.name" = "Deluge";
+          "homepage.icon" = "deluge.png";
+          "homepage.href" = "https://deluge.${cfg.options.urlBase}";
+          "homepage.description" = "Torrent client";
+          "homepage.widget.type" = "deluge";
+          "homepage.widget.url" = "https://127.0.0.1:${port}";
+          "homepage.widget.password" = "osmo";
         };
-      };
-      containers.flaresolverr = {
-        hostname = "flaresolverr";
-        image = "ghcr.io/flaresolverr/flaresolverr:${cfg.version}";
+      };*/
+      containers.qbittorrent = let
+      	port = toString cfg.uiPortStart;
+      in {
+        hostname = "qbittorrent";
+        image = "lscr.io/linuxserver/qbittorrent:${cfg.version}";
+	
         volumes = [
+          "${cfg.dataLocation}/qbittorrent:/config"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
-          "${toString (cfg.uiPortStart + 900) }:8191"
+          "${port}:8080"
+          "6881:6881"
+	  "6881:6881/udp"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+	  WEBUI_PORT = "8080";
+	  TORRENTING_PORT = "6881";
+	  #DOCKER_MODS = "ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Deluge";
+          "homepage.icon" = "deluge.png";
+          "homepage.href" = "https://deluge.${cfg.options.urlBase}";
+          "homepage.description" = "Torrent client";
+          "homepage.widget.type" = "deluge";
+          "homepage.widget.url" = "https://127.0.0.1:${port}";
+          "homepage.widget.password" = "osmo";
+        };
+      };
+      containers.prowlarr = let
+      	port = toString (cfg.uiPortStart + 100);
+      in {
+        hostname = "prowlarr";
+        image = "lscr.io/linuxserver/prowlarr:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/prowlarr:/config"
+        ];
+        ports = [
+          "${port}:9696"
         ];
 	environment = {
 	  PUID = "1000";
@@ -333,16 +137,234 @@ in {
         };
         extraOptions = [
         ];
-	#TODO all of these homepages
         labels = mkIf cfg.enableHomePage {
-          "homepage.group" = "Misc";
-          "homepage.name" = "Crafty";
-          "homepage.icon" = "crafty.png";
-          # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
-          "homepage.description" = "Minecraft server";
-          "homepage.widget.type" = "minecraft";
-          "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";
+          "homepage.group" = "*arr";
+          "homepage.name" = "Prowlarr";
+          "homepage.icon" = "prowlarr";
+          "homepage.href" = "https://prowlarr.${cfg.options.urlBase}";
+          "homepage.description" = "Indexer distributor";
+        };
+      };
+      containers.flaresolverr = let
+      	port = toString (cfg.uiPortStart + 200);
+      in {
+        hostname = "flaresolverr";
+        image = "ghcr.io/flaresolverr/flaresolverr:${cfg.version}";
+        volumes = [
+        ];
+        ports = [
+          "${port}:8191"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+      };
+      containers.sonarr =  let
+      	port = toString (cfg.uiPortStart + 300);
+      in {
+        hostname = "sonarr";
+        image = "lscr.io/linuxserver/sonarr:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/sonarr:/config"
+          "${cfg.options.mediaLocation}/tv:/tv"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
+        ];
+        ports = [
+          "${port}:8989"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Sonarr";
+          "homepage.icon" = "sonarr";
+          "homepage.href" = "https://sonarr.${cfg.options.urlBase}";
+          "homepage.description" = "Downloads and organizes TV shows";
+        };
+      }; 
+      containers.radarr = let
+      	port = toString (cfg.uiPortStart + 400);
+      in {
+        hostname = "radarr";
+        image = "lscr.io/linuxserver/radarr:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/radarr:/config"
+          "${cfg.options.mediaLocation}/movies:/movies"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
+        ];
+        ports = [
+          "${port}:7878"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Radarr";
+          "homepage.icon" = "radarr";
+          "homepage.href" = "https://radarr.${cfg.options.urlBase}";
+          "homepage.description" = "Downlads and organizes movies";
+        };
+      }; 
+      containers.lidarr = let
+      	port = toString (cfg.uiPortStart + 500);
+      in {
+        hostname = "lidarr";
+        image = "lscr.io/linuxserver/lidarr:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/lidarr:/config"
+          "${cfg.options.mediaLocation}/music:/music"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
+        ];
+        ports = [
+          "${port}:8686"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "lidarr";
+          "homepage.icon" = "lidarr";
+          "homepage.href" = "https://lidarr.${cfg.options.urlBase}";
+          "homepage.description" = "Downloads and organizes music";
+        };
+      };
+      containers.readarr = let
+      	port = toString (cfg.uiPortStart + 600);
+      in {
+        hostname = "readarr";
+        image = "lscr.io/linuxserver/readarr:develop";
+	
+        volumes = [
+          "${cfg.dataLocation}/readarr:/config"
+          "${cfg.options.mediaLocation}/books:/books"
+          "${cfg.options.mediaLocation}/downloads:/downloads"
+        ];
+        ports = [
+          "${port}:8787"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Readarr";
+          "homepage.icon" = "readarr";
+          "homepage.href" = "https://readarr.${cfg.options.urlBase}";
+          "homepage.description" = "Downloads and organizes literature";
+        };
+      };
+      containers.bazarr = let
+      	port = toString (cfg.uiPortStart + 700);
+      in {
+        hostname = "bazarr";
+        image = "lscr.io/linuxserver/bazarr:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/bazarr:/config"
+          "${cfg.options.mediaLocation}/movies:/movies"
+          "${cfg.options.mediaLocation}/tv:/tv"
+        ];
+        ports = [
+          "${port}:6767"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Bazarr";
+          "homepage.icon" = "bazarr";
+          "homepage.href" = "https://bazarr.${cfg.options.urlBase}";
+          "homepage.description" = "Downloads and organizes subtitles";
+        };
+      };
+      containers.jellyfin = let
+      	port = toString (cfg.uiPortStart + 800);
+      in {
+        hostname = "jellyfin";
+        image = "lscr.io/linuxserver/jellyfin:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/jellyfin:/config"
+          "${cfg.options.mediaLocation}/movies:/data/movies"
+          "${cfg.options.mediaLocation}/tv:/data/tvshows"
+        ];
+        ports = [
+          "${port}:8096"
+	  "7359:7359/udp"
+	  "1900:1900"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Jellyfin";
+          "homepage.icon" = "jellyfin";
+          "homepage.href" = "https://jellyfin.${cfg.options.urlBase}";
+          "homepage.description" = "Stream your local media";
+        };
+      };
+      containers.jellyseerr = let
+      	port = toString (cfg.uiPortStart + 900);
+      in {
+        hostname = "jellyseerr";
+        image = "fallenbagel/jellyseerr:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/jellyseerr:/config"
+        ];
+        ports = [
+          "${port}:5055"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+	  LOG_LEVEL = "debug";
+        };
+        extraOptions = [
+        ];
+        labels = mkIf cfg.enableHomePage {
+          "homepage.group" = "*arr";
+          "homepage.name" = "Jellyseerr";
+          "homepage.icon" = "jellyseerr";
+          "homepage.href" = "https://jellyseerr.${cfg.options.urlBase}";
+          "homepage.description" = "Controll the *arr stack";
         };
       };
     };
@@ -351,21 +373,15 @@ in {
       "d ${cfg.dataLocation} 0770 osmo users - -"
       "d ${cfg.dataLocation}/downloads 0770 osmo users - -"
       "d ${cfg.dataLocation}/deluge 0770 osmo users - -"
+      "d ${cfg.dataLocation}/qbittorrent 0770 osmo users - -"
       "d ${cfg.dataLocation}/prowlarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/sonarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/radarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/lidarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/readarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/movies 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/tv 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/books 0770 osmo users - -"
-      "d ${cfg.dataLocation}/media/music 0770 osmo users - -"
+      "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
     ];
-    #systemd.services.podman-jellyarr.serviceConfig.User = "osmo";
   };
 }
-

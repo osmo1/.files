@@ -33,7 +33,7 @@
       # FIXME: Specify arch eventually probably
       # This mkHost is way better: https://github.com/linyinfeng/dotfiles/blob/8785bdb188504cfda3daae9c3f70a6935e35c4df/flake/hosts.nix#L358
       newConfig =
-        hostname: disks: remote-crypt:
+        hostname: disks:
         (nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = minimalSpecialArgs;
@@ -46,9 +46,6 @@
             (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/optional/disks/${disks}.nix")
 
             ./minimal-configuration.nix
-            (if remote-crypt == true then configLib.relativeToRoot "common/optional/remote-crypt.nix" else {
-		  disko.devices.disk.main.content.partitions.crypted.content.passwordFile = "/tmp/disko-password";
-	    })
 	    { networking.hostName = hostname; }
             (configLib.relativeToRoot "hosts/${hostname}/hardware-configuration.nix")
           ];
@@ -58,12 +55,13 @@
       nixosConfigurations = {
         # host = newConfig "hostname"
         # Swap size is in GiB
+	lixos = newConfig "lixos" "1-luks-btrfs";
         serveri = newConfig "serveri";
         oraakeli = newConfig "oraakeli";
         testeri = newConfig "testeri";
         testeri2 = newConfig "testeri2";
-	klusteri-0 = newConfig "klusteri-0" "1-luks-btrfs" true;
-	klusteri-1 = newConfig "klusteri-1" "1-luks-btrfs" true;
+	klusteri-0 = newConfig "klusteri-0" "1-luks-btrfs";
+	klusteri-1 = newConfig "klusteri-1" "1-luks-btrfs";
 
         # Custom ISO
         #

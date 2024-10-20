@@ -130,7 +130,7 @@
 	      "/etc/ssh"
 	      "/var/lib/nixos"
 	      #"/home/osmo/"
-	    ];
+	    ] ++ (if config.virtualisation.podman.enable then [ "/etc/containers/" ] else []);
 	    files = [
 	      "/etc/machine-id"
 	    ];

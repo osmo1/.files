@@ -1,17 +1,27 @@
-{ config, lib, pkgs, pkgs-unstable, nixvim, inputs, nur, ... }:
-
+{ config, lib, pkgs, pkgs-unstable, nixvim, inputs, nur, configLib, ... }:
+let
+  hostnames = [ "testeri" "serveri" "klusteri-0" "klusteri-1" ]; # Add your hostnames here
+in
 {
-    imports =
-    [
-        ./hardware-configuration.nix
-        ./home.nix
-    	../../common/core
+    imports = (configLib.scanPaths ./.)
+    ++ [
+        ../../common/core
 	../../common/optional/plasma
-	../../common/optional/printing.nix
+	../../common/optional/disks/1-luks-btrfs.nix
     ];
 
     system.stateVersion = "24.05";
 
+    sops.secrets = builtins.listToAttrs (map (hostname: {
+          name = "nixos/${hostname}/ssh/private";
+          value = { 
+	    path = "/home/osmo/.ssh/${hostname}";
+	    owner = "osmo";
+	    group = "users";
+	    mode = "600";
+	  };
+    }) hostnames);
+    
     #TODO: Find a better place for this
     boot = {
     	loader = {

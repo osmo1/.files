@@ -97,16 +97,16 @@
               system = "x86_64-linux";
               pkgs = nixpkgs.legacyPackages.${system};
               pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-              specialArgs = { inherit pkgs pkgs-unstable inputs outputs configLib; };
+      packages = import ./pkgs { inherit pkgs; };
+              specialArgs = { inherit pkgs pkgs-unstable packages inputs outputs configLib configVars; };
           in
           lib.nixosSystem {
               inherit system;
 	          inherit specialArgs;
               modules = [
                 ./hosts/lixos
-                #inputs.disko.nixosModules.default
-                #(import ./hosts/lixos/disko.nix)
-                #inputs.impermanence.nixosModules.impermanence
+                inputs.disko.nixosModules.default
+                inputs.impermanence.nixosModules.impermanence
 
                 inputs.nur.nixosModules.nur
                 inputs.nixvim.nixosModules.nixvim
