@@ -18,7 +18,6 @@ TODO
 # TODO
 ### Global
  - [ ] Installation instructions
- - [ ] Disko configuration to common/optional/disks
  - [ ] Boot into common/core
  - [ ] Theming
    - [ ] Global shell theming
@@ -27,7 +26,7 @@ TODO
      - [ ] Kanagawa wave
  - [ ] Template host
  - [ ] Flake refactor 
-    - [ ] Format similar to the minimal flake
+    - [ x ] Format similar to the minimal flake (opted to go for format similar to EmergentMind's)
     - [ ] ConfigVars and options such as DE and theme
     - [ ] No need to touch hosts/${host} except for exceptions
     - [ ] Template host
@@ -35,6 +34,6 @@ TODO
  - [ ] All required permanence declarations exist only when impermanence is enabled
 ### Personal
  - [ ] Masiina ready
- - [ ] New host klusteri (K3s)
+ - [ x ] New host klusteri (not K3s)
  - [ ] Serveri and oraakeli working
    - [ ] Import old containers
