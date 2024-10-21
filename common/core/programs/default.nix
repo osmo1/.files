@@ -1,7 +1,8 @@
-{ pkgs, pkgs-unstable, ... }:
+{ pkgs, ... }:
 {
-    environment.systemPackages = 
-        (with pkgs; [
+   environment.systemPackages =
+        (with pkgs.stable; 
+	[
             neovim 
             git
             tmux
@@ -18,7 +19,7 @@
 
         ++
 
-        (with pkgs-unstable; [
+        (with pkgs.unstable; [
             nh
 	    fzf
         ]);

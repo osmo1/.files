@@ -1,6 +1,6 @@
-{ pkgs, pkgs-unstable, inputs, ... }:
-let 
-  zen-browser = pkgs.callPackage ../../../pkgs/zen-browser.nix { };
+{ pkgs, inputs, ... }:
+let
+  zen-browser = pkgs.callPackage ../../../pkgs/zen-browser { };
 in
 {
   users.users.osmo.packages = with pkgs; [

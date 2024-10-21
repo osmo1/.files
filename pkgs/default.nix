@@ -1,5 +1,6 @@
-final: prev:
-
 {
-  zen-browser = prev.callPackage ./zen-browser.nix {};
+  pkgs ? import <nixpkgs> { },
+}:
+rec {
+  zen-browser = pkgs.callPackage ./zen-browser {};
 }

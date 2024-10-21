@@ -43,7 +43,7 @@
 	    {
 			disko.devices.disk.main.device = "/dev/nvme0n1";
 		}
-            (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/optional/disks/${disks}.nix")
+            (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/core/disks/${disks}.nix")
 
             ./minimal-configuration.nix
 	    { networking.hostName = hostname; }

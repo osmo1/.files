@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs-unstable, nixvim, inputs, nur, configLib, ... }:
+{ config, lib, pkgs, nixvim, inputs, nur, configLib, ... }:
 let
   hostnames = [ "testeri" "serveri" "klusteri-0" "klusteri-1" ]; # Add your hostnames here
 in
@@ -7,7 +7,6 @@ in
     ++ [
         ../../common/core
 	../../common/optional/plasma
-	../../common/optional/disks/1-luks-btrfs.nix
     ];
 
     system.stateVersion = "24.05";
@@ -54,40 +53,4 @@ in
 
     networking.hostName = "lixos";
 
-
-    /*systemd.services.fprintd = {
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig.Type = "simple";
-    };
-
-    services.fprintd = {
-	enable = true;
-    	tod = {
-    	    enable = true;
-    	    driver = inputs.nixos-06cb-009a-fingerprint-sensor.lib.libfprint-2-tod1-vfs0090-bingch {
-                calib-data-file = /home/osmo/misc/calib-data.bin;
-            };
-        };
-    };*/
-    
-    services.open-fprintd.enable = true;
-    services.python-validity.enable = true;
-
-    security.pam.services.sudo.fprintAuth = true;
-    /*security.pam.services.sudo.text = ''
-	# Account management.
-	account required pam_unix.so
-
-	# Authentication management.
-	auth sufficient pam_unix.so   likeauth try_first_pass nullok
-	auth sufficient ${inputs.nixos-06cb-009a-fingerprint-sensor.localPackages.fprintd-clients}/lib/security/pam_fprintd.so
-	auth required pam_deny.so
-
-	# Password management.
-	password sufficient pam_unix.so nullok sha512
-
-	# Session management.
-	session required pam_env.so conffile=/etc/pam/environment readenv=0
-	session required pam_unix.so
-    '';*/
 }

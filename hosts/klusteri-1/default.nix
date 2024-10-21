@@ -1,10 +1,9 @@
-{ config, lib, configLib, pkgs, pkgs-unstable, nixvim, inputs, nur, ... }:
+{ config, lib, configLib, pkgs, nixvim, inputs, nur, ... }:
 
 {
     imports = (configLib.scanPaths ./.)
     ++ [
     	../../common/core
-	../../common/optional/disks/1-luks-btrfs.nix
 	      ../../common/optional/impermanence.nix
 	      ../../common/optional/podman.nix
 	      ../../common/optional/vpn.nix

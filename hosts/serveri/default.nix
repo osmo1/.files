@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs-unstable, nixvim, inputs, nur, ... }:
+{ config, lib, pkgs, nixvim, inputs, nur, ... }:
 
 {
     imports = (configLib.scanPaths ./.)
