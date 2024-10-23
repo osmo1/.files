@@ -1,5 +1,7 @@
 { config, lib, configLib, pkgs, nixvim, inputs, nur, ... }:
-
+let
+  hostnames = [ "testeri" "serveri" "klusteri-0" "klusteri-1" ]; # Add your hostnames here
+in
 {
     imports = (configLib.scanPaths ./.)
     ++ [
@@ -7,6 +9,15 @@
 	#../../common/optional/cybersecurity.nix
     ];
 
+    sops.secrets = builtins.listToAttrs (map (hostname: {
+          name = "nixos/${hostname}/ssh/private";
+          value = { 
+	    path = "/home/osmo/.ssh/${hostname}";
+	    owner = "osmo";
+	    group = "users";
+	    mode = "600";
+	  };
+    }) hostnames);
     system.stateVersion = "24.05";
 
     networking.hostName = "nix-wsl";
