@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixvim, inputs, nur, configLib, ... }:
+{ pkgs, inputs, configLib, ... }:
 let
   hostnames = [ "testeri" "serveri" "klusteri-0" "klusteri-1" ]; # Add your hostnames here
 in
@@ -7,6 +7,7 @@ in
     ++ [
         ../../common/core
 	../../common/optional/plasma
+	inputs.nixosModules.wsl.default
     ];
 
     system.stateVersion = "24.05";

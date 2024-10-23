@@ -177,6 +177,7 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
+	    inputs.nixos-wsl.nixosModules.default
             ./hosts/nix-wsl
           ];
         };
