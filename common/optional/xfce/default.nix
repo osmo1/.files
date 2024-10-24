@@ -1,10 +1,15 @@
-{ configLib, pkgs, callPackage, ... }: {
-  imports = (configLib.scanPaths ./.) ++ 
-  [
-	  ../desktop
-	  ../thunar.nix
+{
+  configLib,
+  pkgs,
+  callPackage,
+  ...
+}:
+{
+  imports = (configLib.scanPaths ./.) ++ [
+    ../desktop
+    ../thunar.nix
   ];
- services.xserver = {
+  services.xserver = {
     enable = true;
     desktopManager = {
       xterm.enable = false;

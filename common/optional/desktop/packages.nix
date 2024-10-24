@@ -13,9 +13,10 @@ in
     spotify
     libreoffice-fresh
     vesktop
-    
+
     # Coding
     vscodium # Needs further conf
+    zed-editor
 
     # Tools
     flameshot

@@ -1,10 +1,11 @@
-{ config, ... }: {
+{ config, ... }:
+{
   sops.secrets.wireguard.path = "/persist/run/secrets/wireguard";
   networking.firewall = {
     allowedUDPPorts = [ 51820 ];
   };
   # Enable WireGuard
-   networking.wg-quick.interfaces = {
+  networking.wg-quick.interfaces = {
     # "wg0" is the network interface name. You can name the interface arbitrarily.
     wg0 = {
       # Determines the IP address and subnet of the client's end of the tunnel interface.

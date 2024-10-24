@@ -1,4 +1,9 @@
-{ inputs, config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 {
   nix = {
     # This will add each flake input as a registry
@@ -19,16 +24,25 @@
       # Deduplicate and optimize nix store
       auto-optimise-store = true;
 
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       warn-dirty = false;
     };
-    trustedUsers = [ "root" "osmo" "@wheel" ];
+    trustedUsers = [
+      "root"
+      "osmo"
+      "@wheel"
+    ];
 
     # Garbage Collection
-    /*gc = {
-      automatic = true;
-      options = "--delete-older-than 10d";
-    };*/
+    /*
+      gc = {
+        automatic = true;
+        options = "--delete-older-than 10d";
+      };
+    */
 
   };
 }

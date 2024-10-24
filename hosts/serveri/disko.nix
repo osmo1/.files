@@ -2,7 +2,8 @@
   deviceMain ? throw "Set this to your first disk device, e.g. /dev/sda",
   deviceSecondary ? throw "Set this to your second disk device, e.g. /dev/sdb",
   ...
-}: {
+}:
+{
   disko.devices = {
     disk.main = {
       device = deviceMain;
@@ -39,7 +40,7 @@
               type = "filesystem";
               format = "btrfs";
               mountpoint = "/nix";
-              mountOptions = ["noatime"];
+              mountOptions = [ "noatime" ];
             };
           };
         };
@@ -73,17 +74,23 @@
             size = "100%FREE";
             content = {
               type = "btrfs";
-              extraArgs = ["-f"];
+              extraArgs = [ "-f" ];
               subvolumes = {
                 "/root" = {
                   mountpoint = "/";
                 };
                 "/persist" = {
-                  mountOptions = ["subvol=persist" "noatime"];
+                  mountOptions = [
+                    "subvol=persist"
+                    "noatime"
+                  ];
                   mountpoint = "/persist";
                 };
                 "/home" = {
-                  mountOptions = ["subvol=home" "noatime"];
+                  mountOptions = [
+                    "subvol=home"
+                    "noatime"
+                  ];
                   mountpoint = "/home/osmo";
                 };
               };
@@ -94,4 +101,3 @@
     };
   };
 }
-

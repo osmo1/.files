@@ -1,25 +1,34 @@
-{ config, configLib, configVars, lib, ... }: {
+{
+  config,
+  configLib,
+  configVars,
+  lib,
+  ...
+}:
+{
 
-  home-manager.users.osmo = { inputs, pkgs, ... }: {
-programs.ssh = {
-    enable = true;
+  home-manager.users.osmo =
+    { inputs, pkgs, ... }:
+    {
+      programs.ssh = {
+        enable = true;
 
-    # req'd for enabling yubikey-agent
-    extraConfig = ''
-      AddKeysToAgent yes
-    '';
+        # req'd for enabling yubikey-agent
+        extraConfig = ''
+          AddKeysToAgent yes
+        '';
 
-    matchBlocks = {
-      "git" = {
-        host = "github.com codeberg.org";
-        user = "git";
-        forwardAgent = true;
-        identitiesOnly = true;
-        identityFile = [ "~/.ssh/git" ];
+        matchBlocks = {
+          "git" = {
+            host = "github.com codeberg.org";
+            user = "git";
+            forwardAgent = true;
+            identitiesOnly = true;
+            identityFile = [ "~/.ssh/git" ];
+          };
+        };
       };
     };
-  };
-};
   sops.secrets = {
     "nixos/${config.networking.hostName}/ssh/public" = {
       path = "/etc/ssh/authorized_keys.d/${configVars.username}";

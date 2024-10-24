@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
   boot.supportedFilesystems = [ "btrfs" ];
   disko.devices = {
     disk.main = {
@@ -6,11 +7,11 @@
       content = {
         type = "gpt";
         partitions = {
-	  boot = {
+          boot = {
             name = "boot";
-	    size = "1M";
-	    type = "EF02";
-	  };
+            size = "1M";
+            type = "EF02";
+          };
           esp = {
             name = "ESP";
             size = "512M";
@@ -19,16 +20,14 @@
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
-	      mountOptions = [
-		"defaults"
-	      ]; 
+              mountOptions = [ "defaults" ];
             };
           };
           swap = {
             size = "16G";
             content = {
               type = "swap";
-	      randomEncryption = true;
+              randomEncryption = true;
             };
           };
           home_shared = {
@@ -37,7 +36,7 @@
               type = "filesystem";
               format = "btrfs";
               mountpoint = "/home/shared";
-              mountOptions = ["noatime"];
+              mountOptions = [ "noatime" ];
             };
           };
         };
@@ -56,25 +55,34 @@
               name = "crypted";
               content = {
                 type = "btrfs";
-                extraArgs = ["-f"];
+                extraArgs = [ "-f" ];
                 subvolumes = {
-		  "@" = {};
+                  "@" = { };
                   "@/root" = {
                     mountpoint = "/";
                   };
                   "@/nix" = {
-                    mountOptions = ["subvol=nix" "noatime"];
+                    mountOptions = [
+                      "subvol=nix"
+                      "noatime"
+                    ];
                     mountpoint = "/nix";
                   };
                   "@/persist" = {
-                    mountOptions = ["subvol=persist" "noatime"];
+                    mountOptions = [
+                      "subvol=persist"
+                      "noatime"
+                    ];
                     mountpoint = "/persist";
                   };
                   "@/home" = {
-                    mountOptions = ["subvol=home" "noatime"];
+                    mountOptions = [
+                      "subvol=home"
+                      "noatime"
+                    ];
                     mountpoint = "/home/osmo";
                   };
-	        };
+                };
               };
             };
           };

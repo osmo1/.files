@@ -1,5 +1,4 @@
 { pkgs, ... }:
 {
-  users.users.osmo.packages = with pkgs; [
-  ];
+  users.users.osmo.packages = with pkgs; [ ];
 }

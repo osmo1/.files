@@ -1,67 +1,66 @@
 {
-    description = "My all purpose flake";
+  description = "My all purpose flake";
 
-    inputs = {
-        # Nixpkgs and home-manager
-        nixpkgs.url = "nixpkgs/nixos-24.05";
-        nixpkgs-23-11.url = "nixpkgs/nixos-23.11";
-        nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+  inputs = {
+    # Nixpkgs and home-manager
+    nixpkgs.url = "nixpkgs/nixos-24.05";
+    nixpkgs-23-11.url = "nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
-        nur.url = "github:nix-community/NUR";
-        nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nur.url = "github:nix-community/NUR";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-        home-manager = {
-	  url = "github:nix-community/home-manager/release-24.05";
-          inputs.nixpkgs.follows = "nixpkgs";
-	};
-
-	# Common tools
-        disko = {
-            url = "github:nix-community/disko";
-            inputs.nixpkgs.follows = "nixpkgs";
-        };
-
-        impermanence = {
-            url = "github:nix-community/impermanence";
-        };
-
-        sops-nix = {
-          url = "github:mic92/sops-nix";
-          inputs.nixpkgs.follows = "nixpkgs";
-        };
-
-	# Personal repos
-        secrets = {
-          url = "git+ssh://git@codeberg.org/osmo1/.secrets.git?ref=main&shallow=1";
-          flake = false;
-        };
-        wallpapers = {
-          url = "git+ssh://git@github.com/osmo1/.wallpapers.git?ref=main&shallow=1";
-          flake = false;
-        };
-
-	# Apps and modules
-        nixvim = {
-            url = "github:nix-community/nixvim/nixos-24.05";
-            inputs.nixpkgs.follows = "nixpkgs";
-        };
-
-        nixos-wsl = {
-            url = "github:nix-community/NixOS-WSL";
-            inputs.nixpkgs.follows = "nixpkgs";
-        };
-
-        plasma-manager = {
-            url = "github:nix-community/plasma-manager";
-            inputs.nixpkgs.follows = "nixpkgs";
-            inputs.home-manager.follows = "home-manager";
-        };
-        nixos-06cb-009a-fingerprint-sensor = {
-          url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
-          inputs.nixpkgs.follows = "nixpkgs-23-11";
-        };
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Common tools
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
+
+    sops-nix = {
+      url = "github:mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Personal repos
+    secrets = {
+      url = "git+ssh://git@codeberg.org/osmo1/.secrets.git?ref=main&shallow=1";
+      flake = false;
+    };
+    wallpapers = {
+      url = "git+ssh://git@github.com/osmo1/.wallpapers.git?ref=main&shallow=1";
+      flake = false;
+    };
+
+    # Apps and modules
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+    nixos-06cb-009a-fingerprint-sensor = {
+      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
+      inputs.nixpkgs.follows = "nixpkgs-23-11";
+    };
+  };
 
   outputs =
     {
@@ -128,7 +127,6 @@
         import ./shell.nix { inherit checks pkgs; }
       );
 
-
       nixosConfigurations = {
         # Main
         masiina = lib.nixosSystem {
@@ -136,12 +134,12 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/2-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/nvme0n1";
-	      disko.devices.disk.secondary.device = "/dev/nvme1n1";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/2-luks-btrfs.nix)
+            {
+              disko.devices.disk.main.device = "/dev/nvme0n1";
+              disko.devices.disk.secondary.device = "/dev/nvme1n1";
+            }
             ./hosts/masiina
           ];
         };
@@ -150,11 +148,9 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/1-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/nvme0n1";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/1-luks-btrfs.nix)
+            { disko.devices.disk.main.device = "/dev/nvme0n1"; }
             ./hosts/lixos
           ];
         };
@@ -164,11 +160,9 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/1-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/vda";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/1-luks-btrfs.nix)
+            { disko.devices.disk.main.device = "/dev/vda"; }
             ./hosts/cbt
           ];
         };
@@ -177,7 +171,7 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-	    inputs.nixos-wsl.nixosModules.default
+            inputs.nixos-wsl.nixosModules.default
             ./hosts/nix-wsl
           ];
         };
@@ -186,12 +180,12 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/2-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/vda";
-	      disko.devices.disk.secondary.device = "/dev/vdb";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/2-luks-btrfs.nix)
+            {
+              disko.devices.disk.main.device = "/dev/vda";
+              disko.devices.disk.secondary.device = "/dev/vdb";
+            }
             ./hosts/testeri
           ];
         };
@@ -202,13 +196,13 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/2+1-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/sda";
-	      disko.devices.disk.secondary.device = "/dev/hda";
-	      disko.devices.disk.mini.device = "/dev/emmc";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/2+1-luks-btrfs.nix)
+            {
+              disko.devices.disk.main.device = "/dev/sda";
+              disko.devices.disk.secondary.device = "/dev/hda";
+              disko.devices.disk.mini.device = "/dev/emmc";
+            }
             ./hosts/serveri
           ];
         };
@@ -217,11 +211,9 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/1-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/nvme0n1";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/1-luks-btrfs.nix)
+            { disko.devices.disk.main.device = "/dev/nvme0n1"; }
             ./hosts/klusteri-0
           ];
         };
@@ -230,11 +222,9 @@
           modules = [
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
-            inputs.disko.nixosModules.default 
-	    (import ./common/optional/disks/1-luks-btrfs.nix)
-	    {
-	      disko.devices.disk.main.device = "/dev/nvme0n1";
-	    }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/1-luks-btrfs.nix)
+            { disko.devices.disk.main.device = "/dev/nvme0n1"; }
             ./hosts/klusteri-1
           ];
         };

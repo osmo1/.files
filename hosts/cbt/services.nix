@@ -1,8 +1,8 @@
 {
-    imports = [
-        ../../modules/containers
-	#../../modules/containers/test.nix
-    ];
+  imports = [
+    ../../modules/containers
+    #../../modules/containers/test.nix
+  ];
 
   services.containers = {
     crafty = {
@@ -25,11 +25,10 @@
     };
   };
 
-
-    #services.docker.crafty = {
-    #    enable = true;
-    #    version = "latest";
-    #    volumesBase = "/home/osmo/crafty";
-    #    webUIPort = 380;
-    #};
+  #services.docker.crafty = {
+  #    enable = true;
+  #    version = "latest";
+  #    volumesBase = "/home/osmo/crafty";
+  #    webUIPort = 380;
+  #};
 }
