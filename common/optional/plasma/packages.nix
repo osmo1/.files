@@ -1,14 +1,32 @@
 { pkgs, ... }:
 {
-        users.users.osmo.packages = with pkgs; [
-            #kate
-            wireguard-tools
-	    (librewolf-wayland.override {  cfg.enablePlasmaBrowserIntegration = true; })
-	    anki
-	    bitwarden
-	    thunderbird
-	    whatsapp-for-linux
-	    libsForQt5.dragon
-	    capitaine-cursors
-        ];
+users.users.osmo.packages = with pkgs; [
+    # Tools
+    libsForQt5.qt5ct
+] ++ (with kdePackages; [
+    okular
+    kate
+    plasma-systemmonitor
+    gwenview
+    spectacle
+    filelight
+    kcalc
+    yakuake
+    kolourpaint
+    ksystemlog
+    kompare
+    isoimagewriter
+    elisa
+    konversation
+    akgregator
+    kmix
+    kweather
+    korganizer
+    kontact
+    konqueror
+    kalarm
+    neochat
+    plasmatube
+    tokodon
+]);
 }

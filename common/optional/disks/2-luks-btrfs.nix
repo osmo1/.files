@@ -1,4 +1,4 @@
-{
+{ config, ... }: {
   boot.supportedFilesystems = [ "btrfs" ];
   disko.devices = {
     disk.main = {

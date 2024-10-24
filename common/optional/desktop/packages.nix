@@ -4,12 +4,23 @@ let
 in
 {
   users.users.osmo.packages = with pkgs; [
-    wireguard-tools
-    librewolf
-    bitwarden
-    thunderbird
-    capitaine-cursors
+    # General
+    alacritty
     zen-browser
+    bitwarden
+    whatsapp-for-linux
+    obsidian
+    spotify
+    libreoffice-fresh
+    vesktop
+    
+    # Coding
+    vscodium # Needs further conf
+
+    # Tools
+    flameshot
+    wireguard-tools
+    capitaine-cursors
   ];
-  #environment.packages = with pkgs; [ zen-browser ];
+  programs.kdeconnect.enable = true;
 }

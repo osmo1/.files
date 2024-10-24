@@ -24,6 +24,7 @@
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     oxygen
   ];
+  services.displayManager.defaultSession = "plasma";
   home-manager.users.osmo = { inputs, ... }: {
 	imports = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
   	programs.plasma = {
