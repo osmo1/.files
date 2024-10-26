@@ -4,6 +4,7 @@
   environment.systemPackages =
     (with pkgs.stable; [
       neovim
+      fastfetch
       git
       tmux
       zip
