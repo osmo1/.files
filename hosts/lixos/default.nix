@@ -16,7 +16,6 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/plasma
-    inputs.nixosModules.wsl.default
   ];
 
   system.stateVersion = "24.05";

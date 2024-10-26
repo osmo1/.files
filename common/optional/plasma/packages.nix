@@ -17,18 +17,16 @@
       yakuake
       kolourpaint
       ksystemlog
-      kompare
       isoimagewriter
       elisa
       konversation
-      akgregator
-      kmix
+      akregator
       kweather
       korganizer
       kontact
       konqueror
       kalarm
-      neochat
+      #neochat
       plasmatube
       tokodon
     ]);

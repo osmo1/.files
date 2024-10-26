@@ -6,6 +6,7 @@ default:
 
 update:
   nix flake update
+  nh os switch
 
 
 diff:

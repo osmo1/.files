@@ -1,14 +1,14 @@
 { pkgs, fetchFromGitHub, lib, stdenv, makeWrapper, wrapGAppsHook, copyDesktopItems, patchelf }:
 let
-  version = "twilight";
+  version = "1.0.1-a.12";
 in
 stdenv.mkDerivation rec {
   pname = "zen-browser";
 
-  version = "twilight";
+  version = "1.0.1-a.12";
 	src = builtins.fetchTarball {
 	  url = "https://github.com/zen-browser/desktop/releases/download/${version}/zen.linux-specific.tar.bz2";
-	  sha256 = "sha256:1rxpdihh2j7d1m8crndgmn24zfadzg1f15m10mf9l5lrs7imikh2";
+	  sha256 = "sha256:1b6klh9sf29kf5blyy2r1496gny6g70h2yfpyir79hxysabdf4qs";
 	};
 
   # Optionally include a separate src for the specific or generic variant

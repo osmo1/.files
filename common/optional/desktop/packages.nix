@@ -3,25 +3,31 @@ let
   zen-browser = pkgs.callPackage ../../../pkgs/zen-browser { };
 in
 {
-  users.users.osmo.packages = with pkgs; [
-    # General
-    alacritty
-    zen-browser
-    bitwarden
-    whatsapp-for-linux
-    obsidian
-    spotify
-    libreoffice-fresh
-    vesktop
+  users.users.osmo.packages = 
+    (with pkgs.stable; [
+      # General
+      alacritty
+      zen-browser
+      bitwarden
+      whatsapp-for-linux
+      obsidian
+      #spotify
+      spotifyd
+      libreoffice-fresh
+      vesktop
 
-    # Coding
-    vscodium # Needs further conf
-    zed-editor
+      # Coding
+      vscodium # Needs further conf
+      helix
 
-    # Tools
-    flameshot
-    wireguard-tools
-    capitaine-cursors
-  ];
+      # Tools
+      flameshot
+      wireguard-tools
+      capitaine-cursors
+    ])
+    ++ 
+    (with pkgs.unstable; [
+      zed-editor
+    ]);
   programs.kdeconnect.enable = true;
 }
