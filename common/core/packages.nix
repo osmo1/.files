@@ -1,6 +1,5 @@
 { pkgs, configLib, ... }:
 {
-  imports = (configLib.scanPaths ./.);
   environment.systemPackages =
     (with pkgs.stable; [
       neovim
