@@ -7,6 +7,7 @@ in
     (with pkgs.stable; [
       # General
       alacritty
+      wezterm
       zen-browser
       bitwarden
       whatsapp-for-linux
