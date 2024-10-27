@@ -58,7 +58,6 @@
     corkscrew
     cowpatty
     crackle
-    crackmapexec
     crackql
     creds
     crlfuzz
@@ -207,6 +206,7 @@
     nbtscanner
     ncrack
     netdiscover
+    netexec
     netmask
     netsniff-ng
     networkminer
@@ -242,7 +242,6 @@
     pwncat
     pwndbg
     # capstone-5.0.1 not supported for interpreter python3.12
-    python311Packages.angrop
     python312Packages.arsenic
     python312Packages.dnspython
     python312Packages.httpx

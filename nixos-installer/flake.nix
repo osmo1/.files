@@ -22,8 +22,8 @@
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
-      configVars = import ../vars { inherit inputs lib; };
-      configLib = import ../lib { inherit lib; };
+      configVars = import ../mods/vars.nix { inherit inputs lib; };
+      configLib = import ../mods/lib.nix { inherit lib; };
       minimalConfigVars = lib.recursiveUpdate configVars { isMinimal = true; };
       minimalSpecialArgs = {
         inherit inputs outputs configLib;
@@ -33,7 +33,7 @@
       # FIXME: Specify arch eventually probably
       # This mkHost is way better: https://github.com/linyinfeng/dotfiles/blob/8785bdb188504cfda3daae9c3f70a6935e35c4df/flake/hosts.nix#L358
       newConfig =
-        hostname: disks:
+        hostname: disks: disk: tpm:
         (nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = minimalSpecialArgs;
@@ -41,13 +41,14 @@
             inputs.disko.nixosModules.disko	
 	    inputs.sops-nix.nixosModules.sops
 	    {
-			disko.devices.disk.main.device = "/dev/nvme0n1";
+			disko.devices.disk.main.device = "${disk}";
 		}
-            (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/core/disks/${disks}.nix")
+            (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/optional/disks/${disks}.nix")
 
             ./minimal-configuration.nix
 	    { networking.hostName = hostname; }
             (configLib.relativeToRoot "hosts/${hostname}/hardware-configuration.nix")
+	    (if tpm == true then configLib.relativeToRoot "common/optional/tpm.nix" else "")
           ];
         });
     in
@@ -55,7 +56,8 @@
       nixosConfigurations = {
         # host = newConfig "hostname"
         # Swap size is in GiB
-	lixos = newConfig "lixos" "1-luks-btrfs";
+	lixos = newConfig "lixos" "1-luks-btrfs" "/dev/nvme0n1" true;
+	cbt = newConfig "cbt" "1-luks-btrfs" "/dev/vda" true;
         serveri = newConfig "serveri";
         oraakeli = newConfig "oraakeli";
         testeri = newConfig "testeri";

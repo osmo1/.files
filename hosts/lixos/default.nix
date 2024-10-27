@@ -16,6 +16,8 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/plasma
+    ../../common/optional/tpm.nix
+    ../../common/optional/gaming.nix
   ];
 
   system.stateVersion = "24.05";

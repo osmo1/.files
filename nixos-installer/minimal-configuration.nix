@@ -35,7 +35,7 @@ in
       #authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
     };
   };
-
+  programs.ssh.startAgent = true;
   # allow sudo over ssh with yubikey
   # this potentially causes a security issue that we mitigated above
   security.pam = {

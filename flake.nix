@@ -56,10 +56,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-    nixos-06cb-009a-fingerprint-sensor = {
-      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
-      inputs.nixpkgs.follows = "nixpkgs-23-11";
-    };
   };
 
   outputs =
@@ -151,6 +147,7 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
+	    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e495
             ./hosts/lixos
           ];
         };

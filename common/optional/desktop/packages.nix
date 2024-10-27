@@ -16,6 +16,7 @@ in
       spotifyd
       libreoffice-fresh
       vesktop
+      aseprite
 
       # Coding
       vscodium # Needs further conf

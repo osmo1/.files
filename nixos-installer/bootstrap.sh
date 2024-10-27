@@ -182,9 +182,10 @@ function nixos_anywhere() {
 	SHELL=/bin/sh nix run github:nix-community/nixos-anywhere -- --phases disko,install --ssh-port "$ssh_port" --extra-files "$temp" --flake .#"$target_hostname" root@"$target_destination"
 
 	if [ -n "$tpm" ]; then
+	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=/dev/tpm0 --tpm2-pcrs=0+2 /dev/\$device_name'"
 	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
-	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=0+2 /dev/\$device_name'"
-	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 1'"
+	    # Tpm is not working on nixos 24.05 rn for somereason, will try again in 24.11
+	    #$ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 0'"
 	fi
 	
 	echo "Rebooting now"
@@ -262,6 +263,22 @@ function generate_host_age_key() {
 
 	green "Updating .secrets/.sops.yaml"
 	update_sops_file "$target_hostname" "hosts" "$host_age_key"
+
+	# Extract the private key using sops and save it to a temporary file
+	#sops -d --extract '["nixos"]["$target_hostname"]["git"]["private"]' ~/.secrets/secrets.yaml > /tmp/git_key
+	eval "sops -d --extract '[\"nixos\"][\"$target_hostname\"][\"git\"][\"private\"]' ~/.secrets/secrets.yaml > /tmp/git_key"
+
+	# Set appropriate permissions for the private key file
+	chmod 600 /tmp/git_key
+
+	$ssh_cmd "/bin/sh -c 'mkdir /home/$target_user/.ssh || true' "
+	# Copy the private key file to the target machine
+	$scp_cmd /tmp/git_key $target_user@$target_destination:/home/$target_user/.ssh/git
+
+	# Clean up the temporary file
+	rm -f /tmp/git_key
+	$ssh_cmd "ssh-add ~/.ssh/git && mkdir -p ~/.config/sops/age"
+	$scp_cmd /home/$target_user/.config/sops/age/git-agecrypt.txt $target_user@$target_destination:/home/$target_user/.config/sops/age/git-agecrypt.txt
 }
 
 #function generate_user_age_key() {
@@ -330,11 +347,9 @@ if yes_or_no "Do you want to copy your full .files and .secrets to $target_hostn
 if yes_or_no "Do you want to rebuild immediately?"; then
 	green "Rebuilding .files on $target_hostname"
 	#FIXME there are still a codeberg fingerprint request happening during the rebuild
-	sudo nixos-rebuild \
-	  --flake .\#$target_hostname \
-	  --target-host root@$target_destination \
-	  switch --use-remote-sudo \
-	  || true
+
+	$ssh_cmd "sudo nixos-rebuild switch --flake ~/.files#$target_hostname"
+
 
 	#$ssh_cmd -oForwardAgent=yes "cd .files && nh os switch"
 	#if [ -n "$tpm" ]; then
