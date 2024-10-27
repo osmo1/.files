@@ -148,6 +148,7 @@
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
 	    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e495
+	    inputs.impermanence.nixosModules.default
             ./hosts/lixos
           ];
         };
@@ -200,6 +201,7 @@
               disko.devices.disk.secondary.device = "/dev/hda";
               disko.devices.disk.mini.device = "/dev/emmc";
             }
+	    inputs.impermanence.nixosModules.default
             ./hosts/serveri
           ];
         };
@@ -211,6 +213,7 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
+	    inputs.impermanence.nixosModules.default
             ./hosts/klusteri-0
           ];
         };
@@ -222,6 +225,7 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
+	    inputs.impermanence.nixosModules.default
             ./hosts/klusteri-1
           ];
         };

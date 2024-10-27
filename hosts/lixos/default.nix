@@ -16,6 +16,7 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/plasma
+    ../../common/optional/impermanence.nix
     ../../common/optional/tpm.nix
     ../../common/optional/gaming.nix
   ];
