@@ -1,30 +1,6 @@
-{ inputs, pkgs, ... }:
 {
-  home-manager.users.osmo =
-    { inputs, pkgs, ... }:
-    {
-      imports = [ inputs.nixvim.homeManagerModules.nixvim ];
-      programs.nixvim = {
-        enable = true;
-        extraPlugins = with pkgs.vimPlugins; [
-          telescope-file-browser-nvim
-          plenary-nvim
-        ];
-
-        options = {
-          number = true;
-          relativenumber = true;
-
-          shiftwidth = 4;
-        };
-
-        colorschemes.kanagawa = {
-          enable = true;
-          theme = "wave";
-          transparent = true;
-        };
-
-        plugins.lsp = {
+programs.nixvim = {
+plugins.lsp = {
           enable = true;
           servers = {
             # C/C++
@@ -101,7 +77,84 @@
           comment-nvim.enable = true;
           lsp-format.enable = true;
           chadtree.enable = true;
+
           lualine = {
+            enable = true;
+            sectionSeparators = {
+              right = "";
+              left = "";
+            };
+            alwaysDivideMiddle = false;
+            sections = {
+              lualine_a = [
+                {
+                  name = "mode";
+                  color = {
+                    fg = "#1b1d2b";
+                    bg = "#ff757f";
+                  };
+                  separator = {
+                    right = "";
+                  };
+                }
+                {
+                  name = "location";
+                  color = {
+                    fg = "#1b1d2b";
+                    bg = "#ffc777";
+                  };
+                  separator = {
+                    right = "";
+                  };
+                }
+              ];
+              lualine_b = [
+                {
+                  name = "branch";
+                  icon = "";
+                  color = {
+                    fg = "#1b1d2b";
+                    bg = "#c099ff";
+                  };
+                  separator = {
+                    right = "";
+                  };
+                }
+                {
+                  name = "diff";
+                  color = {
+                    bg = "#86e1fc";
+                    fg = "#1b1d2b";
+                  };
+                  separator = {
+                    right = "";
+                  };
+                }
+                {
+                  name = "diagnostics";
+                  color = {
+                    bg = "#c3e88d";
+                  };
+                  separator = {
+                    right = "";
+                  };
+                }
+              ];
+              lualine_c = [
+                {
+                  name = "filename";
+                  color = {
+                    fg = "#b4c0ff";
+                    bg = "none";
+                  };
+                }
+              ];
+              lualine_x = [ "null" ];
+              lualine_y = [ "null" ];
+              lualine_z = [ "null" ];
+            };
+          };
+          /*lualine = {
             enable = true;
             sectionSeparators = {
               left = "";
@@ -175,9 +228,8 @@
               lualine_y = [ "null" ];
               lualine_z = [ "null" ];
             };
-          };
+          };*/
           telescope.enable = true;
         };
-      };
-    };
+        };
 }
