@@ -19,6 +19,8 @@ in
 {
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
+    ../../common/optional/cli
+    ../../common/optional/school
     #../../common/optional/cybersecurity.nix
   ];
 
