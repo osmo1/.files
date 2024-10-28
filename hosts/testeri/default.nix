@@ -8,7 +8,15 @@
   nur,
   ...
 }:
-
+let
+  hostnames = [
+    "testeri"
+    "serveri"
+    "lixos"
+    "klusteri-0"
+    "klusteri-1"
+  ]; # Add your hostnames here
+in
 {
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
@@ -23,6 +31,17 @@
     #../../common/optional/samba.nix
   ];
 
+  sops.secrets = builtins.listToAttrs (
+    map (hostname: {
+      name = "nixos/${hostname}/ssh/private";
+      value = {
+        path = "/home/osmo/.ssh/${hostname}";
+        owner = "osmo";
+        group = "users";
+        mode = "600";
+      };
+    }) hostnames
+  );
   system.stateVersion = "24.05";
 
   networking.hostName = "testeri";
