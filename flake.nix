@@ -131,10 +131,10 @@
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
             inputs.disko.nixosModules.default
-            (import ./common/optional/disks/2-luks-btrfs.nix)
+            (import ./common/optional/disks/2-btrfs.nix)
             {
-              disko.devices.disk.main.device = "/dev/nvme0n1";
-              disko.devices.disk.secondary.device = "/dev/nvme1n1";
+              disko.devices.disk.main.device = "/dev/sda";
+              disko.devices.disk.secondary.device = "/dev/nvme0n1";
             }
             ./hosts/masiina
           ];

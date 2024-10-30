@@ -33,7 +33,7 @@
       # FIXME: Specify arch eventually probably
       # This mkHost is way better: https://github.com/linyinfeng/dotfiles/blob/8785bdb188504cfda3daae9c3f70a6935e35c4df/flake/hosts.nix#L358
       newConfig =
-        hostname: disks: disk: tpm:
+        hostname: disks: disk: disk2: tpm: grub:
         (nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = minimalSpecialArgs;
@@ -41,14 +41,19 @@
             inputs.disko.nixosModules.disko	
 	    inputs.sops-nix.nixosModules.sops
 	    {
-			disko.devices.disk.main.device = "${disk}";
+			disko.devices.disk = {
+				main.device = "${disk}";
+				secondary.device = "${disk2}";
+			};
+			
 		}
             (if disks == "custom" then configLib.relativeToRoot "hosts/${hostname}/disko.nix" else configLib.relativeToRoot "common/optional/disks/${disks}.nix")
+            (if grub == true then configLib.relativeToRoot "common/optional/grub.nix" else configLib.relativeToRoot "common/optional/systemd-boot.nix")
 
             ./minimal-configuration.nix
 	    { networking.hostName = hostname; }
             (configLib.relativeToRoot "hosts/${hostname}/hardware-configuration.nix")
-	    (if tpm == true then configLib.relativeToRoot "common/optional/tpm.nix" else "")
+	    #(if tpm == true then configLib.relativeToRoot "common/optional/tpm.nix" else "")
           ];
         });
     in
@@ -57,6 +62,7 @@
         # host = newConfig "hostname"
         # Swap size is in GiB
 	lixos = newConfig "lixos" "1-luks-btrfs" "/dev/nvme0n1" true;
+	masiina = newConfig "masiina" "2-btrfs" "/dev/sda" "/dev/nvme0n1" false true;
 	cbt = newConfig "cbt" "1-luks-btrfs" "/dev/vda" true;
         serveri = newConfig "serveri";
         oraakeli = newConfig "oraakeli";

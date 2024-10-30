@@ -6,7 +6,6 @@
 }:
 let
   hostnames = [
-    "masiina"
     "testeri"
     "serveri"
     "klusteri-0"
@@ -17,9 +16,9 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/plasma
-    ../../common/optional/impermanence.nix
-    ../../common/optional/tpm.nix
+    ../../common/optional/grub.nix
     ../../common/optional/gaming.nix
+    ../../common/optional/nvidia.nix
   ];
 
   system.stateVersion = "24.05";
@@ -37,7 +36,7 @@ in
   );
 
   #TODO: Find a better place for this
-  boot = {
+  /*boot = {
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -52,7 +51,7 @@ in
         		})
         	    ];
       */
-    };
+    /*};
     consoleLogLevel = 0;
     initrd.verbose = false;
     kernelPackages = pkgs.linuxPackages_zen;
@@ -66,8 +65,8 @@ in
       "udev.log_priority=3"
     ];
     loader.timeout = 0;
-  };
+  };*/
 
-  networking.hostName = "lixos";
+  networking.hostName = "masiina";
 
 }
