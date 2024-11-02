@@ -22,12 +22,22 @@
       uiPortStart = 1080;
       timeZone = "Europe/Helsinki";
       enableHomePage = true;
+      enableTraefik = true;
       options = {
-	urlBase = "osmo1.duckdns.org";
+	urlBase = "klusteri-1.kotiserweri.zip";
 	mediaLocation = "/mnt/media";
       };
     };
     dockerproxy.enable = true;
+    traefik = {
+	enable = true;
+	version = "v3.1";
+	uiPort = 280;
+	dataLocation = "/home/osmo/traefik";
+    options = {
+        url = "traefik.klusteri-1.kotiserweri.zip";
+    };
+    };
   };
 
 
