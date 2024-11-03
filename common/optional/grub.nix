@@ -9,7 +9,7 @@
     useOSProber = true; # Enable detection for other OS, such as Windows Boot Manager
 
     # Extra menu entries for NixOS (latest) and NixOS Generations
-    extraEntries = ''
+    /*extraEntries = ''
       # Slot One: Latest NixOS Generation
       menuentry "NixOS (latest)" {
         search --set=root --file /boot/grub/grub.cfg
@@ -21,7 +21,7 @@
         search --set=root --file /boot/grub/grub.cfg
         configfile /boot/grub/grub.cfg
       }
-    '';
+    '';*/
   };
   };
   time.hardwareClockInLocalTime = true;

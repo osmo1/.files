@@ -15,10 +15,12 @@ in
 {
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
+    ../../common/optional/cli
     ../../common/optional/plasma
     ../../common/optional/grub.nix
     ../../common/optional/gaming.nix
     ../../common/optional/nvidia.nix
+    ../../common/optional/starcitizen.nix
   ];
 
   system.stateVersion = "24.05";

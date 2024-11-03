@@ -6,14 +6,10 @@ in
   users.users.osmo.packages = 
     (with pkgs.stable; [
       # General
-      alacritty
-      wezterm
       zen-browser
       bitwarden
       whatsapp-for-linux
       obsidian
-      #spotify
-      spotifyd
       libreoffice-fresh
       vesktop
       aseprite
@@ -26,10 +22,12 @@ in
       flameshot
       wireguard-tools
       capitaine-cursors
+      xdg-desktop-portal-gtk
     ])
     ++ 
     (with pkgs.unstable; [
       zed-editor
+      spotify
     ]);
   programs.kdeconnect.enable = true;
 }

@@ -51,8 +51,10 @@
                 config = {
                   General.launchers = [
                     "applications:zen.desktop"
-                    "applications:wezterm.desktop"
+                    "applications:Alacritty.desktop"
                     "applications:org.kde.dolphin.desktop"
+                    "applications:steam.desktop"
+                    "applications:spotify.desktop"
                   ];
                 };
               }
@@ -81,10 +83,11 @@
               }
               "org.kde.plasma.panelspacer"
               "org.kde.plasma.pager"
+              "org.kde.plasma.volume"
               {
                 systemTray.items = {
                   shown = [ "org.kde.plasma.battery" ];
-                  hidden = [ "org.kde.plasma.clipboard" ];
+                  hidden = [ "org.kde.plasma.clipboard" "org.kde.plasma.volume" ];
                 };
               }
             ];
@@ -135,10 +138,17 @@
           "kwinrc"."Tiling"."padding" = 4;
           "kwinrc"."Tiling/213a9620-187e-58a6-b80b-85d8fb95dfce"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
           "kwinrc"."Tiling/9af7dcb9-cc17-5e04-a97c-10654d6af592"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
-          "kwinrc"."Xwayland"."Scale" = 1.25;
           "plasmanotifyrc"."Notifications"."PopupTimeout" = 1942;
+#"kwinrc"."Xwayland"."Scale" = 1.25;
+#"kmix"."decrease_volume" = "XF86AudioLowerVolume";
+#"kmix"."decrease_volume_small" = "Shift+XF86AudioLowerVolume";
+#"kmix"."increase_volume" = "XF86AudioRaiseVolume";
+#"kmix"."increase_volume_small" = "Shift+XF86AudioRaiseVolume";
+#"mediacontrol"."mediavolumedown" = [ "XF86AudioLowerVolume" ];
+#"mediacontrol"."mediavolumeup" = [ "XF86AudioRaiseVolume" ];
+#"shortcuts"."XF86AudioRaiseVolume" = "org.kde.kded5.audio.raiseVolume";
+#"shortcuts"."XF86AudioLowerVolume" = "org.kde.kded5.audio.lowerVolume";
         };
-
       };
     };
 }

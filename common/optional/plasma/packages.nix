@@ -5,6 +5,7 @@
     [
       # Tools
       libsForQt5.qt5ct
+      xorg.xkbutils
     ]
     ++ (with kdePackages; [
       okular
@@ -23,11 +24,10 @@
       akregator
       kweather
       korganizer
-      kontact
-      konqueror
       kalarm
       #neochat
       plasmatube
       tokodon
+      plasma-pa
     ]);
 }
