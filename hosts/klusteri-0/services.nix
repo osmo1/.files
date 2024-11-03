@@ -23,7 +23,7 @@
       timeZone = "Europe/Helsinki";
       enableHomePage = true;
       options = {
-	urlBase = "osmo1.duckdns.org";
+	urlBase = "klusteri-0.kotiserweri.zip";
       };
     };
     pihole = {
@@ -36,16 +36,23 @@
     };
     dockerproxy.enable = true;
     homepage = {
-	enable = true;
-	version = "latest";
-	uiPort = 180;
-	dataLocation = "/home/osmo/homepage";
+        enable = true;
+        enableTraefik = true;
+        version = "latest";
+        uiPort = 180;
+        dataLocation = "/home/osmo/homepage";
+        options = {
+            url = "home.klusteri-0.kotiserweri.zip";
+        };
     };
     traefik = {
 	enable = true;
 	version = "v3.1";
 	uiPort = 280;
 	dataLocation = "/home/osmo/traefik";
+    options = {
+        url = "traefik.klusteri-0.kotiserweri.zip";
+    };
     };
   };
 

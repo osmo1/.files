@@ -57,15 +57,15 @@ labels =    (if cfg.enableHomePage == true then {
       "homepage.group" = "Network";
       "homepage.name" = "Pihole";
       "homepage.icon" = "pihole";
-      "homepage.href" = "https://pihole.osmo1.duckdns.org"; # TODO: Change this.
+      "homepage.href" = "https://pihole.klusteri-0.kotiserweri.zip"; # TODO: Change this.
       "homepage.description" = "DNS blocking";
     } else {} ) //
 
     (if cfg.enableTraefik == true then {
       "traefik.enable" = "true";
-      "traefik.http.routers.pihole.rule" = "Host(`pihole.testeri.duckdns.org`)";
+      "traefik.http.routers.pihole.rule" = "Host(`pihole.klusteri-0.kotiserweri.zip`)";
       "traefik.http.routers.pihole.entrypoints" = "websecure";
-      "traefik.http.routers.pihole.tls.certresolver" = "duckdns";
+      "traefik.http.routers.pihole.tls.certresolver" = "porkbun";
       "traefik.http.services.pihole.loadbalancer.server.port" = "80";
       # Redirect to /admin
       #"traefik.http.middlewares.pihole-addprefix.addprefix.prefix" = "/admin";

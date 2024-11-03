@@ -18,7 +18,15 @@ in {
       type = types.port;
       default = 80;
     };
+    enableTraefik = mkOption {
+      type = types.bool;
+      default = true;
+    };
     options = {
+        url = mkOption {
+            type = types.str;
+            default = "home.klusteri-0.kotiserweri.zip";
+        };
     };
   };
 
@@ -33,6 +41,13 @@ in {
         ports = [
           "${toString cfg.uiPort}:3000"
         ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.homepage.rule" = "Host(`${cfg.options.url}`)";
+          "traefik.http.routers.homepage.entrypoints" = "websecure";
+          "traefik.http.routers.homepage.tls.certresolver" = "porkbun";
+          "traefik.http.services.homepage.loadbalancer.server.port" = "3000";
+          };
       };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPort ];

@@ -4,6 +4,7 @@
     imports = (configLib.scanPaths ./.)
     ++ [
     	../../common/core
+	      ../../common/optional/cli
 	      ../../common/optional/impermanence.nix
 	      ../../common/optional/podman.nix
 	      #../../common/optional/vpn.nix

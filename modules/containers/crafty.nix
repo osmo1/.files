@@ -83,7 +83,7 @@ in {
           "homepage.name" = "Crafty";
           "homepage.icon" = "crafty.png";
           # TODO: Change this.
-          "homepage.href" = "https://crafty.osmo1.duckdns.org";
+          "homepage.href" = "https://crafty.klusteri-1.kotiserweri.zip";
           "homepage.description" = "Minecraft server";
           "homepage.widget.type" = "minecraft";
           "homepage.widget.url" = "udp://127.0.0.1:${toString cfg.options.singlePort}";

@@ -26,10 +26,14 @@ in {
       type = types.bool;
       default = true;
     };
+    enableTraefik = mkOption {
+      type = types.bool;
+      default = true;
+    };
     options = {
       urlBase = mkOption {
         type = types.str;
-	default = "osmo1.duckdns.org";
+	default = "klusteri-1.kotiserweri.zip";
       };
       mediaLocation = mkOption {
         type = types.str;
@@ -107,16 +111,21 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Deluge";
           "homepage.icon" = "deluge.png";
           "homepage.href" = "https://deluge.${cfg.options.urlBase}";
           "homepage.description" = "Torrent client";
-          "homepage.widget.type" = "deluge";
-          "homepage.widget.url" = "https://127.0.0.1:${port}";
-          "homepage.widget.password" = "osmo";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`deluge.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
+        } else {} );
       };
       containers.prowlarr = let
       	port = toString (cfg.uiPortStart + 100);
@@ -137,13 +146,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Prowlarr";
           "homepage.icon" = "prowlarr";
           "homepage.href" = "https://prowlarr.${cfg.options.urlBase}";
           "homepage.description" = "Indexer distributor";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`prowlarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "9696";
+        } else {} );
       };
       containers.flaresolverr = let
       	port = toString (cfg.uiPortStart + 200);
@@ -184,13 +200,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Sonarr";
           "homepage.icon" = "sonarr";
           "homepage.href" = "https://sonarr.${cfg.options.urlBase}";
           "homepage.description" = "Downloads and organizes TV shows";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`sonarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "8989";
+        } else {} );
       }; 
       containers.radarr = let
       	port = toString (cfg.uiPortStart + 400);
@@ -213,13 +236,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Radarr";
           "homepage.icon" = "radarr";
           "homepage.href" = "https://radarr.${cfg.options.urlBase}";
           "homepage.description" = "Downlads and organizes movies";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`radarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "7878";
+        } else {} );
       }; 
       containers.lidarr = let
       	port = toString (cfg.uiPortStart + 500);
@@ -242,13 +272,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "lidarr";
           "homepage.icon" = "lidarr";
           "homepage.href" = "https://lidarr.${cfg.options.urlBase}";
           "homepage.description" = "Downloads and organizes music";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`lidarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "8686";
+        } else {} );
       };
       containers.readarr = let
       	port = toString (cfg.uiPortStart + 600);
@@ -271,13 +308,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Readarr";
           "homepage.icon" = "readarr";
           "homepage.href" = "https://readarr.${cfg.options.urlBase}";
           "homepage.description" = "Downloads and organizes literature";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`readarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "8787";
+        } else {} );
       };
       containers.bazarr = let
       	port = toString (cfg.uiPortStart + 700);
@@ -300,13 +344,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Bazarr";
           "homepage.icon" = "bazarr";
           "homepage.href" = "https://bazarr.${cfg.options.urlBase}";
           "homepage.description" = "Downloads and organizes subtitles";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`bazarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "6767";
+        } else {} );
       };
       containers.jellyfin = let
       	port = toString (cfg.uiPortStart + 800);
@@ -331,13 +382,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Jellyfin";
           "homepage.icon" = "jellyfin";
           "homepage.href" = "https://jellyfin.${cfg.options.urlBase}";
           "homepage.description" = "Stream your local media";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`jellyfin.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "8096";
+        } else {} );
       };
       containers.jellyseerr = let
       	port = toString (cfg.uiPortStart + 900);
@@ -359,13 +417,20 @@ in {
         };
         extraOptions = [
         ];
-        labels = mkIf cfg.enableHomePage {
+        labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
           "homepage.name" = "Jellyseerr";
           "homepage.icon" = "jellyseerr";
           "homepage.href" = "https://jellyseerr.${cfg.options.urlBase}";
           "homepage.description" = "Controll the *arr stack";
-        };
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`jellyseerr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "5055";
+        } else {} );
       };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
