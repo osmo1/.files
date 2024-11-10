@@ -1,14 +1,11 @@
 { pkgs, fetchFromGitHub, lib, stdenv, makeWrapper, wrapGAppsHook, copyDesktopItems, patchelf }:
-let
-  version = "1.0.1-a.17";
-in
 stdenv.mkDerivation rec {
   pname = "zen-browser";
 
-  version = "1.0.1-a.17";
+  version = "1.0.1-a.18";
 	src = builtins.fetchTarball {
 	  url = "https://github.com/zen-browser/desktop/releases/download/${version}/zen.linux-specific.tar.bz2";
-	  sha256 = "sha256:0ahpig3kafphg0pnkl1r60b9phfp5s2rilpxb20q2fwz41d1miwi";
+	  sha256 = "sha256:1n6z8wx8w7dhir8vaqbc19ibhsc6g6rma4kvx2nw04l8b4hxg9bg";
 	};
 
   # Optionally include a separate src for the specific or generic variant

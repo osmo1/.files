@@ -5,4 +5,5 @@
     {
       home.stateVersion = "24.05";
     };
+    home-manager.backupFileExtension = "bk";
 }

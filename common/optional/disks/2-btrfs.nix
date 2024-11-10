@@ -76,7 +76,7 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/home/osmo/games";
+              mountpoint = "/home/osmo/Games";
               mountOptions = ["noatime"];
             };
           };

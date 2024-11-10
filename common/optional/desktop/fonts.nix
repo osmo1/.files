@@ -3,7 +3,7 @@
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
-      (nerdfonts.override { fonts = [ "FiraCode" "Hack" ]; })
+      (nerdfonts.override { fonts = [ "FiraCode" "Hack" "FiraMono" ]; })
         # "ComicShans" does not exist?
     ];
 }
