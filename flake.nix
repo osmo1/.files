@@ -41,6 +41,10 @@
     };
 
     # Apps and modules
+    stylix = {
+        url = "github:danth/stylix/release-24.05";
+        inputs.stylix.follows = "nixpkgs";
+    };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,6 +62,10 @@
     };
     nix-gaming = {
         url = "github:fufexan/nix-gaming";
+        inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    spicetify-nix = {
+        url = "github:Gerg-L/spicetify-nix";
         inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
@@ -103,7 +111,7 @@
       packages = forAllSystems (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = inputs.nixpkgs.legacyPackages.${system};
         in
         import ./pkgs { inherit pkgs; }
       );

@@ -2,13 +2,9 @@
   home-manager.users.osmo = {
     programs.alacritty = {
         enable = true;
+        settings.window.blur = true;
+    };/*
         package = pkgs.alacritty;
-        settings = {
-            import = [ "${pkgs.alacritty-theme}/tokyo-night.toml" ];
-            window = {
-                opacity = 0.8;
-                blur = true;
-            };
             font = {
                 size = 14;
                 normal.family = "FiraCode Nerd Font";
@@ -17,7 +13,7 @@
                 bold_italic.family = "FiraCode Nerd Font";
             };
         };
-    };
+    };*/
   };
   users.users.osmo.packages = [ pkgs.alacritty-theme ];
 }
