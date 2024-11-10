@@ -1,4 +1,5 @@
 { inputs, pkgs, ... }: {
+    imports = [ inputs.spicetify-nix.nixosModules.default ];
     programs.spicetify =
         let
           spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
@@ -16,10 +17,10 @@
             ncsVisualizer
           ];
           enabledSnippets = with spicePkgs.snippets; [
-            rotating-coverart
             pointer
           ];
 
-          theme = spicePkgs.themes.lucid;
+          theme = spicePkgs.themes.text;
+          colorScheme  = "TokyoNight";
     };
 }

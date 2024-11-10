@@ -13,6 +13,7 @@ in
       libreoffice-fresh
       vesktop
       aseprite
+      thunderbird
 
       # Coding
       vscodium # Needs further conf
@@ -23,11 +24,12 @@ in
       wireguard-tools
       capitaine-cursors
       xdg-desktop-portal-gtk
+      openrgb
     ])
     ++ 
     (with pkgs.unstable; [
       zed-editor
-      spotify
+#spotify
     ]);
   programs.kdeconnect.enable = true;
 }
