@@ -1,7 +1,5 @@
 { pkgs, inputs, ... }:
 {
-  # ...
-
   # See https://github.com/starcitizen-lug/knowledge-base/wiki/Manual-Installation#prerequisites
   boot.kernel.sysctl = {
     "vm.max_map_count" = 16777216;
@@ -10,7 +8,7 @@
 
   zramSwap = {
     enable = true;
-    memoryMax = 32 * 1024 * 1024 * 1024;  # 16 GB ZRAM
+    memoryMax = 32 * 1024 * 1024 * 1024;
   };
 
   # The following line was used in my setup, but I'm unsure if it is still needed
@@ -21,6 +19,7 @@
       # see https://github.com/fufexan/nix-gaming/issues/165#issuecomment-2002038453
       (inputs.nix-gaming.packages.${pkgs.unstable.system}.star-citizen.override {
         tricks = [ "arial" "vcrun2019" "win10" "sound=alsa" ];
+        wineDllOverrides = [ "dxgi=n" ];
   })];
 }
 
