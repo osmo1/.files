@@ -1,11 +1,5 @@
 {
-  config,
-  lib,
   configLib,
-  pkgs,
-  nixvim,
-  inputs,
-  nur,
   ...
 }:
 let
@@ -14,6 +8,7 @@ let
     "serveri"
     "klusteri-0"
     "klusteri-1"
+    "masiina"
   ]; # Add your hostnames here
 in
 {
