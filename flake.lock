@@ -155,6 +155,24 @@
         "type": "github"
       }
     },
+    "dwl-patches": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1731512259,
+        "narHash": "sha256-GpF2VkUIF3nRfEopdCZYIrWQoWf8yuH3QwH47Ma+8CY=",
+        "ref": "main",
+        "rev": "29f9d411294b4802c42e57fff7aa7f176158c6d5",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/osmo1/dwl-patches.git"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/osmo1/dwl-patches.git"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -690,6 +708,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "dwl-patches": "dwl-patches",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "nix-gaming": "nix-gaming",

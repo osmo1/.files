@@ -39,6 +39,10 @@
       url = "git+ssh://git@github.com/osmo1/.wallpapers.git?ref=main&shallow=1";
       flake = false;
     };
+    dwl-patches = {
+      url = "git+ssh://git@github.com/osmo1/dwl-patches.git?ref=main&shallow=1";
+      flake = false;
+    };
 
     # Apps and modules
     stylix = {
