@@ -1,4 +1,7 @@
 { inputs, ... }:
+let
+  patches-path = builtins.toString inputs.dwl-patches;
+in
 {
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs { pkgs = final; };
@@ -16,6 +19,9 @@
     #        (prev.lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
     #      ];
     #    };
+    dwl = prev.dwl.overrideAttrs {
+        patches = [ "${patches-path}/*" ];
+    };
   };
 
   #
