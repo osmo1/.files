@@ -14,6 +14,7 @@ in
       vesktop
       aseprite
       thunderbird
+      rustdesk
 
       # Coding
       vscodium # Needs further conf
