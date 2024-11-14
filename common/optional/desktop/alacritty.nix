@@ -1,19 +1,28 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
   home-manager.users.osmo = {
     programs.alacritty = {
         enable = true;
-        settings.window.blur = true;
-    };/*
         package = pkgs.alacritty;
+        settings = {
+            window.blur = true;
             font = {
-                size = 14;
-                normal.family = "FiraCode Nerd Font";
-                bold.family = "FiraCode Nerd Font";
-                italic.family = "FiraCode Nerd Font";
-                bold_italic.family = "FiraCode Nerd Font";
+#size = 14;
+                normal.family = lib.mkForce "FiraCode Nerd Font";
+                bold = {
+                    family = "FiraCode Nerd Font";
+                    style = "Bold";
+                };
+                italic = {
+                    family = "FiraCode Nerd Font";
+                    style = "Italic";
+                };
+                bold_italic = {
+                    family = "FiraCode Nerd Font";
+                    style = "Bold Italic";
+                };
             };
         };
-    };*/
+    };
   };
   users.users.osmo.packages = [ pkgs.alacritty-theme ];
 }

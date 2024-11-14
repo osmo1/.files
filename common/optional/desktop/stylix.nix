@@ -31,11 +31,11 @@
           fonts = {
               monospace = {
                   name = "FiraMono Nerd Font";
-                  package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+                  package = pkgs.nerdfonts.override { fonts = [ "FiraMono" ]; };
               }; 
               sansSerif = {
                   name = "FiraCode Nerd Font";
-                  package = pkgs.nerdfonts.override { fonts = [ "FiraMono" ]; };
+                  package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
               };
               serif = {
                   name = "DejaVu Sans Mono";
