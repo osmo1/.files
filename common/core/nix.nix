@@ -30,7 +30,7 @@
       ];
       warn-dirty = false;
     };
-    trustedUsers = [
+    settings.trusted-users = [
       "root"
       "osmo"
       "@wheel"

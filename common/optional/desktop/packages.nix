@@ -13,6 +13,7 @@ in
       libreoffice-fresh
       vesktop
       aseprite
+      blender
       thunderbird
       rustdesk
 

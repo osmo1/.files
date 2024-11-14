@@ -74,7 +74,6 @@ plugins.lsp = {
           indent-blankline.enable = true;
           gitsigns.enable = true;
           nvim-autopairs.enable = true;
-          comment-nvim.enable = true;
           lsp-format.enable = true;
           chadtree.enable = true;
 

@@ -83,11 +83,10 @@
               }
               "org.kde.plasma.panelspacer"
               "org.kde.plasma.pager"
-              "org.kde.plasma.volume"
               {
                 systemTray.items = {
-                  shown = [ "org.kde.plasma.battery" ];
-                  hidden = [ "org.kde.plasma.clipboard" "org.kde.plasma.volume" ];
+                  shown = [ "org.kde.plasma.battery" "org.kde.plasma.volume" ];
+                  hidden = [ "org.kde.plasma.clipboard" ];
                 };
               }
             ];

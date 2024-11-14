@@ -19,6 +19,7 @@ in
 #../../common/optional/vpn.nix
     ../../common/optional/plasma
     ../../common/optional/grub.nix
+    ../../common/optional/plymouth.nix
     ../../common/optional/gaming.nix
     ../../common/optional/nvidia.nix
     ../../common/optional/starcitizen.nix
