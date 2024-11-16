@@ -1,4 +1,7 @@
-{ config, ... }: {
+{ pkgs, ... }: {
+    users.users.osmo.shell = pkgs.zsh;
+    users.users.osmo.useDefaultShell = true;
+    users.users.osmo.ignoreShellProgramCheck = true;
   home-manager.users.osmo = { config, ... }: {
         programs.zsh = {
           enable = true;
