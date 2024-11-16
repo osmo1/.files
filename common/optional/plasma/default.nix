@@ -31,11 +31,18 @@
         overrideConfig = true;
         workspace = {
           lookAndFeel = "org.kde.breezedark.desktop";
+          colorScheme = "untitled";
           cursor = {
             theme = "capitaine-cursors";
             size = 24;
           };
           iconTheme = "breeze-dark";
+        };
+        fonts = {
+            toolbar = {
+                family = "Hack Nerd Font";
+                pointSize = 10;
+            };
         };
         panels = [
           # Bottom task-manager

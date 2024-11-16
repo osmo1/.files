@@ -30,12 +30,12 @@
         };
           fonts = {
               monospace = {
-                  name = "FiraMono Nerd Font";
-                  package = pkgs.nerdfonts.override { fonts = [ "FiraMono" ]; };
-              }; 
-              sansSerif = {
                   name = "FiraCode Nerd Font";
                   package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+              }; 
+              sansSerif = {
+                  name = "Hack Nerd Font";
+                  package = pkgs.nerdfonts.override { fonts = [ "Hack" ]; };
               };
               serif = {
                   name = "DejaVu Sans Mono";
@@ -49,7 +49,7 @@
               };
           };
           cursor = {
-            name = "Capitane";
+            name = "Capitaine Cursors";
             package = pkgs.capitaine-cursors;
             size = 24;
           };
@@ -57,7 +57,7 @@
               desktop = 1;
               applications = 0.9;
               popups = 0.8;
-              terminal = 0.7;
+              terminal = 0.9;
           };
           polarity = "dark";
           image = "${builtins.toString inputs.wallpapers}/stolen/plasma2k.png";
