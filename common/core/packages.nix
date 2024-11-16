@@ -16,6 +16,7 @@
       tpm2-tools
       tpm2-tss
       dust
+      thefuck
     ])
 
     ++

@@ -2,6 +2,7 @@
 {
   users.users.osmo.packages = (with pkgs.stable; [
     minetest
+    heroic
     (prismlauncher.override{withWaylandGLFW=true;})
     glfw-wayland-minecraft
   ]) ++ (with pkgs.unstable; [
