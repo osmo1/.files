@@ -6,6 +6,7 @@
 }:
 let
   hostnames = [
+    "lixos"
     "testeri"
     "serveri"
     "klusteri-0"
