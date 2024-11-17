@@ -31,6 +31,7 @@
     dockerproxy.enable = true;
     traefik = {
 	enable = true;
+    enableTraefik = true;
 	version = "v3.1";
 	uiPort = 280;
 	dataLocation = "/home/osmo/traefik";

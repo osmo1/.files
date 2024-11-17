@@ -57,8 +57,8 @@ in {
                 "--api.insecure=true"
       "--api.dashboard=true"
       "--providers.docker=true"
-      "--providers.docker.exposedbydefault=false" # only expose containers explicitly
-        "--providers.docker.endpoint=tcp://192.168.11.10:2375" # Use the proxy instead of the direct socket
+      "--providers.docker.exposedbydefault=false"
+        "--providers.docker.endpoint=tcp://${if config.networking.hostName == "klusteri-0" then "192.168.11.10" else "192.168.11.11" }:2375" # Use the proxy instead of the direct socket
       "--entrypoints.web.address=:80"
             "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       "--entrypoints.websecure.address=:443"

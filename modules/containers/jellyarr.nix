@@ -114,17 +114,17 @@ in {
 
         labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
-          "homepage.name" = "Deluge";
-          "homepage.icon" = "deluge.png";
+          "homepage.name" = "Qbittorrent";
+          "homepage.icon" = "qbittorrent.png";
           "homepage.href" = "https://deluge.${cfg.options.urlBase}";
           "homepage.description" = "Torrent client";
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`deluge.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "8080";
+          "traefik.http.routers.qbittorrent.rule" = "Host(`qbittorrent.${cfg.options.urlBase}`)";
+          "traefik.http.routers.qbittorrent.entrypoints" = "websecure";
+          "traefik.http.routers.qbittorrent.tls.certresolver" = "porkbun";
+          "traefik.http.services.qbittorrent.loadbalancer.server.port" = "8080";
         } else {} );
       };
       containers.prowlarr = let
@@ -155,10 +155,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`prowlarr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "9696";
+          "traefik.http.routers.prowlarr.rule" = "Host(`prowlarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.prowlarr.entrypoints" = "websecure";
+          "traefik.http.routers.prowlarr.tls.certresolver" = "porkbun";
+          "traefik.http.services.prowlarr.loadbalancer.server.port" = "9696";
         } else {} );
       };
       containers.flaresolverr = let
@@ -209,10 +209,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`sonarr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "8989";
+          "traefik.http.routers.sonarr.rule" = "Host(`sonarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.sonarr.entrypoints" = "websecure";
+          "traefik.http.routers.sonarr.tls.certresolver" = "porkbun";
+          "traefik.http.services.sonarr.loadbalancer.server.port" = "8989";
         } else {} );
       }; 
       containers.radarr = let
@@ -245,10 +245,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`radarr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "7878";
+          "traefik.http.routers.radarr.rule" = "Host(`radarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.radarr.entrypoints" = "websecure";
+          "traefik.http.routers.radarr.tls.certresolver" = "porkbun";
+          "traefik.http.services.radarr.loadbalancer.server.port" = "7878";
         } else {} );
       }; 
       containers.lidarr = let
@@ -281,10 +281,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`lidarr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "8686";
+          "traefik.http.routers.lidarr.rule" = "Host(`lidarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.lidarr.entrypoints" = "websecure";
+          "traefik.http.routers.lidarr.tls.certresolver" = "porkbun";
+          "traefik.http.services.lidarr.loadbalancer.server.port" = "8686";
         } else {} );
       };
       containers.readarr = let
@@ -317,10 +317,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`readarr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "8787";
+          "traefik.http.routers.readarr.rule" = "Host(`readarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.readarr.entrypoints" = "websecure";
+          "traefik.http.routers.readarr.tls.certresolver" = "porkbun";
+          "traefik.http.services.readarr.loadbalancer.server.port" = "8787";
         } else {} );
       };
       containers.bazarr = let
@@ -353,10 +353,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`bazarr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "6767";
+          "traefik.http.routers.bazarr.rule" = "Host(`bazarr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.bazarr.entrypoints" = "websecure";
+          "traefik.http.routers.bazarr.tls.certresolver" = "porkbun";
+          "traefik.http.services.bazarr.loadbalancer.server.port" = "6767";
         } else {} );
       };
       containers.jellyfin = let
@@ -391,10 +391,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`jellyfin.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "8096";
+          "traefik.http.routers.jellyfin.rule" = "Host(`jellyfin.${cfg.options.urlBase}`)";
+          "traefik.http.routers.jellyfin.entrypoints" = "websecure";
+          "traefik.http.routers.jellyfin.tls.certresolver" = "porkbun";
+          "traefik.http.services.jellyfin.loadbalancer.server.port" = "8096";
         } else {} );
       };
       containers.jellyseerr = let
@@ -426,10 +426,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`jellyseerr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "5055";
+          "traefik.http.routers.jellyseerr.rule" = "Host(`jellyseerr.${cfg.options.urlBase}`)";
+          "traefik.http.routers.jellyseerr.entrypoints" = "websecure";
+          "traefik.http.routers.jellyseerr.tls.certresolver" = "porkbun";
+          "traefik.http.services.jellyseerr.loadbalancer.server.port" = "5055";
         } else {} );
       };
       containers.bitmagnet = let
