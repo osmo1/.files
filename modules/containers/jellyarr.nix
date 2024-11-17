@@ -432,6 +432,64 @@ in {
           "traefik.http.services.traefik.loadbalancer.server.port" = "5055";
         } else {} );
       };
+      containers.bitmagnet = let
+      	port = toString (cfg.uiPortStart + 1000);
+      in {
+        hostname = "bitmagnet";
+        image = "ghcr.io/bitmagnet-io/bitmagnet:${cfg.version}";
+	
+        volumes = [
+        ];
+        ports = [
+          "${port}:3333"
+          "3334:3334/tcp"
+          "3334:3334/udp"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+          TZ = "${cfg.timeZone}";
+          POSTGRES_HOST = "postgres";
+            POSTGRES_PASSWORD = "postgres";
+        };
+        cmd = [
+            "worker"
+            "run"
+            "--keys=http_server"
+            "--keys=queue_server"
+        ];
+        extraOptions = [
+        ];
+        labels =    (if cfg.enableHomePage == true then {
+          "homepage.group" = "*arr";
+          "homepage.name" = "bitmagnet";
+          "homepage.icon" = "bitmagnet";
+          "homepage.href" = "https://bitmagnet.${cfg.options.urlBase}";
+          "homepage.description" = "Crawls dht for extra indexing options";
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.traefik.rule" = "Host(`bitmagnet.${cfg.options.urlBase}`)";
+          "traefik.http.routers.traefik.entrypoints" = "websecure";
+          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
+          "traefik.http.services.traefik.loadbalancer.server.port" = "3333";
+        } else {} );
+      };
+      containers.postgres-bit = {
+        hostname = "postgres-bit";
+        image = "postgres:16-alpine";
+        volumes = [
+          "${cfg.dataLocation}/postgres:/var/lib/postgresql/data"
+        ];
+        ports = [
+          "5432:5432"
+        ];
+	environment = {
+       POSTGRES_PASSWORD = "postgres";
+       POSTGRES_DB = "bitmagnet";
+       PGUSER = "postgres";
+        };
+      };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
     systemd.tmpfiles.rules = [
@@ -447,6 +505,7 @@ in {
       "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
+      "d ${cfg.dataLocation}/postgres 0770 osmo users - -"
     ];
   };
 }

@@ -9,6 +9,7 @@
 	      ../../common/optional/podman.nix
 	      ../../common/optional/vpn.nix
 	      ../../common/optional/nfs-mount.nix
+          ../../common/optional/systemd-boot.nix
 	      #../../common/optional/xfce
 	      #../../common/optional/sddm.nix
 	      #../../common/optional/proton.nix
