@@ -17,14 +17,15 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    ../../common/optional/plasma
+    ../../common/optional/dwl
     ../../common/optional/systemd-boot.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/impermanence.nix
     ../../common/optional/tpm.nix
     ../../common/optional/ssh.nix
     ../../common/optional/gaming.nix
-    ../../common/optional/auto-login.nix
+    ../../common/optional/sddm.nix
+#../../common/optional/auto-login.nix
   ];
 
   system.stateVersion = "24.05";

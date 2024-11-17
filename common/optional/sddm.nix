@@ -7,6 +7,6 @@ in
     enable = true;
     wayland.enable = true;
   };
-  services.xserver.displayManager.sddm.theme = "tokyo-night-sddm";
+  services.displayManager.sddm.theme = "tokyo-night-sddm";
   environment.systemPackages = with pkgs; [ tokyo-night-sddm ];
 }

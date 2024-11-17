@@ -9,10 +9,15 @@
         };
          settings = {
               add_newline = false;
-              format = "[](#7dcfff)$directory[](fg:#7aa2f7 bg:#7dcfff)$git_branch$git_status[](fg:#bb9af7 bg:#7aa2f7)$nodejs$rust$golang$php[](fg:#bb9af7)\n$character";
+              format = "[](#9ece6a)$hostname[](bg:#9ece6a fg:#7dcfff)$directory[](fg:#7aa2f7 bg:#7dcfff)$git_branch$git_status[](fg:#bb9af7 bg:#7aa2f7)$nodejs$rust$golang$php[](fg:#bb9af7)\n$character";
               character = {
                 success_symbol = "[󰘧](#9ece6a)";
                 error_symbol = "[󰘧](#f7768e)";
+              };
+              hostname = {
+                style = "fg:#1a1b26 bg:#9ece6a";
+                format = "[ $hostname ]($style)";
+                ssh_only = true;
               };
               directory = {
                 style = "fg:#1a1b26 bg:#7dcfff";

@@ -20,7 +20,24 @@ in
     #      ];
     #    };
     dwl = prev.dwl.overrideAttrs {
-        patches = [ "${patches-path}/*" ];
+        conf = ../common/optional/dwl/config.h;
+        postInstall =
+        let
+          dwl-session = ''
+            [Desktop Entry]
+            Name=dwl
+            Comment=Dwm but wayland
+            Exec=dbus-dwl
+            Type=Application
+          '';
+        in
+        ''
+          mkdir -p $out/share/wayland-sessions
+          echo "${dwl-session}" > $out/share/wayland-sessions/dwl.desktop
+        '';
+      passthru.providedSessions = [ "dwl" ];
+      patches = [ "${patches-path}/movestack.patch" ];
+#passthru.providedSessions = [ "dwl" "dbus-dwl" ];
     };
   };
 

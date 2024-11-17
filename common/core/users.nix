@@ -23,6 +23,9 @@ in
       extraGroups = [
         "networkmanager"
         "wheel"
+        "video"
+        "input"
+        "seat"
       ];
     };
   };
