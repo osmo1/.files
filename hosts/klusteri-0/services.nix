@@ -54,6 +54,15 @@
         url = "traefik.klusteri-0.kotiserweri.zip";
     };
     };
+    luanti = {
+        enable = true;
+        version = "latest";
+        dataLocation = "/home/osmo/luanti";
+        timeZone = "Europe/Helsinki";
+        options = {
+            singlePort = "30000";
+        };
+    };
   };
 
 
