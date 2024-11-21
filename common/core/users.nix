@@ -26,6 +26,7 @@ in
         "video"
         "input"
         "seat"
+        "libvirtd"
       ];
     };
   };
