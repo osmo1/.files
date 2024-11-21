@@ -165,7 +165,7 @@ in {
       	port = toString (cfg.uiPortStart + 200);
       in {
         hostname = "flaresolverr";
-        image = "ghcr.io/flaresolverr/flaresolverr:${cfg.version}";
+        image = "21hsmw/flaresolverr:nodriver";
         volumes = [
         ];
         ports = [
@@ -187,8 +187,7 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/sonarr:/config"
-          "${cfg.options.mediaLocation}/tv:/tv"
-          "${cfg.options.mediaLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}:/media"
         ];
         ports = [
           "${port}:8989"
@@ -223,8 +222,7 @@ in {
 	
         volumes = [
           "${cfg.dataLocation}/radarr:/config"
-          "${cfg.options.mediaLocation}/movies:/movies"
-          "${cfg.options.mediaLocation}/downloads:/downloads"
+          "${cfg.options.mediaLocation}:/media"
         ];
         ports = [
           "${port}:7878"
@@ -404,7 +402,7 @@ in {
         image = "fallenbagel/jellyseerr:${cfg.version}";
 	
         volumes = [
-          "${cfg.dataLocation}/jellyseerr:/config"
+          "${cfg.dataLocation}/jellyseerr:/app/config"
         ];
         ports = [
           "${port}:5055"
@@ -439,6 +437,7 @@ in {
         image = "ghcr.io/bitmagnet-io/bitmagnet:${cfg.version}";
 	
         volumes = [
+            "/etc/resolv.conf:/etc/resolv.conf:ro"
         ];
         ports = [
           "${port}:3333"
@@ -446,10 +445,7 @@ in {
           "3334:3334/udp"
         ];
 	environment = {
-	  PUID = "1000";
-	  PGID = "100";
-          TZ = "${cfg.timeZone}";
-          POSTGRES_HOST = "postgres";
+          POSTGRES_HOST = "10.88.0.71"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
             POSTGRES_PASSWORD = "postgres";
         };
         cmd = [
@@ -457,6 +453,7 @@ in {
             "run"
             "--keys=http_server"
             "--keys=queue_server"
+            "--keys=dht_crawler"
         ];
         extraOptions = [
         ];
