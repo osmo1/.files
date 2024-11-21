@@ -31,9 +31,10 @@
                 "Music" = " ";
                 "Pictures" = " ";
                 "Videos" = " ";
-#"Projects" = " ";
+#".files" = " ";
                 "Games" = "󰖺 ";
                 "Misc" = "󰫢 ";
+                "~" = "";
               };
               git_branch = {
                 symbol = "";

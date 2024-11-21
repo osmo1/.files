@@ -16,6 +16,7 @@ in
       blender
       thunderbird
       rustdesk
+      anki
 
       # Coding
       vscodium # Needs further conf
