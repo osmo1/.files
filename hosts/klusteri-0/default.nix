@@ -7,7 +7,8 @@
 	      ../../common/optional/cli
 	      ../../common/optional/impermanence.nix
 	      ../../common/optional/podman.nix
-	      #../../common/optional/vpn.nix
+	      ../../common/optional/tpm.nix
+	      ../../common/optional/systemd-boot.nix
 	      #../../common/optional/remote-crypt.nix
 	      #../../common/optional/xfce
 	      #../../common/optional/sddm.nix
