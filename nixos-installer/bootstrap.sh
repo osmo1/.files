@@ -9,6 +9,7 @@ ssh_key=""
 ssh_port="22"
 persist_dir=""
 tpm=""
+nbde=""
 # Create a temp directory for generated host keys
 temp=$(mktemp -d)
 
@@ -73,6 +74,7 @@ function help_and_exit() {
 	echo "  --port <ssh_port>         specify the ssh port to use for remote access. Default=${ssh_port}."
 	echo "  --impermanence            Use this flag if the target machine has impermanence enabled. WARNING: Assumes /persist path."
 	echo "  --tpm                     Use this flag if the target machine has a tpm module and you want to use it."
+	echo "  --nbde                    Use this flag if the target machine needs encryption over the network."
 	echo "  --debug                   Enable debug mode."
 	echo "  -h | --help               Print this help."
 	exit 0
@@ -110,6 +112,9 @@ while [[ $# -gt 0 ]]; do
 		;;	
 	--tpm)
 		tpm=$1
+		;;	
+    --nbde)
+		nbde=$1
 		;;
 	--debug)
 		set -x
@@ -146,6 +151,10 @@ function nixos_anywhere() {
 
 	# Generate host ssh key pair without a passphrase
 	ssh-keygen -t ed25519 -f "$temp/etc/ssh/ssh_host_ed25519_key" -C root@"$target_hostname" -N ""
+	mkdir -p "$temp/home/osmo/.files/.secrets"
+    cp /home/osmo/.files/.secrets/jwt.jwt $temp/home/osmo/.files/.secrets
+	$ssh_root_cmd "mkdir -p /home/osmo/.files/.secrets"
+	$scp_cmd $temp/home/osmo/.files/.secrets/jwt.jwt root@"$target_destination":/home/osmo/.files/.secrets/jwt.jwt
 	 
 	# Set the correct permissions so sshd will accept the key
 	chmod 600 "$temp/etc/ssh/ssh_host_ed25519_key"
@@ -170,8 +179,9 @@ function nixos_anywhere() {
 	#	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#	$ssh_root_cmd "/bin/sh -c 'tpm2-initramfs-tool seal --data \$(cat /tmp/disko-password) --pcrs 0,2'"
 	#else
-		luks_passphrase=osmo
- 	   	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
+		#luks_passphrase=osmo
+		luks_passphrase=$(sops -d --extract '["luks"]["secure"]' "$secret_file")
+        $ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#fi
 
 	green "Generating hardware-config.nix for $target_hostname and adding it to the nix-config."
@@ -187,6 +197,12 @@ function nixos_anywhere() {
 	    # Tpm is not working on nixos 24.05 rn for somereason, will try again in 24.11
 	    #$ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 0'"
 	fi
+	if [ -n "$nbde" ]; then
+        $ssh_root_cmd "clevis luks bind -d /dev/nvme0n1p4 tang '{\"url\":\"192.168.11.2:8888\"}'"
+        $ssh_root_cmd "clevis luks bind -d /dev/sda1 tang '{\"url\":\"192.168.11.2:8888\"}'"
+        $ssh_root_cmd "clevis luks bind -d /dev/sdb1 tang '{\"url\":\"192.168.11.2:8888\"}'"
+	fi
+	
 	
 	echo "Rebooting now"
 	$ssh_root_cmd "sudo reboot now"

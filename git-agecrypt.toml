@@ -1,2 +1,3 @@
 [config]
 ".secrets/password.nix" = ["age1mha92vta5u0qsazst32lmcje5qhvmzcwm5tf6ws0usy4s7fkyezqp0f9fa"]
+".secrets/jwt.jwt" = ["age1mha92vta5u0qsazst32lmcje5qhvmzcwm5tf6ws0usy4s7fkyezqp0f9fa"]
