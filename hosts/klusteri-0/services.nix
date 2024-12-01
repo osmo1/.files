@@ -34,12 +34,12 @@
     };
     };
     luanti = {
-        enable = true;
+        enable = false;
         version = "latest";
         dataLocation = "/home/osmo/luanti";
         timeZone = "Europe/Helsinki";
         options = {
-            singlePort = "30000";
+            singlePort = 30000;
         };
     };
   };
