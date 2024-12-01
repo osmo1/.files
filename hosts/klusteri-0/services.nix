@@ -5,27 +5,7 @@
     ]/* ++ (if config.virtualisation.oci-containers.containers.deluge != null then [ ../../common/optional/vpn.nix ] else [])*/;
 
   services.containers = {
-    crafty = {
-      enable = false;
-      dataLocation = "/home/osmo/crafty";
-      uiPort = 38000;
-      timeZone = "Europe/Helsinki";
-      enableHomePage = false;
-      options = {
-        portOffset = 0;
-        enableRcon = false;
-      };
-    };
-    jellyarr = {
-      enable = false;
-      dataLocation = "/home/osmo/jellyarr";
-      uiPortStart = 1080;
-      timeZone = "Europe/Helsinki";
-      enableHomePage = true;
-      options = {
-	urlBase = "klusteri-0.kotiserweri.zip";
-      };
-    };
+    dockerproxy.enable = true;
     pihole = {
 	enable = true;
 	version = "development";
@@ -34,7 +14,6 @@
 	enableTraefik = true;
 	enableHomePage = true;
     };
-    dockerproxy.enable = true;
     homepage = {
         enable = true;
         enableTraefik = true;
@@ -64,12 +43,4 @@
         };
     };
   };
-
-
-    #services.docker.crafty = {
-    #    enable = true;
-    #    version = "latest";
-    #    volumesBase = "/home/osmo/crafty";
-    #    webUIPort = 380;
-    #};
 }

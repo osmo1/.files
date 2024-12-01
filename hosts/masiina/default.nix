@@ -25,6 +25,7 @@ in
     ../../common/optional/nvidia.nix
     ../../common/optional/starcitizen.nix
     ../../common/optional/auto-login.nix
+    ../../common/optional/podman.nix
   ];
 
   system.stateVersion = "24.05";
