@@ -33,14 +33,13 @@
         url = "traefik.klusteri-0.kotiserweri.zip";
     };
     };
-    luanti = {
-        enable = false;
+    wireguard = {
+        enable = true;
         version = "latest";
-        dataLocation = "/home/osmo/luanti";
-        timeZone = "Europe/Helsinki";
-        options = {
-            singlePort = 30000;
-        };
+        uiPort = 480;
+        dataLocation = "/home/osmo/wireguard";
+        enableHomepage = true;
+        enableTraefik = true;
     };
   };
 }
