@@ -70,7 +70,7 @@
     };
     spicetify-nix = {
         url = "github:Gerg-L/spicetify-nix";
-        inputs.nixpkgs.follows = "nixpkgs-unstable";
+        inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -211,13 +211,14 @@
             home-manager.nixosModules.home-manager
             { home-manager.extraSpecialArgs = specialArgs; }
             inputs.disko.nixosModules.default
-            (import ./common/optional/disks/2+1-luks-btrfs.nix)
+            (import ./common/optional/disks/4-luks-btrfs.nix)
             {
-              disko.devices.disk.main.device = "/dev/sda";
-              disko.devices.disk.secondary.device = "/dev/hda";
-              disko.devices.disk.mini.device = "/dev/emmc";
+              disko.devices.disk.main.device = "/dev/nvme0n1";
+              disko.devices.disk.secondary.device = "/dev/sda";
+              disko.devices.disk.aertiary.device = "/dev/sdb";
+              disko.devices.disk.mini.device = "/dev/mmcblk0";
             }
-	    inputs.impermanence.nixosModules.default
+            inputs.impermanence.nixosModules.default
             ./hosts/serveri
           ];
         };
@@ -229,7 +230,7 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
-	    inputs.impermanence.nixosModules.default
+	        inputs.impermanence.nixosModules.default
             ./hosts/klusteri-0
           ];
         };
@@ -241,7 +242,7 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
-	    inputs.impermanence.nixosModules.default
+            inputs.impermanence.nixosModules.default
             ./hosts/klusteri-1
           ];
         };

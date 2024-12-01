@@ -40,7 +40,7 @@ in
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit (pkgs) wget curl rsync neovim git just git-agecrypt sops tpm2-tools tpm2-tss;
+    inherit (pkgs) wget curl rsync neovim git just git-agecrypt tpm2-tools tpm2-tss;
   };
 
   nix.settings = {
@@ -50,33 +50,6 @@ in
     ];
     warn-dirty = false;
   };
-	sops = {
-		defaultSopsFile = "${secretsPath}/secrets.yaml";
-		validateSopsFiles = false;
-		age = {
-			sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-			keyFile = "/var/lib/sops-nix/key.txt";
-			generateKey = true;
-		};
-		secrets = {
-			test = {};
-		};
-	};
     users.users.root.initialPassword = "osmo";
-
-  sops.secrets."nixos/${config.networking.hostName}/ssh/public" = {};
-  system.activationScripts."${configVars.username}-authorizedKeys".text = ''
-    mkdir -p "/etc/ssh/authorized_keys.d;
-    cp "${config.sops.secrets."nixos/${config.networking.hostName}/ssh/public".path}" "/etc/ssh/authorized_keys.d/${configVars.username}";
-    chmod +r "/etc/ssh/authorized_keys.d/${configVars.username};
-  '';
-  sops.secrets = {
-    "nixos/${config.networking.hostName}/git/private" = {
-      path = "/home/${configVars.username}/.ssh/git";
-      owner = "osmo";
-      group = "users";
-      mode = "600";
-    };
-  };
   system.stateVersion = "24.05";
 }
