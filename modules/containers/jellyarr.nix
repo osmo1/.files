@@ -94,8 +94,7 @@ in {
 	
         volumes = [
             "${cfg.dataLocation}/qbittorrent:/config"
-#"${cfg.options.mediaLocation}/downloads:/downloads"
-          "/home/osmo/vanha/downloads:/downloads"
+            "${cfg.options.mediaLocation}/downloads:/downloads"
         ];
         ports = [
 #"${port}:8080"
