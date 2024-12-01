@@ -93,13 +93,14 @@ in {
         image = "lscr.io/linuxserver/qbittorrent:${cfg.version}";
 	
         volumes = [
-          "${cfg.dataLocation}/qbittorrent:/config"
-          "${cfg.options.mediaLocation}/downloads:/downloads"
+            "${cfg.dataLocation}/qbittorrent:/config"
+#"${cfg.options.mediaLocation}/downloads:/downloads"
+          "/home/osmo/vanha/downloads:/downloads"
         ];
         ports = [
-          "${port}:8080"
-          "6881:6881"
-	  "6881:6881/udp"
+#"${port}:8080"
+#"6881:6881"
+#"6881:6881/udp"
         ];
 	environment = {
 	  PUID = "1000";
@@ -110,6 +111,7 @@ in {
 	  #DOCKER_MODS = "ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest";
         };
         extraOptions = [
+            "--network=container:gluetun"
         ];
 
         labels =    (if cfg.enableHomePage == true then {
@@ -437,15 +439,14 @@ in {
         image = "ghcr.io/bitmagnet-io/bitmagnet:${cfg.version}";
 	
         volumes = [
-            "/etc/resolv.conf:/etc/resolv.conf:ro"
         ];
         ports = [
           "${port}:3333"
           "3334:3334/tcp"
           "3334:3334/udp"
         ];
-	environment = {
-          POSTGRES_HOST = "10.88.0.71"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+	    environment = {
+          POSTGRES_HOST = "10.88.0.217"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
             POSTGRES_PASSWORD = "postgres";
         };
         cmd = [
@@ -456,6 +457,7 @@ in {
             "--keys=dht_crawler"
         ];
         extraOptions = [
+        "--network=container:gluetun"
         ];
         labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "*arr";
@@ -466,10 +468,10 @@ in {
         } else {} ) //
         (if cfg.enableTraefik == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.traefik.rule" = "Host(`bitmagnet.${cfg.options.urlBase}`)";
-          "traefik.http.routers.traefik.entrypoints" = "websecure";
-          "traefik.http.routers.traefik.tls.certresolver" = "porkbun";
-          "traefik.http.services.traefik.loadbalancer.server.port" = "3333";
+          "traefik.http.routers.bitmagnet.rule" = "Host(`bitmagnet.${cfg.options.urlBase}`)";
+          "traefik.http.routers.bitmagnet.entrypoints" = "websecure";
+          "traefik.http.routers.bitmagnet.tls.certresolver" = "porkbun";
+          "traefik.http.services.bitmagnet.loadbalancer.server.port" = "3333";
         } else {} );
       };
       containers.postgres-bit = {
@@ -487,6 +489,75 @@ in {
        PGUSER = "postgres";
         };
       };
+      containers.stump = let
+      	port = toString (cfg.uiPortStart + 1100);
+      in {
+        hostname = "stump";
+        image = "aaronleopold/stump:${cfg.version}";
+	
+        volumes = [
+          "${cfg.dataLocation}/stump/config:/config"
+          "${cfg.dataLocation}/stump/data:/data"
+          "${cfg.options.mediaLocation}/books:/books"
+        ];
+        ports = [
+          "${port}:10801"
+        ];
+	environment = {
+	  PUID = "1000";
+	  PGID = "100";
+        };
+        extraOptions = [
+        ];
+        labels =    (if cfg.enableHomePage == true then {
+          "homepage.group" = "*arr";
+          "homepage.name" = "stump";
+          "homepage.icon" = "stump";
+          "homepage.href" = "https://stump.${cfg.options.urlBase}";
+          "homepage.description" = "ODPS server for ebooks";
+        } else {} ) //
+        (if cfg.enableTraefik == true then {
+          "traefik.enable" = "true";
+          "traefik.http.routers.stump.rule" = "Host(`stump.${cfg.options.urlBase}`)";
+          "traefik.http.routers.stump.entrypoints" = "websecure";
+          "traefik.http.routers.stump.tls.certresolver" = "porkbun";
+          "traefik.http.services.stump.loadbalancer.server.port" = "10801";
+        } else {} );
+      };
+      containers.gluetun = let
+#port = toString (cfg.uiPortStart + 1000);
+      in {
+        hostname = "gluetun";
+        image = "qmcgaw/gluetun:${cfg.version}";
+        volumes = [
+          "${cfg.dataLocation}/gluetun:/gluetun"
+          "${cfg.dataLocation}/oraakeli.conf:/gluetun/wireguard/wg0.conf"
+        ];
+        ports = [
+#"${port}:8888/tcp"
+          "8388:8388/tcp"
+          "8388:8388/udp"
+          "1080:8080"
+          "6881:6881"
+          "6881:6881/udp"
+          /*"${port}:3333"
+          "3334:3334/tcp"
+          "3334:3334/udp"*/
+        ];
+	environment = {
+        VPN_SERVICE_PROVIDER = "custom";
+        VPN_TYPE = "wireguard";
+        /*WIREGUARD_ENDPOINT_IP = "158.179.207.29";
+        WIREGUARD_ENDPOINT_PORT = "51820";
+        WIREGUARD_PRIVATE_KEY = "mN2FxjoFDbTc8VOyNWPfVbK3Uv7k4aA66qALqVMoG1Y=";
+        WIREGUARD_PUBLIC_KEY = "mN2FxjoFDbTc8VOyNWPfVbK3Uv7k4aA66qALqVMoG1Y=";
+        WIREGUARD_ADDRESSES = "10.0.13.0";*/
+        };
+        extraOptions = [
+            "--cap-add=NET_ADMIN"
+            "--device=/dev/net/tun:/dev/net/tun:rwm"
+        ];
+      };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
     systemd.tmpfiles.rules = [
@@ -503,6 +574,11 @@ in {
       "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
       "d ${cfg.dataLocation}/postgres 0770 osmo users - -"
+      "d ${cfg.dataLocation}/stump 0770 osmo users - -"
+      "d ${cfg.dataLocation}/stump/config 0770 osmo users - -"
+      "d ${cfg.dataLocation}/stump/data 0770 osmo users - -"
+      "d ${cfg.dataLocation}/gluetun 0770 osmo users - -"
     ];
+#services.resolved.enable = true;
   };
 }
