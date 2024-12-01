@@ -1,4 +1,4 @@
-{
+{ config, ... }: {
   system.activationScripts.gtkFix.text = ''
       #!/bin/bash
       rm -rf ~/.gtkrc-2.0*
@@ -65,6 +65,9 @@
               nixvim.enable = false;
               alacritty.enable = true;
           };
+      }; 
+      gtk.cursorTheme = {
+          inherit (config.home-manager.users.osmo.stylix.cursor) name package size;
       };
     };
 }

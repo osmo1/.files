@@ -16,7 +16,6 @@
       listenPort = 51820;
       privateKeyFile = config.sops.secrets."wireguard/oraakeli/private".path;
       dns = [
-        "8.8.8.8"
         "10.13.13.1"
       ];
 

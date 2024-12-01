@@ -9,11 +9,4 @@
               };
             };
     };
-    networking = {
-      bridges.br0.interfaces = [ "enp42s0" ]; 
-#interfaces.br0.up = true;
-
-#useDHCP = true;
-      dhcpcd.denyInterfaces = [ "enp42s0" ];  
-    };
 }

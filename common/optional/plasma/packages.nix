@@ -30,5 +30,6 @@
       plasmatube
       tokodon
       plasma-pa
+      krfb
     ]);
 }

@@ -15,7 +15,6 @@ in
       aseprite
       blender
       thunderbird
-      rustdesk
       anki
 
       # Coding
@@ -32,6 +31,7 @@ in
     ++ 
     (with pkgs.unstable; [
       zed-editor
+      rustdesk-flutter
 #spotify
     ]);
   programs.kdeconnect.enable = true;
