@@ -27,6 +27,7 @@
 
   environment.sessionVariables = {
     FLAKE = "/home/osmo/.files";
+    EDITOR = "nvim";
   };
 
   console.keyMap = "fi";

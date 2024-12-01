@@ -50,7 +50,7 @@ in {
     };
   };
 
-  config = kIf cfg.enable {
+  config = mkIf cfg.enable {
     virtualisation.oci-containers = {
       containers.luanti = {
         hostname = "luanti";
