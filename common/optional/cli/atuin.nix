@@ -1,8 +1,10 @@
 {
-  home-manager.users.osmo = { ... }: {
+  home-manager.users.osmo =
+    { ... }:
+    {
       programs.atuin = {
         enable = true;
         enableZshIntegration = true;
       };
-  };
+    };
 }

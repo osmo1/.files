@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   boot.loader.systemd-boot = {
     enable = true;
     # we use Git for version control, so we don't need to keep too many generations.

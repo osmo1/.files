@@ -1,8 +1,14 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.containers.luanti;
-in {
+in
+{
   options.services.containers.luanti = {
     enable = mkEnableOption "Enable luanti server";
     version = mkOption {
@@ -23,24 +29,26 @@ in {
       default = true;
     };
     options = {
-      /*portOffset = lib.mkOption {
-        type = types.int;
-        default = 0;
-        description = "Offset to apply to the base port. Can be a positive or negative integer.";
-      };
-      enableRcon = mkOption {
-        type = types.bool;
-        default = true;
-      };
-      enableSinglePort = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable a single port instead of a port range.";
-      };*/
+      /*
+        portOffset = lib.mkOption {
+          type = types.int;
+          default = 0;
+          description = "Offset to apply to the base port. Can be a positive or negative integer.";
+        };
+        enableRcon = mkOption {
+          type = types.bool;
+          default = true;
+        };
+        enableSinglePort = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable a single port instead of a port range.";
+        };
+      */
       hostPort = mkOption {
-          type = types.str;
-          default = "192.168.1.1";
-          description = "Local host port for the container config";
+        type = types.str;
+        default = "192.168.1.1";
+        description = "Local host port for the container config";
       };
       singlePort = mkOption {
         type = types.int;
@@ -63,12 +71,13 @@ in {
         ];
         environment = {
           TZ = "${cfg.timeZone}";
-            PUID = "1000";
-            PGID = "1000";
-            CLI_ARGS = "--gameid mineclone";
+          PUID = "1000";
+          PGID = "1000";
+          CLI_ARGS = "--gameid mineclone";
         };
-        extraOptions = [
-        ];
+        extraOptions =
+          [
+          ];
         labels = mkIf cfg.enableHomePage {
           "homepage.group" = "Misc";
           "homepage.name" = "luanti";

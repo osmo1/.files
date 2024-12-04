@@ -20,8 +20,8 @@ in
     #      ];
     #    };
     dwl = prev.dwl.overrideAttrs {
-        conf = ../common/optional/dwl/config.h;
-        postInstall =
+      conf = ../common/optional/dwl/config.h;
+      postInstall =
         let
           dwl-session = ''
             [Desktop Entry]
@@ -37,7 +37,7 @@ in
         '';
       passthru.providedSessions = [ "dwl" ];
       patches = [ "${patches-path}/movestack.patch" ];
-#passthru.providedSessions = [ "dwl" "dbus-dwl" ];
+      #passthru.providedSessions = [ "dwl" "dbus-dwl" ];
     };
   };
 

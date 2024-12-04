@@ -1,8 +1,14 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.containers.homepage;
-in {
+in
+{
   options.services.containers.homepage = {
     enable = mkEnableOption "Enable homepage minecraft controller";
     version = mkOption {
@@ -23,10 +29,10 @@ in {
       default = true;
     };
     options = {
-        url = mkOption {
-            type = types.str;
-            default = "home.klusteri-0.kotiserweri.zip";
-        };
+      url = mkOption {
+        type = types.str;
+        default = "home.klusteri-0.kotiserweri.zip";
+      };
     };
   };
 
@@ -47,7 +53,7 @@ in {
           "traefik.http.routers.homepage.entrypoints" = "websecure";
           "traefik.http.routers.homepage.tls.certresolver" = "porkbun";
           "traefik.http.services.homepage.loadbalancer.server.port" = "3000";
-          };
+        };
       };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPort ];
@@ -57,4 +63,3 @@ in {
     ];
   };
 }
-

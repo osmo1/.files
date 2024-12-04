@@ -1,8 +1,14 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.containers.pihole;
-in {
+in
+{
   options.services.containers.pihole = {
     enable = mkEnableOption "Enable pihole";
     version = mkOption {
@@ -30,7 +36,7 @@ in {
       type = types.bool;
       default = true;
     };
-    options = {};
+    options = { };
   };
 
   config = mkIf cfg.enable {
@@ -43,35 +49,46 @@ in {
           "${cfg.dataLocation}/dnsmasq.d:/etc/dnsmasq.d"
         ];
         ports = [
-	       "53:53"
-	       "53:53/udp"
-	       "${toString cfg.uiPort}:80"
+          "53:53"
+          "53:53/udp"
+          "${toString cfg.uiPort}:80"
         ];
         environment = {
           TZ = "${cfg.timeZone}";
         };
         extraOptions = [
-	  "--network=default"
+          "--network=default"
         ];
-labels =    (if cfg.enableHomePage == true then {
-      "homepage.group" = "Network";
-      "homepage.name" = "Pihole";
-      "homepage.icon" = "pihole";
-      "homepage.href" = "https://pihole.klusteri-0.kotiserweri.zip"; # TODO: Change this.
-      "homepage.description" = "DNS blocking";
-    } else {} ) //
+        labels =
+          (
+            if cfg.enableHomePage == true then
+              {
+                "homepage.group" = "Network";
+                "homepage.name" = "Pihole";
+                "homepage.icon" = "pihole";
+                "homepage.href" = "https://pihole.klusteri-0.kotiserweri.zip"; # TODO: Change this.
+                "homepage.description" = "DNS blocking";
+              }
+            else
+              { }
+          )
+          //
 
-    (if cfg.enableTraefik == true then {
-      "traefik.enable" = "true";
-      "traefik.http.routers.pihole.rule" = "Host(`pihole.klusteri-0.kotiserweri.zip`)";
-      "traefik.http.routers.pihole.entrypoints" = "websecure";
-      "traefik.http.routers.pihole.tls.certresolver" = "porkbun";
-      "traefik.http.services.pihole.loadbalancer.server.port" = "80";
-      # Redirect to /admin
-      #"traefik.http.middlewares.pihole-addprefix.addprefix.prefix" = "/admin";
-     # "traefik.http.routers.pihole.middlewares" = "pihole-addprefix";
-    } else {} );
-
+            (
+              if cfg.enableTraefik == true then
+                {
+                  "traefik.enable" = "true";
+                  "traefik.http.routers.pihole.rule" = "Host(`pihole.klusteri-0.kotiserweri.zip`)";
+                  "traefik.http.routers.pihole.entrypoints" = "websecure";
+                  "traefik.http.routers.pihole.tls.certresolver" = "porkbun";
+                  "traefik.http.services.pihole.loadbalancer.server.port" = "80";
+                  # Redirect to /admin
+                  #"traefik.http.middlewares.pihole-addprefix.addprefix.prefix" = "/admin";
+                  # "traefik.http.routers.pihole.middlewares" = "pihole-addprefix";
+                }
+              else
+                { }
+            );
 
       };
     };
@@ -83,4 +100,3 @@ labels =    (if cfg.enableHomePage == true then {
     ];
   };
 }
-

@@ -17,7 +17,7 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-#../../common/optional/vpn.nix
+    #../../common/optional/vpn.nix
     ../../common/optional/plasma
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
@@ -43,7 +43,8 @@ in
   );
 
   #TODO: Find a better place for this
-  /*boot = {
+  /*
+    boot = {
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -57,22 +58,24 @@ in
         		  selected_themes = [ "rings" ];
         		})
         	    ];
-      */
-    /*};
-    consoleLogLevel = 0;
-    initrd.verbose = false;
-    kernelPackages = pkgs.linuxPackages_zen;
-    kernelParams = [
-      "quiet"
-      "splash"
-      "boot.shell_on_fail"
-      "loglevel=3"
-      "rd.systemd.show_status=false"
-      "rd.udev.log_level=3"
-      "udev.log_priority=3"
-    ];
-    loader.timeout = 0;
-  };*/
+  */
+  /*
+    };
+      consoleLogLevel = 0;
+      initrd.verbose = false;
+      kernelPackages = pkgs.linuxPackages_zen;
+      kernelParams = [
+        "quiet"
+        "splash"
+        "boot.shell_on_fail"
+        "loglevel=3"
+        "rd.systemd.show_status=false"
+        "rd.udev.log_level=3"
+        "udev.log_priority=3"
+      ];
+      loader.timeout = 0;
+    };
+  */
 
   networking.hostName = "masiina";
 

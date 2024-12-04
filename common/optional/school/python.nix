@@ -1,5 +1,6 @@
-{ pkgs, ... }:{
-    environment.systemPackages = with pkgs.stable; [
-	python3
-    ];
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs.stable; [
+    python3
+  ];
 }

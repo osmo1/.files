@@ -21,7 +21,6 @@
   networking.hostName = "cbt";
   boot.loader.systemd-boot.enable = true;
 
-
   users.users = {
     osmo.openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAeBjrcy3Gh5gfHlFVNmAVSb2iTamDdOW4PNXH1pU2bQ osmo@osmo.zip"
