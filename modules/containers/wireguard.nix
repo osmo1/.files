@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.services.containers.wireguard;
-in {
+in
+{
   options.services.containers.wireguard = {
     enable = mkEnableOption "Enable wireguard with a web ui";
     version = mkOption {
@@ -27,16 +28,17 @@ in {
     };
     traefik = {
       enable = mkOption {
-          type = types.bool;
-          default = true;
-        };
+        type = types.bool;
+        default = true;
+      };
       urlBase = mkOption {
         type = types.str;
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options = {
-    };
+    options =
+      {
+      };
   };
 
   config = mkIf cfg.enable {
@@ -52,13 +54,13 @@ in {
           "51820:51820/udp"
         ];
         environment = {
-#TZ = "${cfg.timeZone}";
-            WG_HOST = "80.222.53.107";
-            WG_PERSISTENT_KEEPALIVE = "25";
-            WG_DEFAULT_DNS = "192.168.11.10";
-            UI_TRAFFIC_STATS = "true";
-            WG_ALLOWED_IPS = "0.0.0.0/0, ::/0, 10.8.0.0/24, 10.8.0.0/32";
-            WG_MTU = "1412";
+          #TZ = "${cfg.timeZone}";
+          WG_HOST = "80.222.53.107";
+          WG_PERSISTENT_KEEPALIVE = "25";
+          WG_DEFAULT_DNS = "192.168.11.10";
+          UI_TRAFFIC_STATS = "true";
+          WG_ALLOWED_IPS = "0.0.0.0/0, ::/0, 10.8.0.0/24, 10.8.0.0/32";
+          WG_MTU = "1412";
         };
         extraOptions = [
           "--sysctl=net.ipv4.ip_forward=1"
@@ -67,20 +69,31 @@ in {
           "--cap-add=SYS_MODULE"
           "--cap-add=NET_RAW"
         ];
-        labels =    (if cfg.enableHomePage == true then {
-          "homepage.group" = "Network";
-          "homepage.name" = "Wireguad";
-          "homepage.icon" = "wireguard";
-          "homepage.href" = "https://wireguard.${cfg.traefik.urlBase}";
-          "homepage.description" = "Local vpn service";
-        } else {} ) //
-        (if cfg.traefik.enable == true then {
-          "traefik.enable" = "true";
-          "traefik.http.routers.wireguard.rule" = "Host(`wireguard.${cfg.traefik.urlBase}`)";
-          "traefik.http.routers.wireguard.entrypoints" = "websecure";
-          "traefik.http.routers.wireguard.tls.certresolver" = "porkbun";
-          "traefik.http.services.wireguard.loadbalancer.server.port" = "51821";
-        } else {} );
+        labels =
+          (
+            if cfg.enableHomePage == true then
+              {
+                "homepage.group" = "Network";
+                "homepage.name" = "Wireguad";
+                "homepage.icon" = "wireguard";
+                "homepage.href" = "https://wireguard.${cfg.traefik.urlBase}";
+                "homepage.description" = "Local vpn service";
+              }
+            else
+              { }
+          )
+          // (
+            if cfg.traefik.enable == true then
+              {
+                "traefik.enable" = "true";
+                "traefik.http.routers.wireguard.rule" = "Host(`wireguard.${cfg.traefik.urlBase}`)";
+                "traefik.http.routers.wireguard.entrypoints" = "websecure";
+                "traefik.http.routers.wireguard.tls.certresolver" = "porkbun";
+                "traefik.http.services.wireguard.loadbalancer.server.port" = "51821";
+              }
+            else
+              { }
+          );
       };
     };
     networking.firewall = {
@@ -90,11 +103,10 @@ in {
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
     ];
-      networking.nat = {
-          enable = true;
-              enableIPv6 = true;
-        };
-  networking.nat.externalInterface = "eth0";
+    networking.nat = {
+      enable = true;
+      enableIPv6 = true;
+    };
+    networking.nat.externalInterface = "eth0";
   };
 }
-

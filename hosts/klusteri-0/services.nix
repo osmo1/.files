@@ -36,14 +36,14 @@
       };
     };
     wireguard = {
+      enable = true;
+      version = "latest";
+      uiPort = 480;
+      dataLocation = "/home/osmo/wireguard";
+      enableHomePage = true;
+      traefik = {
         enable = true;
-        version = "latest";
-        uiPort = 480;
-        dataLocation = "/home/osmo/wireguard";
-        enableHomePage = true;
-        traefik = {
-            enable = true;
-        };
+      };
     };
   };
 }

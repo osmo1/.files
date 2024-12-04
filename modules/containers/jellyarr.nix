@@ -490,10 +490,12 @@ in
               PUID = "1000";
               PGID = "100";
               TZ = "${cfg.timeZone}";
+              DOCKER_MODS = "linuxserver/mods:jellyfin-opencl-intel-24.35.30872.22";
             };
-            extraOptions =
-              [
-              ];
+            extraOptions = [
+              "--group-add=26"
+              "--device=/dev/dri/renderD128:/dev/dri/renderD128"
+            ];
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -586,7 +588,7 @@ in
               "3334:3334/udp"
             ];
             environment = {
-              POSTGRES_HOST = "10.88.0.217"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+              POSTGRES_HOST = "10.88.0.24"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
               POSTGRES_PASSWORD = "postgres";
             };
             cmd = [
@@ -729,61 +731,74 @@ in
               "--device=/dev/net/tun:/dev/net/tun:rwm"
             ];
           };
+        containers.autobrr =
+          let
+            port = toString (cfg.uiPortStart + 1200);
+          in
+          {
+            hostname = "autobrr";
+            image = "ghcr.io/autobrr/autobrr:${cfg.version}";
+
+            volumes = [
+              "${cfg.dataLocation}/autobrr:/config"
+            ];
+            ports = [
+              "${port}:7474"
+            ];
+            environment = {
+              TZ = "${cfg.timeZone}";
+            };
+            extraOptions =
+              [
+              ];
+            labels =
+              (
+                if cfg.enableHomePage == true then
+                  {
+                    "homepage.group" = "*arr";
+                    "homepage.name" = "autobrr";
+                    "homepage.icon" = "autobrr";
+                    "homepage.href" = "https://autobrr.${cfg.options.urlBase}";
+                    "homepage.description" = "Fetches new releases from irc";
+                  }
+                else
+                  { }
+              )
+              // (
+                if cfg.enableTraefik == true then
+                  {
+                    "traefik.enable" = "true";
+                    "traefik.http.routers.autobrr.rule" = "Host(`autobrr.${cfg.options.urlBase}`)";
+                    "traefik.http.routers.autobrr.entrypoints" = "websecure";
+                    "traefik.http.routers.autobrr.tls.certresolver" = "porkbun";
+                    "traefik.http.services.autobrr.loadbalancer.server.port" = "7474";
+                  }
+                else
+                  { }
+              );
+          };
       };
-      containers.autobrr = let
-      	port = toString (cfg.uiPortStart + 1200);
-      in {
-        hostname = "autobrr";
-        image = "ghcr.io/autobrr/autobrr:${cfg.version}";
-	
-        volumes = [
-          "${cfg.dataLocation}/autobrr:/config"
-        ];
-        ports = [
-          "${port}:7474"
-        ];
-	environment = {
-          TZ = "${cfg.timeZone}";
-        };
-        extraOptions = [
-        ];
-        labels =    (if cfg.enableHomePage == true then {
-          "homepage.group" = "*arr";
-          "homepage.name" = "autobrr";
-          "homepage.icon" = "autobrr";
-          "homepage.href" = "https://autobrr.${cfg.options.urlBase}";
-          "homepage.description" = "Fetches new releases from irc";
-        } else {} ) //
-        (if cfg.enableTraefik == true then {
-          "traefik.enable" = "true";
-          "traefik.http.routers.autobrr.rule" = "Host(`autobrr.${cfg.options.urlBase}`)";
-          "traefik.http.routers.autobrr.entrypoints" = "websecure";
-          "traefik.http.routers.autobrr.tls.certresolver" = "porkbun";
-          "traefik.http.services.autobrr.loadbalancer.server.port" = "7474";
-        } else {} );
-      };
+      networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
+      systemd.tmpfiles.rules = [
+        "d ${cfg.dataLocation} 0770 osmo users - -"
+        "d ${cfg.dataLocation}/downloads 0770 osmo users - -"
+        "d ${cfg.dataLocation}/deluge 0770 osmo users - -"
+        "d ${cfg.dataLocation}/qbittorrent 0770 osmo users - -"
+        "d ${cfg.dataLocation}/prowlarr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/sonarr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/radarr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/lidarr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/readarr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
+        "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/postgres 0770 osmo users - -"
+        "d ${cfg.dataLocation}/stump 0770 osmo users - -"
+        "d ${cfg.dataLocation}/stump/config 0770 osmo users - -"
+        "d ${cfg.dataLocation}/stump/data 0770 osmo users - -"
+        "d ${cfg.dataLocation}/gluetun 0770 osmo users - -"
+        "d ${cfg.dataLocation}/autobrr 0770 osmo users - -"
+      ];
+      #services.resolved.enable = true;
     };
-    networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
-    systemd.tmpfiles.rules = [
-      "d ${cfg.dataLocation} 0770 osmo users - -"
-      "d ${cfg.dataLocation}/downloads 0770 osmo users - -"
-      "d ${cfg.dataLocation}/deluge 0770 osmo users - -"
-      "d ${cfg.dataLocation}/qbittorrent 0770 osmo users - -"
-      "d ${cfg.dataLocation}/prowlarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/sonarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/radarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/lidarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/readarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
-      "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/postgres 0770 osmo users - -"
-      "d ${cfg.dataLocation}/stump 0770 osmo users - -"
-      "d ${cfg.dataLocation}/stump/config 0770 osmo users - -"
-      "d ${cfg.dataLocation}/stump/data 0770 osmo users - -"
-      "d ${cfg.dataLocation}/gluetun 0770 osmo users - -"
-      "d ${cfg.dataLocation}/autobrr 0770 osmo users - -"
-    ];
-#services.resolved.enable = true;
-  };
 }
