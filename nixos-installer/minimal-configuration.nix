@@ -1,12 +1,20 @@
-{ config, lib, pkgs, unstable-pkgs, configLib, configVars, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  unstable-pkgs,
+  configLib,
+  configVars,
+  inputs,
+  ...
+}:
 let
   secretsPath = builtins.toString inputs.secrets;
 in
 {
-  imports = [ 
+  imports = [
     (configLib.relativeToRoot "common/core/users.nix")
   ];
-
 
   fileSystems."/boot".options = [ "umask=0077" ]; # Removes permissions and security warnings.
   boot.loader.efi.canTouchEfiVariables = true;
@@ -16,7 +24,11 @@ in
     # configures the network interface(include wireless) via `nmcli` & `nmtui`
     networkmanager.enable = true;
   };
-  nix.trustedUsers = [ "root" "osmo" "@wheel" ];
+  nix.trustedUsers = [
+    "root"
+    "osmo"
+    "@wheel"
+  ];
   services = {
     qemuGuest.enable = true;
     openssh = {
@@ -33,14 +45,26 @@ in
   # this potentially causes a security issue that we mitigated above
   security.pam = {
     sshAgentAuth.enable = true;
-    /*services.sudo = {
-      u2fAuth = true;
-      sshAgentAuth = true;
-    };*/
+    /*
+      services.sudo = {
+        u2fAuth = true;
+        sshAgentAuth = true;
+      };
+    */
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit (pkgs) wget curl rsync neovim git just git-agecrypt tpm2-tools tpm2-tss;
+    inherit (pkgs)
+      wget
+      curl
+      rsync
+      neovim
+      git
+      just
+      git-agecrypt
+      tpm2-tools
+      tpm2-tss
+      ;
   };
 
   nix.settings = {
@@ -50,6 +74,6 @@ in
     ];
     warn-dirty = false;
   };
-    users.users.root.initialPassword = "osmo";
+  users.users.root.initialPassword = "osmo";
   system.stateVersion = "24.05";
 }

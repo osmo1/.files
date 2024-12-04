@@ -4,6 +4,6 @@
     fsType = "nfs";
   };
   services.cachefilesd = {
-      enable = true;
+    enable = true;
   };
 }

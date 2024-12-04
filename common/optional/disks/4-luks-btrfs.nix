@@ -84,19 +84,19 @@
               passwordFile = "/tmp/disko-password";
               content = {
                 type = "btrfs";
-                extraArgs = [ 
-                    "-f"
-                    "/dev/mapper/media"
+                extraArgs = [
+                  "-f"
+                  "/dev/mapper/media"
                 ];
                 subvolumes = {
-                    "@" = { };
-                    "@/data" = {
-                      mountOptions = [
-                        "subvol=data"
-                        "noatime"
-                      ];
-                      mountpoint = "/home/osmo/data";
-                    };
+                  "@" = { };
+                  "@/data" = {
+                    mountOptions = [
+                      "subvol=data"
+                      "noatime"
+                    ];
+                    mountpoint = "/home/osmo/data";
+                  };
                 };
               };
             };
@@ -132,7 +132,7 @@
               type = "filesystem";
               format = "ext4";
               mountpoint = "/home/osmo/mini";
-              mountOptions = ["noatime"];
+              mountOptions = [ "noatime" ];
             };
           };
         };

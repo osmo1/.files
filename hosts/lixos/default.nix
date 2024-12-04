@@ -25,7 +25,7 @@ in
     ../../common/optional/ssh.nix
     ../../common/optional/gaming.nix
     ../../common/optional/sddm.nix
-#../../common/optional/auto-login.nix
+    #../../common/optional/auto-login.nix
   ];
 
   system.stateVersion = "24.05";

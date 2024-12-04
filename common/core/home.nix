@@ -5,8 +5,8 @@
     {
       home.stateVersion = "24.05";
       home.sessionVariables = {
-          XDG_RUNTIME_DIR = "/run/user/$UID";
-        };
+        XDG_RUNTIME_DIR = "/run/user/$UID";
+      };
     };
-    home-manager.backupFileExtension = "bk";
+  home-manager.backupFileExtension = "bk";
 }

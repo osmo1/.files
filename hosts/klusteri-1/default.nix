@@ -1,4 +1,13 @@
-{ config, lib, configLib, pkgs, nixvim, inputs, nur, ... }:
+{
+  config,
+  lib,
+  configLib,
+  pkgs,
+  nixvim,
+  inputs,
+  nur,
+  ...
+}:
 
 {
     imports = (configLib.scanPaths ./.)
@@ -20,9 +29,9 @@
       #../../common/optional/samba.nix
     ];
 
-    system.stateVersion = "24.05";
+  system.stateVersion = "24.05";
 
-    networking.hostName = "klusteri-1";
+  networking.hostName = "klusteri-1";
 
     networking.firewall.allowedTCPPorts = [ 22 ];
     networking.firewall.allowPing = true;

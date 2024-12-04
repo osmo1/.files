@@ -11,11 +11,11 @@
 {
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
-  ../../common/optional/cli
-#../../common/optional/impermanence.nix
+    ../../common/optional/cli
+    #../../common/optional/impermanence.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/podman.nix
-#../../common/optional/samba.nix
+    #../../common/optional/samba.nix
     ../../common/optional/nfs.nix
     ../../common/optional/ssh.nix
     ../../common/optional/nbde.nix

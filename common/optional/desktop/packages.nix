@@ -3,13 +3,14 @@ let
   zen-browser = pkgs.callPackage ../../../pkgs/zen-browser { };
 in
 {
-  users.users.osmo.packages = 
+  users.users.osmo.packages =
     (with pkgs.stable; [
       # General
       zen-browser
       bitwarden
       whatsapp-for-linux
       obsidian
+      anytype
       libreoffice-fresh
       vesktop
       aseprite
@@ -28,11 +29,10 @@ in
       xdg-desktop-portal-gtk
       openrgb
     ])
-    ++ 
-    (with pkgs.unstable; [
+    ++ (with pkgs.unstable; [
       zed-editor
       rustdesk-flutter
-#spotify
+      #spotify
     ]);
   programs.kdeconnect.enable = true;
 }

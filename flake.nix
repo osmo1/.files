@@ -3,15 +3,14 @@
 
   inputs = {
     # Nixpkgs and home-manager
-    nixpkgs.url = "nixpkgs/nixos-24.05";
-    nixpkgs-23-11.url = "nixpkgs/nixos-23.11";
+    nixpkgs.url = "nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     nur.url = "github:nix-community/NUR";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -46,11 +45,11 @@
 
     # Apps and modules
     stylix = {
-        url = "github:danth/stylix/release-24.05";
-        inputs.stylix.follows = "nixpkgs";
+      url = "github:danth/stylix/release-24.05";
+      inputs.stylix.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-24.05";
+      url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -65,12 +64,12 @@
       inputs.home-manager.follows = "home-manager";
     };
     nix-gaming = {
-        url = "github:fufexan/nix-gaming";
-        inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:fufexan/nix-gaming";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     spicetify-nix = {
-        url = "github:Gerg-L/spicetify-nix";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -163,8 +162,8 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
-	    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e495
-	    inputs.impermanence.nixosModules.default
+            inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e495
+            inputs.impermanence.nixosModules.default
             ./hosts/lixos
           ];
         };
@@ -230,7 +229,7 @@
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
-	        inputs.impermanence.nixosModules.default
+            inputs.impermanence.nixosModules.default
             ./hosts/klusteri-0
           ];
         };
