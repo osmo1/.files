@@ -25,9 +25,15 @@ in {
       type = types.bool;
       default = true;
     };
-    enableTraefik = mkOption {
-      type = types.bool;
-      default = true;
+    traefik = {
+      enable = mkOption {
+          type = types.bool;
+          default = true;
+        };
+      urlBase = mkOption {
+        type = types.str;
+        default = "klusteri-0.kotiserweri.zip";
+      };
     };
     options = {
     };
@@ -47,27 +53,33 @@ in {
         ];
         environment = {
 #TZ = "${cfg.timeZone}";
+            WG_HOST = "80.222.53.107";
             WG_PERSISTENT_KEEPALIVE = "25";
+            WG_DEFAULT_DNS = "192.168.11.10";
+            UI_TRAFFIC_STATS = "true";
+            WG_ALLOWED_IPS = "0.0.0.0/0, ::/0, 10.8.0.0/24, 10.8.0.0/32";
+            WG_MTU = "1412";
         };
         extraOptions = [
           "--sysctl=net.ipv4.ip_forward=1"
           "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
           "--cap-add=NET_ADMIN"
           "--cap-add=SYS_MODULE"
+          "--cap-add=NET_RAW"
         ];
         labels =    (if cfg.enableHomePage == true then {
           "homepage.group" = "Network";
           "homepage.name" = "Wireguad";
           "homepage.icon" = "wireguard";
-          "homepage.href" = "https://wireguard.${cfg.options.urlBase}";
+          "homepage.href" = "https://wireguard.${cfg.traefik.urlBase}";
           "homepage.description" = "Local vpn service";
         } else {} ) //
-        (if cfg.enableTraefik == true then {
+        (if cfg.traefik.enable == true then {
           "traefik.enable" = "true";
-          "traefik.http.routers.stump.rule" = "Host(`wireguard.${cfg.options.urlBase}`)";
-          "traefik.http.routers.stump.entrypoints" = "websecure";
-          "traefik.http.routers.stump.tls.certresolver" = "porkbun";
-          "traefik.http.services.stump.loadbalancer.server.port" = "51820";
+          "traefik.http.routers.wireguard.rule" = "Host(`wireguard.${cfg.traefik.urlBase}`)";
+          "traefik.http.routers.wireguard.entrypoints" = "websecure";
+          "traefik.http.routers.wireguard.tls.certresolver" = "porkbun";
+          "traefik.http.services.wireguard.loadbalancer.server.port" = "51821";
         } else {} );
       };
     };
@@ -78,6 +90,11 @@ in {
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
     ];
+      networking.nat = {
+          enable = true;
+              enableIPv6 = true;
+        };
+  networking.nat.externalInterface = "eth0";
   };
 }
 

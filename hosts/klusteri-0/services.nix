@@ -38,8 +38,10 @@
         version = "latest";
         uiPort = 480;
         dataLocation = "/home/osmo/wireguard";
-        enableHomepage = true;
-        enableTraefik = true;
+        enableHomePage = true;
+        traefik = {
+            enable = true;
+        };
     };
   };
 }
