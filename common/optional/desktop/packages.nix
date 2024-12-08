@@ -7,6 +7,7 @@ in
     (with pkgs.stable; [
       # General
       zen-browser
+      ungoogled-chromium
       bitwarden
       whatsapp-for-linux
       obsidian

@@ -31,5 +31,6 @@
       tokodon
       plasma-pa
       krfb
+      kwallet-pam
     ]);
 }
