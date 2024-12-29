@@ -4,11 +4,12 @@
     (with pkgs.stable; [
       minetest
       heroic
-      prismlauncher
     ])
     ++ (
       with pkgs.unstable;
       [
+      prismlauncher
+      (glfw3.override { withMinecraftPatch = true; })
       ]
     );
   programs.steam = {

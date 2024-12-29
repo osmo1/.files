@@ -10,9 +10,13 @@ in
       type = types.str;
       default = "latest";
     };
-    uiPort = mkOption {
+    morssUiPort = mkOption {
       type = types.port;
       default = 80;
+    };
+    freshUiPort = mkOption {
+      type = types.port;
+      default = 180;
     };
     dataLocation = mkOption {
       type = types.str;
@@ -49,7 +53,7 @@ in
         volumes = [
         ];
         ports = [
-          "${toString cfg.uiPort}:8000"
+          "${toString cfg.morssUiPort}:8000"
         ];
         environment = {
         };
@@ -88,7 +92,7 @@ in
           "${cfg.dataLocation}:/config"
         ];
         ports = [
-          "${toString cfg.uiPort}:80"
+          "${toString cfg.freshUiPort}:80"
         ];
         environment = {
             PUID = "1000";
@@ -124,9 +128,7 @@ in
           );
       };
     };
-    networking.firewall = {
-      allowedTCPPorts = [ cfg.uiPort ];
-    };
+    networking.firewall.allowedTCPPorts = [ cfg.morssUiPort cfg.freshUiPort ];
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
     ];

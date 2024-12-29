@@ -106,6 +106,7 @@ in
             volumes = [
               "${cfg.dataLocation}/qbittorrent:/config"
               "${cfg.options.mediaLocation}/downloads:/downloads"
+              "${cfg.options.mediaLocation}/links:/links"
             ];
             ports = [
               #"${port}:8080"
@@ -428,8 +429,9 @@ in
 
             volumes = [
               "${cfg.dataLocation}/bazarr:/config"
-              "${cfg.options.mediaLocation}/movies:/movies"
-              "${cfg.options.mediaLocation}/tv:/tv"
+              "${cfg.options.mediaLocation}/movies:/media/movies"
+              "${cfg.options.mediaLocation}/tv:/media/tv"
+              "${cfg.options.mediaLocation}/own:/media/own"
             ];
             ports = [
               "${port}:6767"
@@ -474,12 +476,13 @@ in
           in
           {
             hostname = "jellyfin";
-            image = "lscr.io/linuxserver/jellyfin:${cfg.version}";
-
+            image = "jellyfin/jellyfin:${cfg.version}";
             volumes = [
-              "${cfg.dataLocation}/jellyfin:/config"
+              "${cfg.dataLocation}/jellyfin/config:/config"
+              "${cfg.dataLocation}/jellyfin/cache:/cache"
               "${cfg.options.mediaLocation}/movies:/data/movies"
               "${cfg.options.mediaLocation}/tv:/data/tvshows"
+              "${cfg.options.mediaLocation}/own:/data/own"
             ];
             ports = [
               "${port}:8096"
@@ -487,13 +490,10 @@ in
               "1900:1900"
             ];
             environment = {
-              PUID = "1000";
-              PGID = "100";
-              TZ = "${cfg.timeZone}";
-              DOCKER_MODS = "linuxserver/mods:jellyfin-opencl-intel-24.35.30872.22";
+                JELLYFIN_FFMPEG_EXTRA_ARGUMENTS = "-c:v hevc_qsv";
             };
             extraOptions = [
-              "--group-add=26"
+              "--group-add=303"
               "--device=/dev/dri/renderD128:/dev/dri/renderD128"
             ];
             labels =
@@ -588,7 +588,7 @@ in
               "3334:3334/udp"
             ];
             environment = {
-              POSTGRES_HOST = "10.88.0.24"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+              POSTGRES_HOST = "10.88.0.5"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
               POSTGRES_PASSWORD = "postgres";
             };
             cmd = [
@@ -777,6 +777,59 @@ in
                   { }
               );
           };
+        containers.cross-seed =
+          let
+            port = toString (cfg.uiPortStart + 1300);
+          in
+          {
+            hostname = "cross-seed";
+            image = "ghcr.io/cross-seed/cross-seed:6";
+            user = "1000:100";
+            volumes = [
+              "${cfg.dataLocation}/cross-seed/config:/config"
+              "${cfg.dataLocation}/cross-seed/output:/cross-seeds"
+              "${cfg.dataLocation}/qbittorrent/qBittorrent/BT_backup:/torrents:ro"
+              "${cfg.options.mediaLocation}/downloads:/downloads"
+              "${cfg.options.mediaLocation}/links:/links"
+            ];
+            ports = [
+              "${port}:2468"
+            ];
+            environment = {
+              TZ = "${cfg.timeZone}";
+            };
+            extraOptions =
+              [
+              ];
+            cmd = [
+                "daemon"
+            ];
+            labels =
+              (
+                if cfg.enableHomePage == true then
+                  {
+                    "homepage.group" = "*arr";
+                    "homepage.name" = "Cross-seed";
+                    "homepage.icon" = "cross-seed";
+                    "homepage.href" = "https://cross-seed.${cfg.options.urlBase}";
+                    "homepage.description" = "Cross seeds torrents across private trackers";
+                  }
+                else
+                  { }
+              )
+              // (
+                if cfg.enableTraefik == true then
+                  {
+                    "traefik.enable" = "true";
+                    "traefik.http.routers.cross-seed.rule" = "Host(`cross-seed.${cfg.options.urlBase}`)";
+                    "traefik.http.routers.cross-seed.entrypoints" = "websecure";
+                    "traefik.http.routers.cross-seed.tls.certresolver" = "porkbun";
+                    "traefik.http.services.cross-seed.loadbalancer.server.port" = "2468";
+                  }
+                else
+                  { }
+              );
+          };
       };
       networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
       systemd.tmpfiles.rules = [
@@ -791,6 +844,8 @@ in
         "d ${cfg.dataLocation}/readarr 0770 osmo users - -"
         "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
         "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
+        "d ${cfg.dataLocation}/jellyfin/cache 0770 osmo users - -"
+        "d ${cfg.dataLocation}/jellyfin/config 0770 osmo users - -"
         "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
         "d ${cfg.dataLocation}/postgres 0770 osmo users - -"
         "d ${cfg.dataLocation}/stump 0770 osmo users - -"
@@ -798,6 +853,9 @@ in
         "d ${cfg.dataLocation}/stump/data 0770 osmo users - -"
         "d ${cfg.dataLocation}/gluetun 0770 osmo users - -"
         "d ${cfg.dataLocation}/autobrr 0770 osmo users - -"
+        "d ${cfg.dataLocation}/cross-seed 0770 osmo users - -"
+        "d ${cfg.dataLocation}/cross-seed/config 0770 osmo users - -"
+        "d ${cfg.dataLocation}/cross-seed/output 0770 osmo users - -"
       ];
       #services.resolved.enable = true;
     };
