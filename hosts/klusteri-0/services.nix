@@ -50,6 +50,7 @@
       version = "latest";
       morssUiPort = 580;
       freshUiPort = 680;
+      dockerssUiPort = 780;
       dataLocation = "/home/osmo/fresh";
       enableHomePage = true;
       traefik = {

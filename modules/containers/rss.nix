@@ -18,6 +18,10 @@ in
       type = types.port;
       default = 180;
     };
+    dockerssUiPort = mkOption {
+      type = types.port;
+      default = 280;
+    };
     dataLocation = mkOption {
       type = types.str;
       default = "${config.users.users.osmo.home}/fresh";
@@ -122,6 +126,40 @@ in
                 "traefik.http.routers.fresh.entrypoints" = "websecure";
                 "traefik.http.routers.fresh.tls.certresolver" = "porkbun";
                 "traefik.http.services.fresh.loadbalancer.server.port" = "80";
+              }
+            else
+              { }
+          );
+      };
+      containers.dockerss = {
+        hostname = "dockerss";
+        image = "theconnman/docker-hub-rss:${cfg.version}";
+
+        ports = [
+          "${toString cfg.dockerssUiPort}:3000"
+        ];
+
+        labels =
+          (
+            if cfg.enableHomePage == true then
+              {
+                "homepage.group" = "RSS";
+                "homepage.name" = "dockerss";
+                "homepage.icon" = "dockerss";
+                "homepage.href" = "https://dockerss.${cfg.traefik.urlBase}";
+                "homepage.description" = "RSS feed aggregator";
+              }
+            else
+              { }
+          )
+          // (
+            if cfg.traefik.enable == true then
+              {
+                "traefik.enable" = "true";
+                "traefik.http.routers.dockerss.rule" = "Host(`dockerss.${cfg.traefik.urlBase}`)";
+                "traefik.http.routers.dockerss.entrypoints" = "websecure";
+                "traefik.http.routers.dockerss.tls.certresolver" = "porkbun";
+                "traefik.http.services.dockerss.loadbalancer.server.port" = "3000";
               }
             else
               { }
