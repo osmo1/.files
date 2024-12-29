@@ -45,5 +45,16 @@
         enable = true;
       };
     };
+    rss = {
+      enable = true;
+      version = "latest";
+      morssUiPort = 580;
+      freshUiPort = 680;
+      dataLocation = "/home/osmo/fresh";
+      enableHomePage = true;
+      traefik = {
+        enable = true;
+      };
+    };
   };
 }
