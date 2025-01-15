@@ -57,5 +57,21 @@
         enable = true;
       };
     };
+    ente = {
+      enable = false;
+      uiPort = 880;
+      dataLocation = "/home/osmo/ente";
+      enableHomePage = true;
+      version = {
+          museum = "8656f698c0c66cf1573c2c000b81d2d93c73c69c";
+          postgres = "16";
+          minio = "RELEASE.2024-12-18T13-15-44Z";
+          mc = "RELEASE.2024-11-21T17-21-54Z";
+          socat = "1.8.0.0";
+      };
+      traefik = {
+        enable = true;
+      };
+    };
   };
 }
