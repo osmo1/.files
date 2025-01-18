@@ -68,7 +68,7 @@ in
       ephemeral = true;
 
       bindMounts = {
-        "/data" = {
+        "/var/lib/hass" = {
           hostPath = cfg.dataLocation;
           isReadOnly = false;
         };
@@ -80,18 +80,23 @@ in
 
           system.stateVersion = "24.11";
 
-        services.home-assistant = {
+          services.home-assistant = {
             enable = true;
             extraComponents = [
               # Components required to complete the onboarding
               "esphome"
               "met"
-              "radio_browser"
+              "shelly"
+              "pi_hole"
             ];
             config = {
               # Includes dependencies for a basic setup
               # https://www.home-assistant.io/integrations/default_config/
               default_config = {};
+              http = {
+                use_x_forwarded_for = true;
+                trusted_proxies = [ "192.168.11.10" "192.168.11.11" ];
+              };
             };
           };
 
@@ -104,7 +109,7 @@ in
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
             useHostResolvConf = lib.mkForce false;
           };
-          services.resolved.enable = true;
+            services.resolved.enable = true;
         };
     };
     systemd.tmpfiles.rules = [
@@ -132,7 +137,7 @@ in
                     home-assistant:
                       loadBalancer:
                         servers:
-                          - url: http://192.168.11.11:${builtins.toString cfg.uiPort}
+                          - url: http://192.168.11.10:${builtins.toString cfg.uiPort}
               '';
             in
             config.lib.dag.entryAfter [ "writeBoundary" ] ''

@@ -73,5 +73,15 @@
         enable = true;
       };
     };
+    home-assistant = {
+      enable = true;
+      version = "latest";
+      uiPort = 980;
+      dataLocation = "/home/osmo/home-assistant";
+      enableHomePage = true;
+      traefik = {
+        enable = true;
+      };
+    };
   };
 }
