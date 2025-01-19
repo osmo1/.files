@@ -16,6 +16,7 @@
       tpm2-tools
       tpm2-tss
       dust
+      borgbackup
     ])
 
     ++
@@ -25,4 +26,5 @@
         fzf
       ]);
   programs.thefuck.enable = true;
+  services.fwupd.enable = true;
 }

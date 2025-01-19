@@ -46,11 +46,17 @@
     # Apps and modules
     stylix = {
       url = "github:danth/stylix/release-24.05";
-      inputs.stylix.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixcord = {
+      url = "github:kaylorben/nixcord";
+    };
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
     };
 
     nixos-wsl = {
@@ -70,6 +76,12 @@
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # This is for 5800x3d but as I undestood it, it should work for any am4 x3d chips
+    ryzen-undervolt = {
+      url = "github:svenlange2/Ryzen-5800x3d-linux-undervolting/0f05965f9939259c27a428065fda5a6c0cbb9225";
+      flake = false;
     };
   };
 

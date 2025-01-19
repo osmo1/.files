@@ -1,17 +1,22 @@
 {
   pkgs,
   inputs,
+  lib,
   configLib,
   ...
 }:
 let
   hostnames = [
+    "borgus"
     "lixos"
     "testeri"
     "serveri"
     "klusteri-0"
     "klusteri-1"
   ]; # Add your hostnames here
+  ryzen-undervolt = pkgs.writeScriptBin "ryzen-undervolt" (
+    builtins.readFile "${inputs.ryzen-undervolt}/ruv.py"
+  );
 in
 {
   imports = (configLib.scanPaths ./.) ++ [
@@ -41,42 +46,24 @@ in
       };
     }) hostnames
   );
-
-  #TODO: Find a better place for this
-  /*
-    boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    plymouth = {
-      enable = true;
-      /*
-        theme = "rings";
-        	    themePackages = with pkgs; [
-        		(adi1090x-plymouth-themes.override {
-        		  selected_themes = [ "rings" ];
-        		})
-        	    ];
-  */
-  /*
-    };
-      consoleLogLevel = 0;
-      initrd.verbose = false;
-      kernelPackages = pkgs.linuxPackages_zen;
-      kernelParams = [
-        "quiet"
-        "splash"
-        "boot.shell_on_fail"
-        "loglevel=3"
-        "rd.systemd.show_status=false"
-        "rd.udev.log_level=3"
-        "udev.log_priority=3"
-      ];
-      loader.timeout = 0;
-    };
-  */
+  networking.interfaces.enp5s0.wakeOnLan.enable = true;
 
   networking.hostName = "masiina";
-
+    environment.systemPackages = [
+      ryzen-undervolt
+      pkgs.python312Full
+    ];
+    systemd.services.ryzen-undervolt = {
+      description = "Ryzen 5700x3D undervolting service";
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.python312Full ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe pkgs.python312Full} ${lib.getExe ryzen-undervolt} -c 8 -o -15";
+      };
+    };
+    hardware.cpu.amd = {
+      updateMicrocode = true;
+      ryzen-smu.enable = true;
+    };
 }

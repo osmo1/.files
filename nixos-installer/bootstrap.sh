@@ -179,8 +179,8 @@ function nixos_anywhere() {
 	#	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#	$ssh_root_cmd "/bin/sh -c 'tpm2-initramfs-tool seal --data \$(cat /tmp/disko-password) --pcrs 0,2'"
 	#else
-		#luks_passphrase=osmo
-		luks_passphrase=$(sops -d --extract '["luks"]["secure"]' "$secret_file")
+		luks_passphrase=osmo
+		#luks_passphrase=$(sops -d --extract '["luks"]["secure"]' "$secret_file")
         $ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#fi
 

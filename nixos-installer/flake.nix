@@ -60,8 +60,10 @@
     {
       nixosConfigurations = {
         # host     = newConfig "hostname"   "disko file name" "disks"                             tpm   nbde  grub
-        lixos = newConfig "lixos" "1-luks-btrfs" [ "nvme0n1" ] true false true;
         masiina = newConfig "masiina" "2-btrfs" [ "sda" "nvme0n1" ] false false true;
+        lixos = newConfig "lixos" "1-luks-btrfs" {
+          disk.main.device = "/dev/nvme0n1";
+        }  true false true;
         cbt = newConfig "cbt" "1-luks-btrfs" [ "vda" ] true false true;
         serveri = newConfig "serveri" "4-luks-btrfs" {
           disk.main.device = "/dev/nvme0n1";

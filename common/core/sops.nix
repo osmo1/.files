@@ -34,7 +34,7 @@ in
   systemd.services.decrypt-sops = {
     description = "Decrypt sops secrets";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
+#after = [ "network-online.target" ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
