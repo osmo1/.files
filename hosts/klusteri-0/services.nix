@@ -19,7 +19,7 @@
     homepage = {
       enable = true;
       enableTraefik = true;
-      version = "latest";
+      version = "v0.10.9";
       uiPort = 180;
       dataLocation = "/home/osmo/homepage";
       options = {
