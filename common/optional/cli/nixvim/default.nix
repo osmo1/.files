@@ -114,17 +114,9 @@
 
             vim-illuminate # Highlight similar words as are under the cursor
             vim-numbertoggle # Use relative number on focused buffer only
-            range-highlight-nvim # Highlight range as specified in commandline e.g. :10,15
-            vimade # Dim unfocused buffers
             vim-twiggy # Fugitive plugin to add branch control
             vimwiki # Vim Wiki
             YouCompleteMe # Code completion engine
-
-            # TODO:(nixvim) make sure this is working and not conflicting with YCM
-            # supertab # Use <tab> for insert completion needs - https://github.com/ervandew/supertab/
-
-            # Keep vim-devicons as last entry
-            vim-devicons
             ;
         };
         extraConfigVim = ''
@@ -197,15 +189,6 @@
 
             "     let g:ale_fix_on_save = 1
         '';
-
-        # extraConfigLua = ''
-        # -- ========= Colorscheme Overrides ==========
-        # -- Override cursor color and blink for nav and visual mode
-        # vim.cmd("highlight Cursor guifg=black guibg=orange");
-        #
-        # -- Override cursor color for insert mode
-        # vim.cmd("highlight iCursor guifg=black guibg=orange");
-        # '';
       };
     };
 }
