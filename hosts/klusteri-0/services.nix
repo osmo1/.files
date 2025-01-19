@@ -32,7 +32,7 @@
       uiPort = 280;
       dataLocation = "/home/osmo/traefik";
       options = {
-        url = "traefik.klusteri-0.kotiserweri.zip";
+        url = "klusteri-0.kotiserweri.zip";
       };
     };
     wireguard = {
