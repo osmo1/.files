@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
   system.activationScripts.gtkFix.text = ''
     #!/bin/bash
@@ -50,7 +50,7 @@
           };
         };
         cursor = {
-          name = "Capitaine Cursors";
+          name = "capitaine-cursors";
           package = pkgs.capitaine-cursors;
           size = 24;
         };
@@ -68,7 +68,15 @@
         };
       };
       gtk.cursorTheme = {
-        inherit (config.home-manager.users.osmo.stylix.cursor) name package size;
+        inherit (config.home-manager.users.osmo.stylix.cursor) name package; 
+        size = lib.mkForce 24;
+      };
+      home.pointerCursor = {
+          gtk.enable = true; 
+            x11.enable = true;
+        size = lib.mkForce 24;
       };
     };
+    environment.variables.XCURSOR_SIZE = "24";
+#xdg.icons.fallbackCursorThemes = [ "capitaine-cursors" ];
 }
