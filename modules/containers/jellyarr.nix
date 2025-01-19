@@ -373,7 +373,7 @@ in
           in
           {
             hostname = "readarr";
-            image = "lscr.io/linuxserver/readarr${cfg.version.readarr}";
+            image = "lscr.io/linuxserver/readarr:${cfg.version.readarr}";
 
             volumes = [
               "${cfg.dataLocation}/readarr:/config"
@@ -579,7 +579,7 @@ in
               "3334:3334/udp"
             ];
             environment = {
-              POSTGRES_HOST = "10.88.0.5"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+              POSTGRES_HOST = "10.88.0.162"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
               POSTGRES_PASSWORD = "postgres";
             };
             cmd = [
