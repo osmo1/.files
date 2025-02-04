@@ -3,7 +3,6 @@
   boot.supportedFilesystems = [ "btrfs" ];
   disko.devices = {
     disk.main = {
-      type = "disk";
       content = {
         type = "gpt";
         partitions = {
@@ -30,25 +29,7 @@
               randomEncryption = true;
             };
           };
-          home_shared = {
-            size = "100%";
-            content = {
-              type = "filesystem";
-              format = "btrfs";
-              mountpoint = "/home/shared";
-              mountOptions = [ "noatime" ];
-            };
-          };
-        };
-      };
-    };
-    disk.secondary = {
-      device = "/dev/vdb";
-      type = "disk";
-      content = {
-        type = "gpt";
-        partitions = {
-          encrypted-root = {
+          crypted = {
             size = "100%";
             content = {
               type = "luks";
@@ -89,5 +70,32 @@
         };
       };
     };
+    disk.secondary = {
+      content = {
+        type = "gpt";
+        partitions = {
+          crypted-extra = {
+            size = "100%";
+            content = {
+              type = "luks";
+              name = "crypted-extra";
+              content = {
+                type = "btrfs";
+                extraArgs = [ "-f" ];
+                subvolumes = {
+                  "@/extra" = {
+                    mountOptions = [
+                      "subvol=extra"
+                      "noatime"
+                    ];
+                    mountpoint = "/home/osmo/extra";
+                  };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
   };
 }

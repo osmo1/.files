@@ -17,7 +17,7 @@
     ../../common/optional/podman.nix
     ../../common/optional/tpm.nix
     ../../common/optional/ssh.nix
-    ../../common/optional/nfs-mount.nix
+#../../common/optional/nfs-mount.nix
     ../../common/optional/systemd-boot.nix
     #../../common/optional/remote-crypt.nix
     #../../common/optional/xfce
@@ -30,7 +30,7 @@
 
   system.stateVersion = "24.05";
 
-  networking.hostName = "klusteri-0";
+  networking.hostName = "klusteri-2";
 
   networking.firewall.allowedTCPPorts = [ 22 ];
   networking.firewall.allowPing = true;

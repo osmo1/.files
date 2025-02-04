@@ -8,8 +8,4 @@ users = {
 		openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuY9A1IS3Xz7GqiN32Cy8vQC1UWR6onYsV2Suy17XKs osmo@serveri"];
 	    };
     };
-  fileSystems."/borgbackup" = {
-    device = "/home/osmo/data/backups";
-    options = [ "bind" ];
-  };
 }

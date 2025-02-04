@@ -257,6 +257,19 @@
             ./hosts/klusteri-1
           ];
         };
+        klusteri-2 = lib.nixosSystem {
+          inherit specialArgs;
+          modules = [
+            home-manager.nixosModules.home-manager
+            { home-manager.extraSpecialArgs = specialArgs; }
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/2-luks-btrfs.nix)
+            { disko.devices.disk.main.device = "/dev/nvme0n1"; 
+              disko.devices.disk.secondary.device = "/dev/sda1"; }
+            inputs.impermanence.nixosModules.default
+            ./hosts/klusteri-2
+          ];
+        };
       };
     };
 }

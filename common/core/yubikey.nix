@@ -8,23 +8,24 @@
 }:
 let
   homeDirectory = "/home/osmo";
-  yubikey-up =
+    yubikey-up =
     let
       yubikeyIds = lib.concatStringsSep " " (
-        lib.mapAttrsToList (name: id: "[${name}]=\"${builtins.toString id}\"") { yubi1 = "30649273"; }
+        lib.mapAttrsToList (name: id: "[${name}]=\"${builtins.toString id}\"") { yubi-0 = "30649273"; }
       );
+#yubikeyIds = "30649273";
     in
     pkgs.writeShellApplication {
       name = "yubikey-up";
-      runtimeInputs = builtins.attrValues { inherit (pkgs) gawk yubikey-manager; };
-      text = ''
+      runtimeInputs = builtins.attrValues { inherit (pkgs) gawk yubikey-manager age age-plugin-yubikey; };
+ text = ''
         #!/usr/bin/env bash
         set -euo pipefail
 
         serial=$(ykman list | awk '{print $NF}')
         # If it got unplugged before we ran, just don't bother
         if [ -z "$serial" ]; then
-          # FIXME:(yubikey) Warn probably
+          # FIXME(yubikey): Warn probably
           exit 0
         fi
 
@@ -38,23 +39,26 @@ let
         done
 
         if [ -z "$key_name" ]; then
-          echo WARNING: Unidentified yubikey with serial "$serial" . Won\'t link an SSH key.
+          echo "WARNING: Unidentified yubikey with serial $serial. Won't link an age key."
           exit 0
         fi
 
-        echo "Creating links to ${homeDirectory}/id_$key_name"
-        ln -sf "${homeDirectory}/.ssh/id_$key_name" ${homeDirectory}/.ssh/id_yubikey
-        ln -sf "${homeDirectory}/.ssh/id_$key_name.pub" ${homeDirectory}/.ssh/id_yubikey.pub
-      '';
-    };
+        age_dir="${homeDirectory}/.config/age"
+        mkdir -p "$age_dir"
+
+        echo "Extracting age key to $age_dir/age_$key_name"
+        age-plugin-yubikey --identity --slot 1 > "$age_dir/$key_name-age"
+
+      '';    };
+#ln -sf "$age_dir/age_$key_name" "$age_dir/age_yubikey"
+  
   yubikey-down = pkgs.writeShellApplication {
     name = "yubikey-down";
     text = ''
       #!/usr/bin/env bash
       set -euo pipefail
 
-      rm ${homeDirectory}/.ssh/id_yubikey
-      rm ${homeDirectory}/.ssh/id_yubikey.pub
+      rm -f ${homeDirectory}/.config/age/*
     '';
   };
 in
@@ -69,8 +73,8 @@ in
           pam_u2f # for yubikey with sudo
           ;
       })
-#yubikey-up
-#yubikey-down
+    yubikey-up
+    yubikey-down
     ];
 
 
@@ -81,6 +85,13 @@ in
 
     # FIXME(yubikey): This is linux only
     services.udev.extraRules = ''
+      # Link/unlink ssh key on yubikey add/remove
+      SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="1050", RUN+="${lib.getBin yubikey-up}/bin/yubikey-up"
+      # NOTE: Yubikey 4 has a ID_VENDOR_ID on remove, but not Yubikey 5 BIO, whereas both have a HID_NAME.
+      # Yubikey 5 HID_NAME uses "YubiKey" whereas Yubikey 4 uses "Yubikey", so matching on "Yubi" works for both
+      SUBSYSTEM=="hid", ACTION=="remove", ENV{HID_NAME}=="Yubico Yubi*", RUN+="${lib.getBin yubikey-down}/bin/yubikey-down"
+
+      ##
       ##
       # Yubikey 4
       ##

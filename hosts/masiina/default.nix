@@ -13,6 +13,7 @@ let
     "serveri"
     "klusteri-0"
     "klusteri-1"
+    "klusteri-2"
   ]; # Add your hostnames here
   ryzen-undervolt = pkgs.writeScriptBin "ryzen-undervolt" (
     builtins.readFile "${inputs.ryzen-undervolt}/ruv.py"
@@ -34,6 +35,8 @@ in
   ];
 
   system.stateVersion = "24.05";
+
+  borgus.enable = false;
 
   sops.secrets = builtins.listToAttrs (
     map (hostname: {

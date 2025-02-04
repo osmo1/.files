@@ -73,7 +73,10 @@
         } false true false;
         klusteri-0 = newConfig "klusteri-0" "1-luks-btrfs" [ "nvme0n1" ] true false false;
         klusteri-1 = newConfig "klusteri-1" "1-luks-btrfs" [ "nvme0n1" ] true false false;
-        klusteri-2 = newConfig "klusteri-2" "1-luks-btrfs" [ "nvme0n1" ] true false false;
+        klusteri-2 = newConfig "klusteri-2" "2-luks-btrfs" { 
+          disk.main.device = "/dev/nvme0n1";
+          disk.secondary.device = "/dev/sda";
+        } true false false;
         oraakeli = newConfig "oraakeli" "1-luks-btrfs" false false false true;
         #testeri    = newConfig "testeri";/*[ "sda" "nvme0n1" "hda" "mmcblk0" ]*/
 

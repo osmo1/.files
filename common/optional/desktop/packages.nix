@@ -19,6 +19,9 @@ in
       element-desktop
       cinny
       yubioath-flutter
+      pomodoro-gtk
+      freecad-wayland
+      speedcrunch
 
       # Coding
       vscodium # Needs further conf

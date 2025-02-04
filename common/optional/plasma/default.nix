@@ -131,6 +131,7 @@
           "kactivitymanagerdrc"."activities"."c85a11b2-5b3c-4cde-82b4-f671d9fdd7f0" = "Work";
           "kactivitymanagerdrc"."activities"."f8f3555b-efa8-43ee-b0f6-c511464b68ec" = "Default";
           "kactivitymanagerdrc"."activities-icons"."c85a11b2-5b3c-4cde-82b4-f671d9fdd7f0" = "fcitx-handwriting-inactive";
+          "kactivitymanagerdrc"."activities-icons"."f8f3555b-efa8-43ee-b0f6-c511464b68ec" = "nix-snowflake-white";
           "kactivitymanagerdrc"."main"."currentActivity" = "f8f3555b-efa8-43ee-b0f6-c511464b68ec";
           "kcminputrc"."Libinput/1739/0/Synaptics TM3145-005"."ClickMethod" = 2;
           "kcminputrc"."Libinput/1739/0/Synaptics TM3145-005"."NaturalScroll" = true;
@@ -183,11 +184,14 @@
           "kwinrc"."ElectricBorders"."BottomRight" = "ShowDesktop";
           "kwinrc"."Input"."TabletMode" = "off";
           "kwinrc"."NightColor"."Active" = true;
-          "kwinrc"."NightColor"."NightTemperature" = 3000;
+          "kwinrc"."NightColor"."NightTemperature" = 2000;
           "kwinrc"."Tiling"."padding" = 4;
           "kwinrc"."Tiling/213a9620-187e-58a6-b80b-85d8fb95dfce"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
           "kwinrc"."Tiling/9af7dcb9-cc17-5e04-a97c-10654d6af592"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
           "kwinrc"."Windows"."TitlebarDoubleClickCommand" = "Nothing";
+          "kwinrc"."NightColor"."LatitudeFixed" = 60.18427958015267;
+          "kwinrc"."NightColor"."LongitudeFixed" = 24.63052161654133;
+          "kwinrc"."NightColor"."Mode" = "Location";
           "kcminputrc"."Libinput/1133/49970/Logitech Gaming Mouse G502"."PointerAcceleration" = "-0.200";
           "kcminputrc"."Libinput/1133/49970/Logitech Gaming Mouse G502"."PointerAccelerationProfile" = 1;
           "kxkbrc"."Layout"."Options" = "caps:escape_shifted_capslock";
