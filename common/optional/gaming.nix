@@ -5,6 +5,7 @@
       minetest
       heroic
       mangohud
+      lutris-free
     ])
     ++ (
       with pkgs.unstable;

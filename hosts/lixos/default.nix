@@ -7,21 +7,22 @@
 let
   hostnames = [
     "masiina"
-    "testeri"
     "serveri"
     "klusteri-0"
     "klusteri-1"
+    "klusteri-2"
   ]; # Add your hostnames here
 in
 {
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    ../../common/optional/dwl
+#../../common/optional/dwl
+    ../../common/optional/plasma
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
-    ../../common/optional/impermanence.nix
-    ../../common/optional/tpm.nix
+#../../common/optional/impermanence.nix
+#../../common/optional/tpm.nix
     ../../common/optional/ssh.nix
 #../../common/optional/gaming.nix
     ../../common/optional/sddm.nix
