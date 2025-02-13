@@ -19,7 +19,7 @@
     homepage = {
       enable = true;
       enableTraefik = true;
-      version = "latest";
+      version = "v0.10.9";
       uiPort = 180;
       dataLocation = "/home/osmo/homepage";
       options = {
@@ -32,7 +32,7 @@
       uiPort = 280;
       dataLocation = "/home/osmo/traefik";
       options = {
-        url = "traefik.klusteri-0.kotiserweri.zip";
+        url = "klusteri-0.kotiserweri.zip";
       };
     };
     wireguard = {
@@ -50,7 +50,34 @@
       version = "latest";
       morssUiPort = 580;
       freshUiPort = 680;
+      dockerssUiPort = 780;
       dataLocation = "/home/osmo/fresh";
+      enableHomePage = true;
+      traefik = {
+        enable = true;
+      };
+    };
+    ente = {
+      enable = false;
+      uiPort = 880;
+      dataLocation = "/home/osmo/ente";
+      enableHomePage = true;
+      version = {
+          museum = "8656f698c0c66cf1573c2c000b81d2d93c73c69c";
+          postgres = "16";
+          minio = "RELEASE.2024-12-18T13-15-44Z";
+          mc = "RELEASE.2024-11-21T17-21-54Z";
+          socat = "1.8.0.0";
+      };
+      traefik = {
+        enable = true;
+      };
+    };
+    home-assistant = {
+      enable = true;
+      version = "latest";
+      uiPort = 980;
+      dataLocation = "/home/osmo/home-assistant";
       enableHomePage = true;
       traefik = {
         enable = true;

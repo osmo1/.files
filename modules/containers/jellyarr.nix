@@ -11,10 +11,6 @@ in
 {
   options.services.containers.jellyarr = {
     enable = mkEnableOption "Enable jellyfin, *arr services and deluge";
-    version = mkOption {
-      type = types.str;
-      default = "latest";
-    };
     dataLocation = mkOption {
       type = types.str;
       # TODO: This needs to be changed.
@@ -36,6 +32,72 @@ in
       type = types.bool;
       default = true;
     };
+    version = {
+        qbittorrent = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        prowlarr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        flaresolverr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        sonarr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        radarr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        lidarr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        readarr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        bazarr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        jellyfin = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        jellyseerr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        bitmagnet = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        postgres = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        stump = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        gluetun = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        autobrr = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+        cross-seed = mkOption {
+          type = types.str;
+          default = "latest";
+        };
+    };
     options = {
       urlBase = mkOption {
         type = types.str;
@@ -48,70 +110,20 @@ in
     };
   };
 
-  config =
-    let
-      startPort = 25500 + cfg.options.portOffset;
-      endPort = 25600 + cfg.options.portOffset;
-      portRange = "${toString startPort}-${toString endPort}:${toString startPort}-${toString endPort}/tcp";
-      singlePortString = "${toString cfg.options.singlePort}:${toString cfg.options.singlePort}";
-    in
-    mkIf cfg.enable {
-      #services.containers.homepage = mkIf cfg.enableHomePage true;
+  config = mkIf cfg.enable {
       virtualisation.oci-containers = {
-        /*
-          containers.deluge = let
-                	port = toString cfg.uiPortStart;
-                in {
-                  hostname = "deluge";
-                  image = "lscr.io/linuxserver/deluge:${cfg.version}";
-
-                  volumes = [
-                    "${cfg.dataLocation}/deluge:/config"
-                    "${cfg.dataLocation}/downloads:/downloads"
-                  ];
-                  ports = [
-                    "${port}:8112"
-          	  "6881:6881"
-          	  "6881:6881/udp"
-          	  "58846:58846"
-                  ];
-          	environment = {
-          	  PUID = "1000";
-          	  PGID = "100";
-                    TZ = "${cfg.timeZone}";
-          	  DELUGE_LOGLEVEL = "error";
-                  };
-                  extraOptions = [
-                  ];
-                  labels = mkIf cfg.enableHomePage {
-                    "homepage.group" = "*arr";
-                    "homepage.name" = "Deluge";
-                    "homepage.icon" = "deluge.png";
-                    "homepage.href" = "https://deluge.${cfg.options.urlBase}";
-                    "homepage.description" = "Torrent client";
-                    "homepage.widget.type" = "deluge";
-                    "homepage.widget.url" = "https://127.0.0.1:${port}";
-                    "homepage.widget.password" = "osmo";
-                  };
-                };
-        */
         containers.qbittorrent =
           let
             port = toString cfg.uiPortStart;
           in
           {
             hostname = "qbittorrent";
-            image = "lscr.io/linuxserver/qbittorrent:${cfg.version}";
+            image = "lscr.io/linuxserver/qbittorrent:${cfg.version.qbittorrent}";
 
             volumes = [
               "${cfg.dataLocation}/qbittorrent:/config"
               "${cfg.options.mediaLocation}/downloads:/downloads"
               "${cfg.options.mediaLocation}/links:/links"
-            ];
-            ports = [
-              #"${port}:8080"
-              #"6881:6881"
-              #"6881:6881/udp"
             ];
             environment = {
               PUID = "1000";
@@ -119,7 +131,6 @@ in
               TZ = "${cfg.timeZone}";
               WEBUI_PORT = "8080";
               TORRENTING_PORT = "6881";
-              #DOCKER_MODS = "ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest";
             };
             extraOptions = [
               "--network=container:gluetun"
@@ -157,7 +168,7 @@ in
           in
           {
             hostname = "prowlarr";
-            image = "lscr.io/linuxserver/prowlarr:${cfg.version}";
+            image = "lscr.io/linuxserver/prowlarr:${cfg.version.prowlarr}";
 
             volumes = [
               "${cfg.dataLocation}/prowlarr:/config"
@@ -170,9 +181,7 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -205,10 +214,8 @@ in
           in
           {
             hostname = "flaresolverr";
-            image = "21hsmw/flaresolverr:nodriver";
-            volumes =
-              [
-              ];
+            image = "21hsmw/flaresolverr:${cfg.version.flaresolverr}";
+
             ports = [
               "${port}:8191"
             ];
@@ -217,9 +224,6 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
           };
         containers.sonarr =
           let
@@ -227,7 +231,7 @@ in
           in
           {
             hostname = "sonarr";
-            image = "lscr.io/linuxserver/sonarr:${cfg.version}";
+            image = "lscr.io/linuxserver/sonarr:${cfg.version.sonarr}";
 
             volumes = [
               "${cfg.dataLocation}/sonarr:/config"
@@ -241,9 +245,7 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -276,7 +278,7 @@ in
           in
           {
             hostname = "radarr";
-            image = "lscr.io/linuxserver/radarr:${cfg.version}";
+            image = "lscr.io/linuxserver/radarr:${cfg.version.radarr}";
 
             volumes = [
               "${cfg.dataLocation}/radarr:/config"
@@ -290,9 +292,7 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -325,7 +325,7 @@ in
           in
           {
             hostname = "lidarr";
-            image = "lscr.io/linuxserver/lidarr:${cfg.version}";
+            image = "lscr.io/linuxserver/lidarr:${cfg.version.lidarr}";
 
             volumes = [
               "${cfg.dataLocation}/lidarr:/config"
@@ -340,9 +340,7 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -375,7 +373,7 @@ in
           in
           {
             hostname = "readarr";
-            image = "lscr.io/linuxserver/readarr:develop";
+            image = "lscr.io/linuxserver/readarr:${cfg.version.readarr}";
 
             volumes = [
               "${cfg.dataLocation}/readarr:/config"
@@ -390,9 +388,7 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -425,7 +421,7 @@ in
           in
           {
             hostname = "bazarr";
-            image = "lscr.io/linuxserver/bazarr:${cfg.version}";
+            image = "lscr.io/linuxserver/bazarr:${cfg.version.bazarr}";
 
             volumes = [
               "${cfg.dataLocation}/bazarr:/config"
@@ -441,9 +437,7 @@ in
               PGID = "100";
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -476,7 +470,8 @@ in
           in
           {
             hostname = "jellyfin";
-            image = "jellyfin/jellyfin:${cfg.version}";
+            image = "jellyfin/jellyfin:${cfg.version.jellyfin}";
+
             volumes = [
               "${cfg.dataLocation}/jellyfin/config:/config"
               "${cfg.dataLocation}/jellyfin/cache:/cache"
@@ -496,6 +491,7 @@ in
               "--group-add=303"
               "--device=/dev/dri/renderD128:/dev/dri/renderD128"
             ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -528,7 +524,7 @@ in
           in
           {
             hostname = "jellyseerr";
-            image = "fallenbagel/jellyseerr:${cfg.version}";
+            image = "fallenbagel/jellyseerr:${cfg.version.jellyseerr}";
 
             volumes = [
               "${cfg.dataLocation}/jellyseerr:/app/config"
@@ -542,9 +538,7 @@ in
               TZ = "${cfg.timeZone}";
               LOG_LEVEL = "debug";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -577,18 +571,15 @@ in
           in
           {
             hostname = "bitmagnet";
-            image = "ghcr.io/bitmagnet-io/bitmagnet:${cfg.version}";
+            image = "ghcr.io/bitmagnet-io/bitmagnet:${cfg.version.bitmagnet}";
 
-            volumes =
-              [
-              ];
             ports = [
               "${port}:3333"
               "3334:3334/tcp"
               "3334:3334/udp"
             ];
             environment = {
-              POSTGRES_HOST = "10.88.0.5"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+              POSTGRES_HOST = "10.88.0.162"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
               POSTGRES_PASSWORD = "postgres";
             };
             cmd = [
@@ -601,6 +592,7 @@ in
             extraOptions = [
               "--network=container:gluetun"
             ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -629,7 +621,8 @@ in
           };
         containers.postgres-bit = {
           hostname = "postgres-bit";
-          image = "postgres:16-alpine";
+          image = "postgres:${cfg.version.postgres}";
+
           volumes = [
             "${cfg.dataLocation}/postgres:/var/lib/postgresql/data"
           ];
@@ -648,7 +641,7 @@ in
           in
           {
             hostname = "stump";
-            image = "aaronleopold/stump:${cfg.version}";
+            image = "aaronleopold/stump:${cfg.version.stump}";
 
             volumes = [
               "${cfg.dataLocation}/stump/config:/config"
@@ -662,9 +655,7 @@ in
               PUID = "1000";
               PGID = "100";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -692,39 +683,24 @@ in
               );
           };
         containers.gluetun =
-          let
-          in
-          #port = toString (cfg.uiPortStart + 1000);
           {
             hostname = "gluetun";
-            image = "qmcgaw/gluetun:${cfg.version}";
+            image = "qmcgaw/gluetun:${cfg.version.gluetun}";
+
             volumes = [
               "${cfg.dataLocation}/gluetun:/gluetun"
               "${cfg.dataLocation}/oraakeli.conf:/gluetun/wireguard/wg0.conf"
             ];
             ports = [
-              #"${port}:8888/tcp"
               "8388:8388/tcp"
               "8388:8388/udp"
               "1080:8080"
               "6881:6881"
               "6881:6881/udp"
-              /*
-                "${port}:3333"
-                "3334:3334/tcp"
-                "3334:3334/udp"
-              */
             ];
             environment = {
               VPN_SERVICE_PROVIDER = "custom";
               VPN_TYPE = "wireguard";
-              /*
-                WIREGUARD_ENDPOINT_IP = "158.179.207.29";
-                WIREGUARD_ENDPOINT_PORT = "51820";
-                WIREGUARD_PRIVATE_KEY = "mN2FxjoFDbTc8VOyNWPfVbK3Uv7k4aA66qALqVMoG1Y=";
-                WIREGUARD_PUBLIC_KEY = "mN2FxjoFDbTc8VOyNWPfVbK3Uv7k4aA66qALqVMoG1Y=";
-                WIREGUARD_ADDRESSES = "10.0.13.0";
-              */
             };
             extraOptions = [
               "--cap-add=NET_ADMIN"
@@ -737,7 +713,7 @@ in
           in
           {
             hostname = "autobrr";
-            image = "ghcr.io/autobrr/autobrr:${cfg.version}";
+            image = "ghcr.io/autobrr/autobrr:${cfg.version.autobrr}";
 
             volumes = [
               "${cfg.dataLocation}/autobrr:/config"
@@ -748,9 +724,7 @@ in
             environment = {
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -783,7 +757,8 @@ in
           in
           {
             hostname = "cross-seed";
-            image = "ghcr.io/cross-seed/cross-seed:6";
+            image = "ghcr.io/cross-seed/cross-seed:${cfg.version.cross-seed}";
+
             user = "1000:100";
             volumes = [
               "${cfg.dataLocation}/cross-seed/config:/config"
@@ -798,12 +773,10 @@ in
             environment = {
               TZ = "${cfg.timeZone}";
             };
-            extraOptions =
-              [
-              ];
             cmd = [
                 "daemon"
             ];
+
             labels =
               (
                 if cfg.enableHomePage == true then
@@ -835,7 +808,6 @@ in
       systemd.tmpfiles.rules = [
         "d ${cfg.dataLocation} 0770 osmo users - -"
         "d ${cfg.dataLocation}/downloads 0770 osmo users - -"
-        "d ${cfg.dataLocation}/deluge 0770 osmo users - -"
         "d ${cfg.dataLocation}/qbittorrent 0770 osmo users - -"
         "d ${cfg.dataLocation}/prowlarr 0770 osmo users - -"
         "d ${cfg.dataLocation}/sonarr 0770 osmo users - -"

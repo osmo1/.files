@@ -107,6 +107,5 @@ in
       enable = true;
       enableIPv6 = true;
     };
-    networking.nat.externalInterface = "eth0";
   };
 }

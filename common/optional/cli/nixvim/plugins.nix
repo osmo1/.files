@@ -7,9 +7,9 @@
         clangd.enable = true;
 
         # Rust
-        rust-analyzer.enable = true;
-        rust-analyzer.installRustc = false;
-        rust-analyzer.installCargo = false;
+        rust_analyzer.enable = true;
+        rust_analyzer.installRustc = false;
+        rust_analyzer.installCargo = false;
 
         # Nix
         nixd.enable = true;
@@ -23,45 +23,8 @@
 
         # Javascript and Typescript
         eslint.enable = true;
-        tsserver.enable = true;
+        ts_ls.enable = true;
       };
-    };
-
-    plugins.cmp = {
-      enable = true;
-      autoEnableSources = true;
-      /*
-        sources = [
-        		    {name = "nvim_lsp";}
-        		    {name = "path";}
-        		    {name = "buffer";}
-        		    {name = "luasnip";}
-        		];
-      */
-
-      /*
-        mapping = {
-        		  "<C-Space>" = "cmp.mapping.complete()";
-        		  "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-        		  "<C-e>" = "cmp.mapping.close()";
-        		  "<C-f>" = "cmp.mapping.scroll_docs(4)";
-        		  "<CR>" = "cmp.mapping.confirm({ select = true })";
-        		  "<S-Tab>" = {
-        		    action = "cmp.mapping.select_prev_item()";
-        		    modes = [
-        		      "i"
-        		      "s"
-        		    ];
-        		  };
-        		  "<Tab>" = {
-        		    action = "cmp.mapping.select_next_item()";
-        		    modes = [
-        		      "i"
-        		      "s"
-        		    ];
-        		  };
-        		};
-      */
     };
 
     plugins = {
@@ -76,18 +39,22 @@
       nvim-autopairs.enable = true;
       lsp-format.enable = true;
       chadtree.enable = true;
+      web-devicons.enable = true;
 
       lualine = {
         enable = true;
-        sectionSeparators = {
-          right = "";
-          left = "";
-        };
-        alwaysDivideMiddle = false;
+        settings = {
+            options = {
+                alwaysDivideMiddle = false;
+                sectionSeparators = {
+                  right = "";
+                  left = "";
+                };
+            };
         sections = {
           lualine_a = [
             {
-              name = "mode";
+              __unkeyed = "mode";
               color = {
                 fg = "#1b1d2b";
                 bg = "#ff757f";
@@ -97,7 +64,7 @@
               };
             }
             {
-              name = "location";
+              __unkeyed = "location";
               color = {
                 fg = "#1b1d2b";
                 bg = "#ffc777";
@@ -109,7 +76,7 @@
           ];
           lualine_b = [
             {
-              name = "branch";
+              __unkeyed = "branch";
               icon = "";
               color = {
                 fg = "#1b1d2b";
@@ -120,7 +87,7 @@
               };
             }
             {
-              name = "diff";
+              __unkeyed = "diff";
               color = {
                 bg = "#86e1fc";
                 fg = "#1b1d2b";
@@ -130,7 +97,7 @@
               };
             }
             {
-              name = "diagnostics";
+              __unkeyed = "diagnostics";
               color = {
                 bg = "#c3e88d";
               };
@@ -141,7 +108,7 @@
           ];
           lualine_c = [
             {
-              name = "filename";
+              __unkeyed = "filename";
               color = {
                 fg = "#b4c0ff";
                 bg = "none";
@@ -151,6 +118,7 @@
           lualine_x = [ "null" ];
           lualine_y = [ "null" ];
           lualine_z = [ "null" ];
+        };
         };
       };
       /*

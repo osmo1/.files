@@ -12,12 +12,17 @@ in
       whatsapp-for-linux
       obsidian
       anytype
-      libreoffice-fresh
-      vesktop
+      libreoffice-qt6-fresh
       aseprite
       blender
       thunderbird
       anki
+      element-desktop
+      cinny
+      yubioath-flutter
+      pomodoro-gtk
+      freecad-wayland
+      speedcrunch
 
       # Coding
       vscodium # Needs further conf
@@ -34,6 +39,6 @@ in
       zed-editor
       rustdesk-flutter
       #spotify
-    ]);
+    ]) ++ [ inputs.ghostty.packages.x86_64-linux.default ];
   programs.kdeconnect.enable = true;
 }

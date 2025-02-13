@@ -51,6 +51,7 @@ in
     stable = import inputs.nixpkgs {
       system = final.system;
       config.allowUnfree = true;
+      config.permittedInsecurePackages = [ "cinny-unwrapped-4.2.3" ];
     };
   };
   unstable-packages = final: _prev: {

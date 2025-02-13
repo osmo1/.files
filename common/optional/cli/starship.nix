@@ -62,6 +62,11 @@
             style = "fg:#1a1b26 bg:#bb9af7";
             format = "[ $symbol($version) ]($style)";
           };
+          php = {
+            symbol = "";
+            style = "fg:#1a1b26 bg:#bb9af7";
+            format = "[ $symbol($version) ]($style)";
+          };
         };
       };
     };

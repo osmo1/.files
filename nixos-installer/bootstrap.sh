@@ -179,8 +179,8 @@ function nixos_anywhere() {
 	#	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#	$ssh_root_cmd "/bin/sh -c 'tpm2-initramfs-tool seal --data \$(cat /tmp/disko-password) --pcrs 0,2'"
 	#else
-		#luks_passphrase=osmo
-		luks_passphrase=$(sops -d --extract '["luks"]["secure"]' "$secret_file")
+		luks_passphrase=osmo
+		#luks_passphrase=$(sops -d --extract '["luks"]["secure"]' "$secret_file")
         $ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#fi
 
@@ -191,9 +191,17 @@ function nixos_anywhere() {
 	# --extra-files here picks up the ssh host key we generated earlier and puts it onto the target machine
 	SHELL=/bin/sh nix run github:nix-community/nixos-anywhere -- --phases disko,install --ssh-port "$ssh_port" --extra-files "$temp" --flake .#"$target_hostname" root@"$target_destination"
 
+    after_install
+}
+
+function after_install() {
 	if [ -n "$tpm" ]; then
-	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=/dev/tpm0 --tpm2-pcrs=0+2 /dev/\$device_name'"
-	    $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
+        $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | awk '\''\$2 == \"└─crypted\" {print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=/dev/tpm0 --tpm2-pcrs=0+2 /dev/\$device_name'"
+        $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | awk '\''\$2 == \"└─crypted\" {print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
+        if [[ "$(hostname)" == "klusteri-2" ]]; then
+            $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted-extra | awk '\''{print \$1}'\''); systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=/dev/tpm0 --tpm2-pcrs=0+2 /dev/\$device_name'"
+            $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted-extra | awk '\''{print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
+        fi
 	    # Tpm is not working on nixos 24.05 rn for somereason, will try again in 24.11
 	    #$ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | grep crypted | awk '\''{print \$1}'\''); cryptsetup luksKillSlot /dev/\$device_name 0'"
 	fi
@@ -326,6 +334,10 @@ fi
 
 if yes_or_no "Run nixos-anywhere installation?"; then
 	nixos_anywhere
+else
+    if yes_or_no "Run after install only?"; then
+        after_install
+    fi
 fi
 
 if yes_or_no "Generate host (ssh-based) age key?"; then
