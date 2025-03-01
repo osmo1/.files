@@ -75,9 +75,8 @@ in
           PGID = "1000";
           CLI_ARGS = "--gameid mineclone";
         };
-        extraOptions =
-          [
-          ];
+        extraOptions = [
+        ];
         labels = mkIf cfg.enableHomePage {
           "homepage.group" = "Misc";
           "homepage.name" = "luanti";

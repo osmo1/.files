@@ -90,12 +90,12 @@
                     ];
                     mountpoint = "/home/osmo/extra";
                   };
+                };
               };
             };
           };
         };
       };
     };
-  };
   };
 }

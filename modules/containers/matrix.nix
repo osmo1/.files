@@ -36,9 +36,8 @@ in
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options =
-      {
-      };
+    options = {
+    };
   };
 
   config = mkIf cfg.enable {
@@ -47,24 +46,24 @@ in
         hostname = "matrix";
         image = "ghcr.io/girlbossceo/conduwuit:${cfg.version}";
         volumes = [
-            "${cfg.dataLocation}/db:/var/lib/conduit"
-            "${cfg.dataLocation}/conduwuit.toml:/etc/conduwuit.toml"
+          "${cfg.dataLocation}/db:/var/lib/conduit"
+          "${cfg.dataLocation}/conduwuit.toml:/etc/conduwuit.toml"
         ];
         ports = [
           "${toString cfg.matrixUiPort}:6167"
         ];
         environment = {
-             CONDUWUIT_SERVER_NAME = "your.server.name.example";
-              CONDUWUIT_DATABASE_PATH = "/var/lib/conduwuit";
-              CONDUWUIT_PORT = "6167"; # should match the loadbalancer traefik label
-              CONDUWUIT_MAX_REQUEST_SIZE = "20000000"; # in bytes, ~20 MB
-              CONDUWUIT_ALLOW_REGISTRATION = "true";
-              CONDUWUIT_ALLOW_FEDERATION = "true";
-              CONDUWUIT_ALLOW_CHECK_FOR_UPDATES = "true";
-              CONDUWUIT_TRUSTED_SERVERS = "[ 'matrix.org' 'envs.net' ]";
-              #CONDUWUIT_LOG = "warn,state_res=warn"
-              CONDUWUIT_ADDRESS = "0.0.0.0";
-              CONDUWUIT_CONFIG = "/etc/conduwuit.toml"; # Uncomment if you mapped config toml above
+          CONDUWUIT_SERVER_NAME = "your.server.name.example";
+          CONDUWUIT_DATABASE_PATH = "/var/lib/conduwuit";
+          CONDUWUIT_PORT = "6167"; # should match the loadbalancer traefik label
+          CONDUWUIT_MAX_REQUEST_SIZE = "20000000"; # in bytes, ~20 MB
+          CONDUWUIT_ALLOW_REGISTRATION = "true";
+          CONDUWUIT_ALLOW_FEDERATION = "true";
+          CONDUWUIT_ALLOW_CHECK_FOR_UPDATES = "true";
+          CONDUWUIT_TRUSTED_SERVERS = "[ 'matrix.org' 'envs.net' ]";
+          #CONDUWUIT_LOG = "warn,state_res=warn"
+          CONDUWUIT_ADDRESS = "0.0.0.0";
+          CONDUWUIT_CONFIG = "/etc/conduwuit.toml"; # Uncomment if you mapped config toml above
         };
         extraOptions = [
         ];
@@ -95,7 +94,10 @@ in
           );
       };
     };
-    networking.firewall.allowedTCPPorts = [ cfg.matrixUiPort cfg.freshUiPort ];
+    networking.firewall.allowedTCPPorts = [
+      cfg.matrixUiPort
+      cfg.freshUiPort
+    ];
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
     ];

@@ -6,7 +6,8 @@
 }:
 {
   sops.secrets."wireguard/oraakeli/private".path = "/persist/run/secrets/wireguard/oraakeli/private";
-  sops.secrets."wireguard/oraakeli/preshare".path = "/persist/run/secrets/wireguard/oraakeli/preshare";
+  sops.secrets."wireguard/oraakeli/preshare".path =
+    "/persist/run/secrets/wireguard/oraakeli/preshare";
   networking.firewall = {
     allowedUDPPorts = [ 51820 ];
   };

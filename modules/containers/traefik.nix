@@ -36,14 +36,14 @@ in
 
   config = mkIf cfg.enable {
     sops.secrets."containers/traefik-api" = {
-        owner = "osmo";
-        group = "users";
-        mode = "700";
+      owner = "osmo";
+      group = "users";
+      mode = "700";
     };
     sops.secrets."containers/traefik-secret" = {
-        owner = "osmo";
-        group = "users";
-        mode = "700";
+      owner = "osmo";
+      group = "users";
+      mode = "700";
     };
     virtualisation.oci-containers = {
       containers.traefik = {
@@ -72,10 +72,14 @@ in
           "--providers.docker=true"
           "--providers.docker.exposedbydefault=false"
           "--providers.docker.endpoint=tcp://${
-            if config.networking.hostName == "klusteri-0" then "192.168.11.10"
-            else if config.networking.hostName == "klusteri-1" then "192.168.11.11"
-            else if config.networking.hostName == "klusteri-2" then "192.168.11.12"
-            else "192.168.11.200"
+            if config.networking.hostName == "klusteri-0" then
+              "192.168.11.10"
+            else if config.networking.hostName == "klusteri-1" then
+              "192.168.11.11"
+            else if config.networking.hostName == "klusteri-2" then
+              "192.168.11.12"
+            else
+              "192.168.11.200"
           }:2375" # Use the proxy instead of the direct socket
           "--entrypoints.web.address=:80"
           "--entrypoints.web.http.redirections.entrypoint.to=websecure"

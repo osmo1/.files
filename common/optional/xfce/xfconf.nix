@@ -260,19 +260,23 @@
         xfce4-desktop = {
           "backdrop/screen0/monitorVirtual-1/workspace0/color-style" = 0;
           "backdrop/screen0/monitorVirtual-1/workspace0/image-style" = 5;
-          "backdrop/screen0/monitorVirtual-1/workspace0/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
+          "backdrop/screen0/monitorVirtual-1/workspace0/last-image" =
+            "${wallpapersPath}/stolen/nixos-tokyo.png";
 
           "backdrop/screen0/monitorVirtual-1/workspace1/color-style" = 0;
           "backdrop/screen0/monitorVirtual-1/workspace1/image-style" = 5;
-          "backdrop/screen0/monitorVirtual-1/workspace1/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
+          "backdrop/screen0/monitorVirtual-1/workspace1/last-image" =
+            "${wallpapersPath}/stolen/nixos-tokyo.png";
 
           "backdrop/screen0/monitorVirtual-1/workspace2/color-style" = 0;
           "backdrop/screen0/monitorVirtual-1/workspace2/image-style" = 5;
-          "backdrop/screen0/monitorVirtual-1/workspace2/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
+          "backdrop/screen0/monitorVirtual-1/workspace2/last-image" =
+            "${wallpapersPath}/stolen/nixos-tokyo.png";
 
           "backdrop/screen0/monitorVirtual-1/workspace3/color-style" = 0;
           "backdrop/screen0/monitorVirtual-1/workspace3/image-style" = 5;
-          "backdrop/screen0/monitorVirtual-1/workspace3/last-image" = "${wallpapersPath}/stolen/nixos-tokyo.png";
+          "backdrop/screen0/monitorVirtual-1/workspace3/last-image" =
+            "${wallpapersPath}/stolen/nixos-tokyo.png";
         };
       };
     };

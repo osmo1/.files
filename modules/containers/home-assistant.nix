@@ -36,9 +36,8 @@ in
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options =
-      {
-      };
+    options = {
+    };
   };
 
   config = mkIf cfg.enable {
@@ -92,10 +91,13 @@ in
             config = {
               # Includes dependencies for a basic setup
               # https://www.home-assistant.io/integrations/default_config/
-              default_config = {};
+              default_config = { };
               http = {
                 use_x_forwarded_for = true;
-                trusted_proxies = [ "192.168.11.10" "192.168.11.11" ];
+                trusted_proxies = [
+                  "192.168.11.10"
+                  "192.168.11.11"
+                ];
               };
             };
           };
@@ -109,7 +111,7 @@ in
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
             useHostResolvConf = lib.mkForce false;
           };
-            services.resolved.enable = true;
+          services.resolved.enable = true;
         };
     };
     systemd.tmpfiles.rules = [
@@ -119,37 +121,36 @@ in
     home-manager.users =
       let
         traefikConf =
-      { config, lib, ... }:
-        {
-          home.activation.myActivationAction =
-            let
-              nconfig = ''
-                http:
-                  routers:
-                    home-assistant:
-                      rule: "Host(\`home-assistant.${cfg.traefik.urlBase}\`)"
-                      entryPoints:
-                        - websecure
-                      tls:
-                        certResolver: porkbun
-                      service: home-assistant
-                  services:
-                    home-assistant:
-                      loadBalancer:
-                        servers:
-                          - url: http://192.168.11.10:${builtins.toString cfg.uiPort}
+          { config, lib, ... }:
+          {
+            home.activation.myActivationAction =
+              let
+                nconfig = ''
+                  http:
+                    routers:
+                      home-assistant:
+                        rule: "Host(\`home-assistant.${cfg.traefik.urlBase}\`)"
+                        entryPoints:
+                          - websecure
+                        tls:
+                          certResolver: porkbun
+                        service: home-assistant
+                    services:
+                      home-assistant:
+                        loadBalancer:
+                          servers:
+                            - url: http://192.168.11.10:${builtins.toString cfg.uiPort}
+                '';
+              in
+              config.lib.dag.entryAfter [ "writeBoundary" ] ''
+                cat <<EOF > /home/osmo/traefik/config/home-assistant.yaml
+                ${nconfig}
+                EOF
               '';
-            in
-            config.lib.dag.entryAfter [ "writeBoundary" ] ''
-              cat <<EOF > /home/osmo/traefik/config/home-assistant.yaml
-              ${nconfig}
-              EOF
-            '';
-        };
+          };
       in
       {
-        osmo =
-            lib.mkIf cfg.traefik.enable traefikConf;
+        osmo = lib.mkIf cfg.traefik.enable traefikConf;
       };
   };
 }

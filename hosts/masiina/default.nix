@@ -51,7 +51,7 @@ in
     }) hostnames
   );
   networking.interfaces.enp5s0.wakeOnLan.enable = true;
-    # The services doesn't actually work atm, define an additional service
+  # The services doesn't actually work atm, define an additional service
   # see https://github.com/NixOS/nixpkgs/issues/91352
   systemd.services.wakeonlan = {
     description = "Reenable wake on lan every boot";
@@ -65,26 +65,26 @@ in
   };
 
   networking.hostName = "masiina";
-    environment.systemPackages = [
-      ryzen-undervolt
-      pkgs.python312Full
+  environment.systemPackages = [
+    ryzen-undervolt
+    pkgs.python312Full
     pkgs.looking-glass-client
     pkgs.swtpm
-    ];
-    systemd.services.ryzen-undervolt = {
-      description = "Ryzen 5700x3D undervolting service";
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.python312Full ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${lib.getExe pkgs.python312Full} ${lib.getExe ryzen-undervolt} -c 8 -o -15";
-      };
+  ];
+  systemd.services.ryzen-undervolt = {
+    description = "Ryzen 5700x3D undervolting service";
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.python312Full ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe pkgs.python312Full} ${lib.getExe ryzen-undervolt} -c 8 -o -15";
     };
-    hardware.cpu.amd = {
-      updateMicrocode = true;
-      ryzen-smu.enable = true;
-    };
-    systemd.services.NetworkManager-wait-online.enable = false;
-    systemd.services.NetworkManager.wantedBy = [ "multi-user.target" ];
-    systemd.targets.network-online.wantedBy = lib.mkForce [ ];
+  };
+  hardware.cpu.amd = {
+    updateMicrocode = true;
+    ryzen-smu.enable = true;
+  };
+  systemd.services.NetworkManager-wait-online.enable = false;
+  systemd.services.NetworkManager.wantedBy = [ "multi-user.target" ];
+  systemd.targets.network-online.wantedBy = lib.mkForce [ ];
 }

@@ -13,13 +13,11 @@ stdenvNoCC.mkDerivation rec {
     rev = "8bccfa14e3327acbc99b3ce5a7712b3a6c865f7b";
     sha256 = "sha256-yvVopLBSMd8RD6E1YiOJx8I4LdVxlQo28lzyPJ6PSJk=";
   };
-  nativeBuildInputs =
-    [
-    ];
+  nativeBuildInputs = [
+  ];
 
-  propagatedUserEnvPkgs =
-    [
-    ];
+  propagatedUserEnvPkgs = [
+  ];
 
   installPhase = ''
     mkdir -p $out/share/icons

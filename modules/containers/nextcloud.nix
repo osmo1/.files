@@ -46,9 +46,8 @@ in
         default = "serveri.kotiserweri.zip";
       };
     };
-    options =
-      {
-      };
+    options = {
+    };
   };
 
   config = mkIf cfg.enable {
@@ -163,37 +162,36 @@ in
     home-manager.users =
       let
         traefikConf =
-      { config, lib, ... }:
-        {
-          home.activation.myActivationAction =
-            let
-              nconfig = ''
-                http:
-                  routers:
-                    nextcloud:
-                      rule: "Host(\`nextcloud.${cfg.traefik.urlBase}\`)"
-                      entryPoints:
-                        - websecure
-                      tls:
-                        certResolver: porkbun
-                      service: nextcloud
-                  services:
-                    nextcloud:
-                      loadBalancer:
-                        servers:
-                          - url: http://192.168.11.200:${builtins.toString cfg.uiPort}
+          { config, lib, ... }:
+          {
+            home.activation.myActivationAction =
+              let
+                nconfig = ''
+                  http:
+                    routers:
+                      nextcloud:
+                        rule: "Host(\`nextcloud.${cfg.traefik.urlBase}\`)"
+                        entryPoints:
+                          - websecure
+                        tls:
+                          certResolver: porkbun
+                        service: nextcloud
+                    services:
+                      nextcloud:
+                        loadBalancer:
+                          servers:
+                            - url: http://192.168.11.200:${builtins.toString cfg.uiPort}
+                '';
+              in
+              config.lib.dag.entryAfter [ "writeBoundary" ] ''
+                cat <<EOF > /home/osmo/traefik/config/nextcloud.yaml
+                ${nconfig}
+                EOF
               '';
-            in
-            config.lib.dag.entryAfter [ "writeBoundary" ] ''
-              cat <<EOF > /home/osmo/traefik/config/nextcloud.yaml
-              ${nconfig}
-              EOF
-            '';
-        };
+          };
       in
       {
-        osmo =
-            lib.mkIf cfg.traefik.enable traefikConf;
+        osmo = lib.mkIf cfg.traefik.enable traefikConf;
       };
   };
 

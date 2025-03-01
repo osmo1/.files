@@ -10,8 +10,8 @@
         discord.enable = false;
         vesktop.enable = true;
         config = {
-          themeLinks = [ 
-              "https://raw.githubusercontent.com/Dyzean/Tokyo-Night/main/themes/tokyo-night.theme.css"
+          themeLinks = [
+            "https://raw.githubusercontent.com/Dyzean/Tokyo-Night/main/themes/tokyo-night.theme.css"
           ];
           frameless = true;
           plugins = {

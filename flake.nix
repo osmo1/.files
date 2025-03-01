@@ -261,8 +261,10 @@
             { home-manager.extraSpecialArgs = specialArgs; }
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/2-luks-btrfs.nix)
-            { disko.devices.disk.main.device = "/dev/nvme0n1"; 
-              disko.devices.disk.secondary.device = "/dev/sda1"; }
+            {
+              disko.devices.disk.main.device = "/dev/nvme0n1";
+              disko.devices.disk.secondary.device = "/dev/sda1";
+            }
             inputs.impermanence.nixosModules.default
             ./hosts/klusteri-2
           ];

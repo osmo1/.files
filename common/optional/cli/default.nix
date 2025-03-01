@@ -4,8 +4,7 @@
   environment.systemPackages =
     (with pkgs.stable; [
     ])
-    ++
-    (with pkgs.unstable; [
+    ++ (with pkgs.unstable; [
     ]);
   home-manager.users.osmo =
     { ... }:

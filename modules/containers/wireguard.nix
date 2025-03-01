@@ -36,9 +36,8 @@ in
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options =
-      {
-      };
+    options = {
+    };
   };
 
   config = mkIf cfg.enable {

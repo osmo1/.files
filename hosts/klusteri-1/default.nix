@@ -50,7 +50,7 @@
     intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
   };
   environment.sessionVariables = {
-#LIBVA_DRIVER_NAME = "iHD";
+    #LIBVA_DRIVER_NAME = "iHD";
     LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.dbus ];
   };
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

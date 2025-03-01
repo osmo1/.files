@@ -124,14 +124,17 @@
         };
         configFile = {
           "baloofilerc"."General"."dbVersion" = 2;
-          "baloofilerc"."General"."exclude filters" = "*~,*.part,*.o,*.la,*.lo,*.loT,*.moc,moc_*.cpp,qrc_*.cpp,ui_*.h,cmake_install.cmake,CMakeCache.txt,CTestTestfile.cmake,libtool,config.status,confdefs.h,autom4te,conftest,confstat,Makefile.am,*.gcode,.ninja_deps,.ninja_log,build.ninja,*.csproj,*.m4,*.rej,*.gmo,*.pc,*.omf,*.aux,*.tmp,*.po,*.vm*,*.nvram,*.rcore,*.swp,*.swap,lzo,litmain.sh,*.orig,.histfile.*,.xsession-errors*,*.map,*.so,*.a,*.db,*.qrc,*.ini,*.init,*.img,*.vdi,*.vbox*,vbox.log,*.qcow2,*.vmdk,*.vhd,*.vhdx,*.sql,*.sql.gz,*.ytdl,*.tfstate*,*.class,*.pyc,*.pyo,*.elc,*.qmlc,*.jsc,*.fastq,*.fq,*.gb,*.fasta,*.fna,*.gbff,*.faa,po,CVS,.svn,.git,_darcs,.bzr,.hg,CMakeFiles,CMakeTmp,CMakeTmpQmake,.moc,.obj,.pch,.uic,.npm,.yarn,.yarn-cache,__pycache__,node_modules,node_packages,nbproject,.terraform,.venv,venv,core-dumps,lost+found";
+          "baloofilerc"."General"."exclude filters" =
+            "*~,*.part,*.o,*.la,*.lo,*.loT,*.moc,moc_*.cpp,qrc_*.cpp,ui_*.h,cmake_install.cmake,CMakeCache.txt,CTestTestfile.cmake,libtool,config.status,confdefs.h,autom4te,conftest,confstat,Makefile.am,*.gcode,.ninja_deps,.ninja_log,build.ninja,*.csproj,*.m4,*.rej,*.gmo,*.pc,*.omf,*.aux,*.tmp,*.po,*.vm*,*.nvram,*.rcore,*.swp,*.swap,lzo,litmain.sh,*.orig,.histfile.*,.xsession-errors*,*.map,*.so,*.a,*.db,*.qrc,*.ini,*.init,*.img,*.vdi,*.vbox*,vbox.log,*.qcow2,*.vmdk,*.vhd,*.vhdx,*.sql,*.sql.gz,*.ytdl,*.tfstate*,*.class,*.pyc,*.pyo,*.elc,*.qmlc,*.jsc,*.fastq,*.fq,*.gb,*.fasta,*.fna,*.gbff,*.faa,po,CVS,.svn,.git,_darcs,.bzr,.hg,CMakeFiles,CMakeTmp,CMakeTmpQmake,.moc,.obj,.pch,.uic,.npm,.yarn,.yarn-cache,__pycache__,node_modules,node_packages,nbproject,.terraform,.venv,venv,core-dumps,lost+found";
           "baloofilerc"."General"."exclude filters version" = 9;
           "dolphinrc"."KFileDialog Settings"."Places Icons Auto-resize" = false;
           "dolphinrc"."KFileDialog Settings"."Places Icons Static Size" = 22;
           "kactivitymanagerdrc"."activities"."c85a11b2-5b3c-4cde-82b4-f671d9fdd7f0" = "Work";
           "kactivitymanagerdrc"."activities"."f8f3555b-efa8-43ee-b0f6-c511464b68ec" = "Default";
-          "kactivitymanagerdrc"."activities-icons"."c85a11b2-5b3c-4cde-82b4-f671d9fdd7f0" = "fcitx-handwriting-inactive";
-          "kactivitymanagerdrc"."activities-icons"."f8f3555b-efa8-43ee-b0f6-c511464b68ec" = "nix-snowflake-white";
+          "kactivitymanagerdrc"."activities-icons"."c85a11b2-5b3c-4cde-82b4-f671d9fdd7f0" =
+            "fcitx-handwriting-inactive";
+          "kactivitymanagerdrc"."activities-icons"."f8f3555b-efa8-43ee-b0f6-c511464b68ec" =
+            "nix-snowflake-white";
           "kactivitymanagerdrc"."main"."currentActivity" = "f8f3555b-efa8-43ee-b0f6-c511464b68ec";
           "kcminputrc"."Libinput/1739/0/Synaptics TM3145-005"."ClickMethod" = 2;
           "kcminputrc"."Libinput/1739/0/Synaptics TM3145-005"."NaturalScroll" = true;
@@ -186,8 +189,10 @@
           "kwinrc"."NightColor"."Active" = true;
           "kwinrc"."NightColor"."NightTemperature" = 2000;
           "kwinrc"."Tiling"."padding" = 4;
-          "kwinrc"."Tiling/213a9620-187e-58a6-b80b-85d8fb95dfce"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
-          "kwinrc"."Tiling/9af7dcb9-cc17-5e04-a97c-10654d6af592"."tiles" = "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
+          "kwinrc"."Tiling/213a9620-187e-58a6-b80b-85d8fb95dfce"."tiles" =
+            "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
+          "kwinrc"."Tiling/9af7dcb9-cc17-5e04-a97c-10654d6af592"."tiles" =
+            "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
           "kwinrc"."Windows"."TitlebarDoubleClickCommand" = "Nothing";
           "kwinrc"."NightColor"."LatitudeFixed" = 60.18427958015267;
           "kwinrc"."NightColor"."LongitudeFixed" = 24.63052161654133;

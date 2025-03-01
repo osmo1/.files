@@ -68,15 +68,15 @@
         };
       };
       gtk.cursorTheme = {
-        inherit (config.home-manager.users.osmo.stylix.cursor) name package; 
+        inherit (config.home-manager.users.osmo.stylix.cursor) name package;
         size = lib.mkForce 24;
       };
       home.pointerCursor = {
-          gtk.enable = true; 
-            x11.enable = true;
+        gtk.enable = true;
+        x11.enable = true;
         size = lib.mkForce 24;
       };
     };
-    environment.variables.XCURSOR_SIZE = "24";
-#xdg.icons.fallbackCursorThemes = [ "capitaine-cursors" ];
+  environment.variables.XCURSOR_SIZE = "24";
+  #xdg.icons.fallbackCursorThemes = [ "capitaine-cursors" ];
 }

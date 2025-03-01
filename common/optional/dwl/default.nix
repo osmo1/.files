@@ -22,11 +22,8 @@ in
 
     ++
 
-      (
-        with pkgs.unstable;
-        [
-        ]
-      );
+      (with pkgs.unstable; [
+      ]);
   services.displayManager.sessionPackages = [ pkgs.dwl ];
   services.gnome.gnome-keyring.enable = true;
   systemd = {

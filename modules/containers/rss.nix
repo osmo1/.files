@@ -44,9 +44,8 @@ in
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options =
-      {
-      };
+    options = {
+    };
   };
 
   config = mkIf cfg.enable {
@@ -99,9 +98,9 @@ in
           "${toString cfg.freshUiPort}:80"
         ];
         environment = {
-            PUID = "1000";
-            PGID = "100";
-            TZ = "${cfg.timeZone}";
+          PUID = "1000";
+          PGID = "100";
+          TZ = "${cfg.timeZone}";
         };
         extraOptions = [
         ];
@@ -166,7 +165,10 @@ in
           );
       };
     };
-    networking.firewall.allowedTCPPorts = [ cfg.morssUiPort cfg.freshUiPort ];
+    networking.firewall.allowedTCPPorts = [
+      cfg.morssUiPort
+      cfg.freshUiPort
+    ];
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
     ];
