@@ -26,6 +26,13 @@
             identitiesOnly = true;
             identityFile = [ "~/.ssh/git" ];
           };
+          "restic" = {
+            host = "klusteri-2 192.168.11.12";
+            user = "restic";
+            forwardAgent = true;
+            identitiesOnly = true;
+            identityFile = [ "~/.ssh/borgus" ];
+          };
         };
       };
     };

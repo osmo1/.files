@@ -55,9 +55,6 @@
     nixcord = {
       url = "github:kaylorben/nixcord";
     };
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-    };
 
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";

@@ -18,7 +18,6 @@ in
       thunderbird
       anki
       element-desktop
-      cinny
       yubioath-flutter
       pomodoro-gtk
       freecad-wayland
@@ -39,6 +38,6 @@ in
       zed-editor
       rustdesk-flutter
       #spotify
-    ]) ++ [ inputs.ghostty.packages.x86_64-linux.default ];
+    ]);
   programs.kdeconnect.enable = true;
 }

@@ -4,12 +4,14 @@
     initrd.systemd.enable = true;
     loader = {
         efi.canTouchEfiVariables = true;
+        timeout = 0;
         grub = {
           enable = true;
           device = "nodev"; # GRUB menu generated without installing GRUB on a device
 
           efiSupport = true;
           useOSProber = true; # Enable detection for other OS, such as Windows Boot Manager
+          timeoutStyle = "hidden";
 
           # Extra menu entries for NixOS (latest) and NixOS Generations
           /*

@@ -31,7 +31,7 @@ in
   */
 
   # Annoyingly sops-nix and impermanence don't work well together, this is a workaround for now.
-  systemd.services.decrypt-sops = {
+  /*systemd.services.decrypt-sops = {
     description = "Decrypt sops secrets";
     wantedBy = [ "multi-user.target" ];
 #after = [ "network-online.target" ];
@@ -44,6 +44,6 @@ in
     };
     script = config.system.activationScripts.setupSecrets.text # + config.system.activationScripts.setupSecretsForUsers.text
     ;
-  };
+  };*/
 
 }
