@@ -1,30 +1,78 @@
 {
   programs.nixvim = {
-    plugins.lsp = {
-      enable = true;
-      servers = {
-        # C/C++
-        clangd.enable = true;
+    plugins = {
+      lsp-format = {
+          enable = true;
+        };
+        lsp = {
+          enable = true;
+          servers = {
+            clangd = {
+              enable = true;
+            };
+            lua_ls = {
+              enable = true;
+              extraOptions = {
+                settings = {
+                  Lua = {
+                    completion = {
+                      callSnippet = "Replace";
+                    };
+                    telemetry = {
+                      enabled = false;
+                    };
+                  };
+                };
+              };
+            };
+            nixd = {
+              enable = true;
+              settings = {
+                nixpkgs = {
+                  expr = "import <nixpkgs> {}";
+                };
+                formatting = {
+                  command = [ "nixfmt" ];
+                };
+              };
+            };
+            ts_ls = {
+              enable = false;
+              filetypes = [
+                "javascript"
+                "javascriptreact"
+                "typescript"
+                "typescriptreact"
+              ];
+            };
+            typos_lsp = {
+              enable = true;
+              extraOptions = {
+                init_options = {
+                  diagnosticSeverity = "Warning";
+                };
+              };
+            };
+            eslint = {
+              enable = true;
+            };
+            pyright = {
+              enable = true;
+            };
+            #          ruff-lsp = {enable = true;};
 
-        # Rust
-        rust_analyzer.enable = true;
-        rust_analyzer.installRustc = false;
-        rust_analyzer.installCargo = false;
-
-        # Nix
-        nixd.enable = true;
-
-        # HTML
-        html.enable = true;
-
-        # CSS and Tailwind
-        cssls.enable = true;
-        tailwindcss.enable = true;
-
-        # Javascript and Typescript
-        eslint.enable = true;
-        ts_ls.enable = true;
-      };
+            #          rust-analyzer = {
+            #            enable = true;
+            #            installCargo = true;
+            #            installRustc = true;
+            #            settings = {
+            #              procMacro = {
+            #                enable = true;
+            #              };
+            #            };
+            #          };
+          };
+        };
     };
 
     plugins = {
@@ -37,7 +85,6 @@
       indent-blankline.enable = true;
       gitsigns.enable = true;
       nvim-autopairs.enable = true;
-      lsp-format.enable = true;
       chadtree.enable = true;
       web-devicons.enable = true;
 
