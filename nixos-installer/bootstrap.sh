@@ -184,7 +184,7 @@ function nixos_anywhere() {
 	#	$ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#	$ssh_root_cmd "/bin/sh -c 'tpm2-initramfs-tool seal --data \$(cat /tmp/disko-password) --pcrs 0,2'"
 	#else
-	luks_passphrase=osmo
+		luks_passphrase=osmo
 		#luks_passphrase=$(sops -d --extract '["luks"]["secure"]' "$secret_file")
         $ssh_root_cmd "/bin/sh -c 'echo \"$luks_passphrase\" > /tmp/disko-password'"
 	#fi
@@ -196,7 +196,7 @@ function nixos_anywhere() {
 	# --extra-files here picks up the ssh host key we generated earlier and puts it onto the target machine
 	SHELL=/bin/sh nix run github:nix-community/nixos-anywhere -- --phases disko,install --ssh-port "$ssh_port" --extra-files "$temp" --flake .#"$target_hostname" root@"$target_destination"
 
-   after_install
+    after_install
 }
 
 function after_install() {

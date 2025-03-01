@@ -25,7 +25,6 @@ in
     ../../common/optional/cli
     #../../common/optional/vpn.nix
     ../../common/optional/tpm.nix
-    ../../common/optional/ssh.nix
     ../../common/optional/plasma
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
@@ -85,45 +84,7 @@ in
       updateMicrocode = true;
       ryzen-smu.enable = true;
     };
-
-    boot.extraModulePackages = [ config.boot.kernelPackages.kvmfr ];
-    boot.kernelModules = [ "kvmfr" ];
-    boot.extraModprobeConfig = ''
-        options kvmfr static_size_mb=32
-    '';
-    services.udev.extraRules = ''
-        SUBSYSTEM=="kvmfr", OWNER="osmo", GROUP="kvm", MODE="0660"
-    '';
-    virtualisation.libvirtd.qemu.verbatimConfig = ''
-        cgroup_device_acl = [
-            "/dev/null", "/dev/full", "/dev/zero",
-            "/dev/random", "/dev/urandom",
-            "/dev/ptmx", "/dev/kvm",
-            "/dev/kvmfr0"
-        ]
-    '';
-  /*systemd.services.NetworkManager = {
-      wantedBy = lib.mkForce [ ];
-      after = [ "graphical.target" ];
-      wants = [ "graphical.target" ];
-  };
-
-    systemd.services.NetworkManager-dispatcher = {
-        wantedBy = lib.mkForce [ ];
-        after = [ "graphical.target" ];
-      wants = [ "graphical.target" ];
-    };
-    systemd.targets.network-online = {
-        after = lib.mkForce [ "graphical.target" ];
-        wants = lib.mkForce  [ "graphical.target" ];
-    };
-    systemd.services.NetworkManager-wait-online = {
-        wantedBy = lib.mkForce [ ];
-        after = [ "graphical.target" ];
-      wants = [ "graphical.target" ];
-    };*/
     systemd.services.NetworkManager-wait-online.enable = false;
     systemd.services.NetworkManager.wantedBy = [ "multi-user.target" ];
     systemd.targets.network-online.wantedBy = lib.mkForce [ ];
-
 }
