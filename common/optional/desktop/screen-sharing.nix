@@ -10,7 +10,7 @@
         kdePackages.xdg-desktop-portal-kde
       ];
       #config.common.default = "*";
-      configPackages = [ pkgs.unstable.xdg-desktop-portal-kde ];
+      configPackages = [ pkgs.unstable.kdePackages.xdg-desktop-portal-kde ];
     };
   };
   users.users.osmo.packages = with pkgs.unstable; [
