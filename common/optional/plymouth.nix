@@ -2,14 +2,6 @@
   boot = {
     plymouth = {
       enable = true;
-      /*
-        theme = "rings";
-                themePackages = with pkgs; [
-                (adi1090x-plymouth-themes.override {
-                  selected_themes = [ "rings" ];
-                })
-                ];
-      */
     };
     consoleLogLevel = 0;
     initrd.verbose = false;

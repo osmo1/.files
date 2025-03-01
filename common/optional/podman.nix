@@ -1,7 +1,5 @@
 {
-  config,
   pkgs,
-  lib,
   ...
 }:
 {
@@ -32,12 +30,15 @@
       zfs
       iputils
     ];
+
     # TODO: need to figure out rootless
     # rootless = {
     #     enable = true;
     #     setSocketVariable = true;
     # };
+
   };
+
   environment.systemPackages = (with pkgs; [ slirp4netns ]);
   environment.extraInit = ''
           if [ -z "$DOCKER_HOST" -a -n "$XDG_RUNTIME_DIR" ]; then

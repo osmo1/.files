@@ -1,13 +1,11 @@
 {
   configLib,
-  pkgs,
-  callPackage,
   ...
 }:
 {
   imports = (configLib.scanPaths ./.) ++ [
-    ../desktop
-    ../thunar.nix
+    ../core
+    ../optional/thunar.nix
   ];
   services.xserver = {
     enable = true;

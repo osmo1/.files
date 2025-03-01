@@ -10,15 +10,6 @@ in
   # You can change versions, add patches, set compilation flags, anything really.
   # https://wiki.nixos.org/wiki/Overlays
   modifications = final: prev: {
-    # example = prev.example.overrideAttrs (oldAttrs: let ... in {
-    # ...
-    # });
-    #    flameshot = prev.flameshot.overrideAttrs {
-    #      cmakeFlags = [
-    #        (prev.lib.cmakeBool "USE_WAYLAND_GRIM" true)
-    #        (prev.lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
-    #      ];
-    #    };
     dwl = prev.dwl.overrideAttrs {
       conf = ../common/optional/dwl/config.h;
       postInstall =
@@ -41,7 +32,6 @@ in
     };
   };
 
-  #
   # Convenient access to stable or unstable nixpkgs regardless
   #
   # When applied, the nixpkgs-stable set (declared in the flake inputs) will
@@ -51,7 +41,6 @@ in
     stable = import inputs.nixpkgs {
       system = final.system;
       config.allowUnfree = true;
-      config.permittedInsecurePackages = [ "cinny-unwrapped-4.2.3" ];
     };
   };
   unstable-packages = final: _prev: {

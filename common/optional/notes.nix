@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 {
+  # TODO(big): Add syncthing client, relies on syncthing server component first though.
+  # I remember testing this and it didn't work properly but theres been some time so maybe fixed?
   /*
     sops.secrets = {
     	"syncthing/${config.networking.hostName}/key" = {

@@ -27,10 +27,15 @@ TODO
     - [x] Format similar to the minimal flake (opted to go for format similar to EmergentMind's)
     - [ ] ConfigVars and options such as DE and theme
     - [ ] Template host
- - [ ] Backup using borgbackup
+ - [x] Backup using ~borgbackup~ restic
  - [ ] All required permanence declarations exist only when impermanence is enabled
+    - [ ] And opposite
 ### Personal
  - [x] Masiina ready
  - [x] New host klusteri (not K3s)
- - [ ] Serveri and oraakeli working
-   - [ ] Import old containers
+ - [ ] ~Serveri~ and oraakeli working
+   - [x] Import old containers
+
+# Thanks
+ - A lot of "inspiration" from [EmergentMinds](https://github.com/EmergentMind/nix-config) config
+ - Miscellaneous nixos discourses and github issues

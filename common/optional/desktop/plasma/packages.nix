@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  # TODO: I had planned alphabethical ordering and categories but was too lazy
   users.users.osmo.packages =
     with pkgs;
     [

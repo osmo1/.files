@@ -6,9 +6,7 @@
     ])
     ++ (with pkgs.unstable; [
     ]);
-  home-manager.users.osmo =
-    { ... }:
-    {
+  home-manager.users.osmo = {
       programs.btop.enable = true;
     };
 }

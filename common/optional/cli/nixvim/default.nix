@@ -1,5 +1,7 @@
 { configLib, ... }:
 {
+  # TODO: This doesn't feel like my config (it isn't)
+  # Needs some configuring or deletion
   home-manager.users.osmo =
     { inputs, pkgs, ... }:
     {

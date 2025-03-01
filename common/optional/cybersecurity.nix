@@ -9,7 +9,6 @@
     amass
     apache-users
     apachetomcatscanner
-    #archivebox https://github.com/NixOS/nixpkgs/issues/276947
     ares-rs
     argus
     argus-clients
@@ -36,7 +35,6 @@
     burpsuite
     cadaver
     caido
-    #cameradar
     cantoolz
     certgraph
     certipy
@@ -64,9 +62,6 @@
     crunch
     crowbar
     ctypes_sh
-    # https://github.com/NixOS/nixpkgs/issues/308262
-    #cutter
-    #cutterPlugins.rz-ghidra
     dalfox
     detect-secrets
     darkstat
@@ -85,7 +80,6 @@
     dorkscout
     driftnet
     dsniff
-    #dublin-traceroute #To be backported to 24.05
     dump1090
     edb
     enum4linux
@@ -116,7 +110,6 @@
     ghdorker
     ghidra
     girsh
-    #git-hound # Marked as broken
     gitleaks
     git-hound
     go-cve-search
@@ -153,8 +146,6 @@
     iputils
     jadx
     jaeles
-    # https://github.com/NixOS/nixpkgs/issues/308260
-    #jd-cli
     jd-gui
     jnetmap
     john
@@ -169,8 +160,6 @@
     kerbrute
     kismet
     kiterunner
-    # https://github.com/NixOS/nixpkgs/issues/326927
-    #klee
     knockpy
     kube-hunter
     ldapdomaindump
@@ -184,8 +173,6 @@
     log4j-scan
     lynis
     macchanger
-    # pyhanko error on maigret
-    #maigret
     mailsend
     maltego
     mapcidr
@@ -241,7 +228,6 @@
     pwnat
     pwncat
     pwndbg
-    # capstone-5.0.1 not supported for interpreter python3.12
     python312Packages.arsenic
     python312Packages.dnspython
     python312Packages.httpx
@@ -251,28 +237,18 @@
     python312Packages.minikerberos
     python312Packages.myjwt
     python312Packages.netmap
-    # nose-1.3.7 not supported for interpreter python3.12
     python311Packages.patator
     python312Packages.pyjsparser
     python312Packages.pypykatz
     python312Packages.rfcat
-    # capstone-5.0.1 not supported for interpreter python3.12
     python311Packages.ropgadget
-    # capstone-5.0.1 not supported for interpreter python3.12
     python311Packages.ropper
     python312Packages.scapy
-    # https://github.com/NixOS/nixpkgs/issues/308235
-    #python312Packages.scrapy
-    # https://github.com/NixOS/nixpkgs/issues/308232
-    #python312Packages.scrapy-deltafetch
-    #python312Packages.scrapy-fake-useragent
-    #python312Packages.scrapy-splash
     python312Packages.shodan
     python312Packages.spyse-python
     python312Packages.sshtunnel
     python312Packages.thefuzz
     python312Packages.torpy
-    #python312Packages.uncompyle6
     python312Packages.websockify
     radamsa
     radare2
@@ -288,8 +264,6 @@
     rizin
     rizinPlugins.rz-ghidra
     ropgadget
-    # https://github.com/NixOS/nixpkgs/issues/326970
-    #routersploit
     ruler
     rustcat
     rustscan
@@ -309,8 +283,6 @@
     snmpcheck
     snort
     snowman
-    # https://github.com/NixOS/nixpkgs/issues/326940
-    #snscrape
     snyk
     soapui
     socat
@@ -331,9 +303,6 @@
     subfinder
     subjs
     swaks
-    #swftools
-    # https://github.com/NixOS/nixpkgs/pull/326600
-    #sysdig
     tcpdump
     tcpflow
     tcpreplay
@@ -347,7 +316,6 @@
     tlsx
     tor
     traceroute
-    #trinity
     trivy
     trufflehog
     udp2raw
@@ -358,8 +326,6 @@
     wapiti
     webanalyze
     websploit
-    # https://github.com/NixOS/nixpkgs/issues/326902
-    #wfuzz
     whatweb
     whispers
     wifite2
@@ -367,8 +333,6 @@
     wpscan
     wuzz
     xcat
-    # https://github.com/NixOS/nixpkgs/issues/326943
-    #xsser
     yersinia
     zap
     zdns
@@ -378,7 +342,6 @@
     zssh
     zulu
     zzuf
-    ### payloads and wordlists
     payloadsallthethings
     seclists
   ];

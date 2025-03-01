@@ -1,4 +1,4 @@
-{ pkgs, configLib, ... }:
+{ pkgs, ... }:
 {
   environment.systemPackages =
     (with pkgs.stable; [
@@ -16,7 +16,7 @@
       tpm2-tools
       tpm2-tss
       dust
-      borgbackup
+      restic
     ])
 
     ++
@@ -25,6 +25,5 @@
         nh
         fzf
       ]);
-  programs.thefuck.enable = true;
   services.fwupd.enable = true;
 }

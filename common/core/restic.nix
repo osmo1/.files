@@ -6,32 +6,32 @@
 }:
 with lib;
 let
-  cfg = config.borgus;
+  cfg = config.restic;
 in
 {
-  options.borgus = {
+  options.restic = {
     enable = mkEnableOption "Enable borgmatic backups";
-    extraPatterns = mkOption {
+    extraExcludes = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      #description = "Extra patterns for the home directory";
+      description = "Extra excludes for the home directory";
     };
     extraBackups = mkOption {
       type = types.attrs;
       default = { };
-      #description = "Extra backup configurations";
+      description = "Extra backup configurations";
     };
   };
 
   config = mkIf cfg.enable {
     sops.secrets = {
-      borg-age = {
+      restic-age = {
         owner = "osmo";
         group = "users";
         mode = "600";
       };
-      "nixos/borgus/ssh/private" = {
-        path = "/home/osmo/.ssh/borgus";
+      "nixos/restic/ssh/private" = {
+        path = "/home/osmo/.ssh/restic";
         owner = "osmo";
         group = "users";
         mode = "600";
@@ -47,11 +47,11 @@ in
           "/home/osmo/.cache"
           "/home/osmo/.steam"
           "/home/osmo/.local/share/Steam"
-        ];
+        ] ++ cfg.extraExcludes;
         initialize = true;
-        passwordFile = config.sops.secrets.borg-age.path;
+        passwordFile = config.sops.secrets.restic-age.path;
         repository = "sftp:restic@192.168.11.12:/backups/${config.networking.hostName}-home";
-        extraOptions = [ "sftp.command='ssh restic@192.168.11.12 -i /home/osmo/.ssh/borgus -s sftp'" ];
+        extraOptions = [ "sftp.command='ssh restic@192.168.11.12 -i /home/osmo/.ssh/restic -s sftp'" ];
         extraBackupArgs = [
           "--compression auto"
           "--read-concurrency 20"
@@ -60,7 +60,6 @@ in
           OnCalendar = "19:00";
           Persistent = true;
         };
-        #inhibitsSleep = true;
         pruneOpts = [
           "--keep-last 3"
           "--keep-daily 7"
@@ -68,9 +67,9 @@ in
           "--keep-monthly 1"
         ];
       };
-    };
-    systemd.services.restic-backups-main-backup.unitConfig.OnFailure = "notify-backup-failed.service";
+    } // cfg.extraBackups;
 
+    systemd.services.restic-backups-main-backup.unitConfig.OnFailure = "notify-backup-failed.service";
     systemd.services."notify-backup-failed" = {
       enable = true;
       description = "Notify on failed backup";
@@ -88,6 +87,6 @@ in
           "$(journalctl -u restic-backups-daily -n 5 -o cat)"
       '';
     };
-    environment.systemPackages = [ pkgs.restic ];
+    environment.systemPackages = with pkgs; [ restic libnotify ];
   };
 }

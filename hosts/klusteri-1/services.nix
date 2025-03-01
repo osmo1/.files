@@ -1,7 +1,6 @@
 {
   imports = [
     ../../modules/containers
-    #../../modules/containers/test.nix
   ];
 
   services.containers = {

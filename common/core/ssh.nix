@@ -1,15 +1,11 @@
 {
   config,
-  configLib,
   configVars,
-  lib,
   ...
 }:
 {
 
-  home-manager.users.osmo =
-    { inputs, pkgs, ... }:
-    {
+  home-manager.users.osmo = {
       programs.ssh = {
         enable = true;
 
@@ -31,7 +27,7 @@
             user = "restic";
             forwardAgent = true;
             identitiesOnly = true;
-            identityFile = [ "~/.ssh/borgus" ];
+            identityFile = [ "~/.ssh/restic" ];
           };
         };
       };

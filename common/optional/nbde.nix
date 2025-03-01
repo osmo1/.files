@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }:
 {
@@ -9,8 +8,10 @@
     network = {
       enable = true;
     };
+
     # Network card drivers. Check `lshw` if unsure.
     kernelModules = [ "r8169" ];
+    # TODO(maybe): I'd love to have these somehow "auto filled" but no idea how. 
     clevis = {
       enable = true;
       useTang = true;
@@ -27,8 +28,7 @@
     };
   };
   environment.systemPackages = [ pkgs.clevis ];
-  # Your post-boot network configuration is taken
-  # into account. It should contain:
+
   networking.useDHCP = false;
   networking.interfaces.enp2s0.useDHCP = true;
 }

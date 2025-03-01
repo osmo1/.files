@@ -1,14 +1,7 @@
 {
-  config,
-  secrets,
   inputs,
-  lib,
-  configVars,
   ...
 }:
-let
-  secretsPath = builtins.toString inputs.secrets;
-in
 {
   imports = [ ../../.secrets/password.nix ];
 
@@ -16,10 +9,12 @@ in
     mutableUsers = false;
     users.osmo = {
       isNormalUser = true;
+      # FIXME: Impermanence trickery
       #initialPassword = "osmo";
       # Sops (user secrets) does not want to work with impermanence so im (not) using git-agecrypt
       #hashedPasswordFile = "${secretsPath}/password";
       #hashedPasswordFile = config.sops.secrets.password.path;
+      # TODO: Do i need this many groups?
       extraGroups = [
         "networkmanager"
         "wheel"
@@ -30,7 +25,7 @@ in
       ];
     };
   };
-  # No idea if this safe
+  # FIXME: Impermanence trickery, no idea if this safe but the fucking passwords don't want to work
   #     environment.persistence."/persist" = {
   #         directories = [ "/run/secrets-for-users"  ];
   #         files = [ "/run/secrets-for-users.d/age-keys.txt" ];

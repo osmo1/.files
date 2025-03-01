@@ -1,7 +1,6 @@
 {
   imports = [
     ../../modules/containers
-    #../../modules/containers/test.nix
   ];
 
   services.containers = {
@@ -24,11 +23,4 @@
       enableHomePage = false;
     };
   };
-
-  #services.docker.crafty = {
-  #    enable = true;
-  #    version = "latest";
-  #    volumesBase = "/home/osmo/crafty";
-  #    webUIPort = 380;
-  #};
 }

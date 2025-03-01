@@ -1,6 +1,5 @@
 {
   inputs,
-  pkgs,
   system,
   ...
 }:
@@ -44,7 +43,6 @@
         types = [ "symlink" ];
       };
 
-      # ========== nix ==========
       nixfmt-rfc-style.enable = true;
       deadnix = {
         enable = true;
@@ -53,7 +51,6 @@
         };
       };
 
-      # ========== shellscripts ==========
       shfmt.enable = true;
       shellcheck.enable = true;
 

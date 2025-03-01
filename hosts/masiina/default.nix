@@ -3,7 +3,6 @@
   inputs,
   lib,
   configLib,
-  config,
   ...
 }:
 let
@@ -14,7 +13,7 @@ let
     "klusteri-0"
     "klusteri-1"
     "klusteri-2"
-  ]; # Add your hostnames here
+  ];
   ryzen-undervolt = pkgs.writeScriptBin "ryzen-undervolt" (
     builtins.readFile "${inputs.ryzen-undervolt}/ruv.py"
   );
@@ -23,9 +22,8 @@ in
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    #../../common/optional/vpn.nix
     ../../common/optional/tpm.nix
-    ../../common/optional/plasma
+    ../../common/optional/desktop/plasma
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/gaming.nix
@@ -37,7 +35,7 @@ in
 
   system.stateVersion = "24.05";
 
-  borgus.enable = true;
+  restic.enable = true;
 
   sops.secrets = builtins.listToAttrs (
     map (hostname: {
@@ -50,7 +48,9 @@ in
       };
     }) hostnames
   );
+
   networking.interfaces.enp5s0.wakeOnLan.enable = true;
+
   # The services doesn't actually work atm, define an additional service
   # see https://github.com/NixOS/nixpkgs/issues/91352
   systemd.services.wakeonlan = {

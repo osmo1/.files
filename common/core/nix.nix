@@ -1,7 +1,7 @@
 {
   inputs,
-  config,
   lib,
+  config,
   ...
 }:
 {
@@ -12,7 +12,7 @@
 
     # This will add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    #nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     settings = {
       # See https://jackson.dev/post/nix-reasonable-defaults/
@@ -33,16 +33,13 @@
     settings.trusted-users = [
       "root"
       "osmo"
-      "@wheel"
     ];
 
-    # Garbage Collection
     /*
       gc = {
         automatic = true;
         options = "--delete-older-than 10d";
       };
     */
-
   };
 }

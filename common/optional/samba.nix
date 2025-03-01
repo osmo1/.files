@@ -50,10 +50,12 @@
       };
     };
   };
+
   services.samba-wsdd = {
     enable = true;
     openFirewall = true;
   };
+
   systemd.tmpfiles.rules = [
     "d /home/osmo/data/samba 0750 osmo users - -"
   ];

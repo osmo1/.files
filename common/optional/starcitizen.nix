@@ -12,10 +12,11 @@
   };
 
   # The following line was used in my setup, but I'm unsure if it is still needed
+  # - Doesn't seem so but will keep here
   # hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
 
   users.users.osmo.packages = with pkgs.stable; [
-    # tricks override to fix audio
+    # Tricks override to fix audio
     # see https://github.com/fufexan/nix-gaming/issues/165#issuecomment-2002038453
     (inputs.nix-gaming.packages.${pkgs.unstable.system}.star-citizen.override {
       tricks = [

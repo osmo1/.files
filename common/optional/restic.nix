@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   users = {
-    users.borgus = {
+    users.restic = {
       isNormalUser = false;
       isSystemUser = true;
       group = "users";

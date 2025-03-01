@@ -148,6 +148,7 @@
       );
 
       nixosConfigurations = {
+        # TODO: I have great plans for this including themes but don't yet know how
         # Main
         masiina = lib.nixosSystem {
           inherit specialArgs;

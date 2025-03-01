@@ -1,19 +1,15 @@
 { configLib, pkgs, ... }:
 {
-  imports = (configLib.scanPaths ./.) ++ [ ../desktop ];
+  imports = (configLib.scanPaths ./.) ++ [ ../core ];
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
   services.xserver.enable = false;
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
   };
   services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
   services.xserver = {
     xkb = {
       layout = "fi";
@@ -194,6 +190,7 @@
           "kwinrc"."Tiling/9af7dcb9-cc17-5e04-a97c-10654d6af592"."tiles" =
             "{\"layoutDirection\":\"horizontal\",\"tiles\":[{\"width\":0.25},{\"width\":0.5},{\"width\":0.25}]}";
           "kwinrc"."Windows"."TitlebarDoubleClickCommand" = "Nothing";
+          # Not my actual location if you are in the doxxing business
           "kwinrc"."NightColor"."LatitudeFixed" = 60.18427958015267;
           "kwinrc"."NightColor"."LongitudeFixed" = 24.63052161654133;
           "kwinrc"."NightColor"."Mode" = "Location";

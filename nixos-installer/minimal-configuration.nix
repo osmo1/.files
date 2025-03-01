@@ -1,16 +1,9 @@
 {
-  config,
-  lib,
   pkgs,
-  unstable-pkgs,
   configLib,
-  configVars,
-  inputs,
+  lib,
   ...
 }:
-let
-  secretsPath = builtins.toString inputs.secrets;
-in
 {
   imports = [
     (configLib.relativeToRoot "common/core/users.nix")
@@ -21,13 +14,11 @@ in
   boot.initrd.systemd.enable = true;
 
   networking = {
-    # configures the network interface(include wireless) via `nmcli` & `nmtui`
     networkmanager.enable = true;
   };
   nix.trustedUsers = [
     "root"
     "osmo"
-    "@wheel"
   ];
   services = {
     qemuGuest.enable = true;
@@ -37,7 +28,7 @@ in
       settings.PermitRootLogin = "yes";
       # Fix LPE vulnerability with sudo use SSH_AUTH_SOCK: https://github.com/NixOS/nixpkgs/issues/31611
       # this mitigates the security issue caused by enabling u2fAuth in pam
-      #authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
+      authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
     };
   };
   programs.ssh.startAgent = true;
@@ -45,12 +36,10 @@ in
   # this potentially causes a security issue that we mitigated above
   security.pam = {
     sshAgentAuth.enable = true;
-    /*
       services.sudo = {
         u2fAuth = true;
         sshAgentAuth = true;
       };
-    */
   };
 
   environment.systemPackages = builtins.attrValues {

@@ -1,4 +1,3 @@
-{ config, sops, ... }:
 {
   boot.supportedFilesystems = [ "btrfs" ];
   disko.devices = {
@@ -34,11 +33,9 @@
               settings = {
                 allowDiscards = true;
               };
-              # Subvolumes must set a mountpoint in order to be mounted,
-              # unless their parent is mounted
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # force overwrite
+                extraArgs = [ "-f" ];
                 subvolumes = {
                   "@" = { };
                   "@/root" = {

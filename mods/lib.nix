@@ -1,4 +1,4 @@
-# This is from EmergentMind's config github.com/EmergentMind/nix-config
+# This is from EmergentMind's config github.com/EmergentMind/nix-config (and i have no idea how it works)
 { lib, ... }:
 {
   # use path relative to the root of the project

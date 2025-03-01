@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   inputs,
   ...
 }:
@@ -15,13 +13,12 @@ in
     validateSopsFiles = false;
     age = {
       sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+      # TODO: Shouldn't be hard coded /persist
       keyFile = "/persist/var/lib/sops-nix/key.txt";
       generateKey = true;
     };
-    secrets = {
-      test = { };
-    };
   };
+  # FIXME: Weird impermanence trickery
   #environment = lib.mkIf config.fileSystems."/persist".neededForBoot {
   /*
     environment.persistence."/persist".directories = [

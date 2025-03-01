@@ -1,7 +1,5 @@
-{ lib, ... }:
 {
-  networking = import ./networking.nix { inherit lib; };
-
+  # TODO: EmergentMind changed this for hostspec, which I should copy
   username = "osmo";
   #domain = inputs.nix-secrets.domain;
   #userFullName = inputs.nix-secrets.full-name;

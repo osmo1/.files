@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
+# TODO: Rebase on EmergentMinds new one
 
 # User variables
 target_hostname=""

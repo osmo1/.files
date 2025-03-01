@@ -8,15 +8,14 @@ let
     "serveri"
     "klusteri-0"
     "klusteri-1"
-    "masiina"
-  ]; # Add your hostnames here
+    "klusteri-2"
+  ];
 in
 {
   imports = (configLib.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
     ../../common/optional/school
-    #../../common/optional/cybersecurity.nix
   ];
 
   sops.secrets = builtins.listToAttrs (
@@ -35,17 +34,4 @@ in
   networking.hostName = "nix-wsl";
   wsl.enable = true;
   wsl.defaultUser = "osmo";
-
-  #TODO: Find a better place for this
-  # common/optional/ssh.nix ?
-  services.openssh = {
-    enable = true;
-    ports = [ 22 ];
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    settings.PermitRootLogin = "no";
-  };
-
-  networking.firewall.allowedTCPPorts = [ 22 ];
-  networking.firewall.allowPing = true;
 }

@@ -1,7 +1,5 @@
 {
-  home-manager.users.osmo =
-    { config, ... }:
-    {
+  home-manager.users.osmo = {
       programs.starship = {
         enable = true;
         enableTransience = true;
@@ -33,7 +31,6 @@
             "Music" = " ";
             "Pictures" = " ";
             "Videos" = " ";
-            #".files" = " ";
             "Games" = "󰖺 ";
             "Misc" = "󰫢 ";
             "~" = "";

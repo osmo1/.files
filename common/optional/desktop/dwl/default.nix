@@ -6,7 +6,10 @@ let
   '';
 in
 {
-  imports = (configLib.scanPaths ./.) ++ [ ../desktop ];
+  # TODO: DOES NOT WORK!
+  # I can't seem to get the configuration or the session control working.
+  # Requires some nix wizardry skills that I don't yet have
+  imports = (configLib.scanPaths ./.) ++ [ ../core ];
   environment.systemPackages =
     (with pkgs.stable; [
       dwl
