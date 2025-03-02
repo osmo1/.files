@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }:
 let
-  zen-browser = pkgs.callPackage ../../../pkgs/zen-browser { };
+  zen-browser = pkgs.callPackage ../../../../pkgs/zen-browser { };
 in
 {
   users.users.osmo.packages =

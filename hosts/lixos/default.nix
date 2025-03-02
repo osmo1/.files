@@ -19,7 +19,7 @@ in
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/ssh.nix
-    ../../common/optional/sddm.nix
+    ../../common/optional/yubikey-boot.nix
   ];
 
   system.stateVersion = "24.05";

@@ -217,49 +217,8 @@ function after_install() {
         $ssh_root_cmd "clevis luks bind -d /dev/sdb1 tang '{\"url\":\"192.168.11.2:8888\"}'"
 	fi
 if [ -n "$yubi" ]; then
-    $ssh_root_cmd "
-        nix-shell https://github.com/sgillespie/nixos-yubikey-luks/archive/master.tar.gz --run '
-            # Dynamically determine the parent device of the \"└─crypted\" partition
-            device_name=\$(lsblk -no PKNAME,NAME | awk '\''\$2 == \"└─crypted\" {print \$1}'\'')
-            device=\"/dev/\${device_name}\"
-
-            # Step 3 - Calculate the LUKS key derived from the YubiKey factors
-            SALT_LENGTH=16
-            SALT=\$(dd if=/dev/random bs=1 count=\$SALT_LENGTH 2>/dev/null | rbtohex)
-
-            echo \"Enter 2FA passphrase (if using 2FA; leave empty for none):\"
-            read -s USER_PASSPHRASE
-            echo
-
-            CHALLENGE=\$(echo -n \"\$SALT\" | openssl dgst -binary -sha512 | rbtohex)
-            RESPONSE=\$(ykchalresp -2 -x \"\$CHALLENGE\" 2>/dev/null)
-
-            KEY_LENGTH=512
-            ITERATIONS=1000000
-
-            if [ -n \"\$USER_PASSPHRASE\" ]; then
-                LUKS_KEY=\$(echo -n \"\$USER_PASSPHRASE\" | pbkdf2-sha512 \$((KEY_LENGTH / 8)) \$ITERATIONS \"\$RESPONSE\" | rbtohex)
-            else
-                LUKS_KEY=\$(echo | pbkdf2-sha512 \$((KEY_LENGTH / 8)) \$ITERATIONS \"\$RESPONSE\" | rbtohex)
-            fi
-
-            # Instead of formatting the device, enroll the new key into an unused slot.
-            # Write the new key (converted to binary) to a temporary file.
-            temp_new_key_file=\"/tmp/yubi_new_key_\$\$.bin\"
-            echo -n \"\$LUKS_KEY\" | hextorb > \"\$temp_new_key_file\"
-
-            echo \"Please enter the existing LUKS passphrase to authorize adding the new YubiKey key:\"
-            cryptsetup luksAddKey \"\$device\" --new-keyfile \"\$temp_new_key_file\"
-
-            rm \"\$temp_new_key_file\"
-
-            # Step 5 - (Optional) Store the salt and iterations on an unencrypted partition
-            mkdir -p /boot/crypt-storage
-            echo -ne \"\$SALT\n\$ITERATIONS\" > /boot/crypt-storage/default
-
-            # Step 6 - (Optional) You could test unlocking the device with the new key:
-            # echo -n \"\$LUKS_KEY\" | hextorb | cryptsetup open \"\$device\" encrypted --key-file=-
-        '"
+        $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | awk '\''\$2 == \"└─crypted\" {print \$1}'\''); systemd-cryptenroll /dev/\$device_name --fido2-device=auto  --fido2-with-client-pin=yes'"
+        $ssh_root_cmd "/bin/sh -c 'device_name=\$(lsblk -no PKNAME,NAME | awk '\''\$2 == \"└─crypted\" {print \$1}'\''); systemd-cryptenroll --recovery-key /dev/\$device_name'"
 fi
 
 
