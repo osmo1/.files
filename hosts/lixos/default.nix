@@ -20,6 +20,7 @@ in
     ../../common/optional/plymouth.nix
     ../../common/optional/ssh.nix
     ../../common/optional/yubikey-boot.nix
+    ../../common/optional/auto-login.nix
   ];
 
   system.stateVersion = "24.05";
