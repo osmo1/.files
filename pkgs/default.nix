@@ -3,4 +3,5 @@
 }:
 rec {
   zen-browser = pkgs.callPackage ./zen-browser { };
+  daisy = pkgs.callPackage ./daisy { };
 }
