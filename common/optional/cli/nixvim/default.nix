@@ -1,11 +1,11 @@
-{ configLib, ... }:
+{ lib, ... }:
 {
   # TODO: This doesn't feel like my config (it isn't)
   # Needs some configuring or deletion
   home-manager.users.osmo =
     { inputs, pkgs, ... }:
     {
-      imports = [ inputs.nixvim.homeManagerModules.nixvim ] ++ (configLib.scanPaths ./.);
+      imports = [ inputs.nixvim.homeManagerModules.nixvim ] ++ (lib.custom.scanPaths ./.);
       programs.nixvim = {
         enable = true;
         enableMan = true; # install man pages for nixvim options

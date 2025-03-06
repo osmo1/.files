@@ -1,6 +1,6 @@
-{ configLib, pkgs, ... }:
+{  pkgs, lib, ... }:
 {
-  imports = (configLib.scanPaths ./.);
+  imports = (lib.custom.scanPaths ./.);
   environment.systemPackages =
     (with pkgs.stable; [
     ])
