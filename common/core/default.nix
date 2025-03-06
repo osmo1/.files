@@ -2,11 +2,13 @@
   inputs,
   outputs,
   lib,
-  configLib,
+  config,
   ...
 }:
 {
-  imports = (configLib.scanPaths ./.) ++ [ inputs.home-manager.nixosModules.home-manager ];
+  imports = (lib.custom.scanPaths ./.) 
+      ++ [ inputs.home-manager.nixosModules.home-manager ] 
+      ++ [ ../../modules/nixos ];
 
   security.sudo.extraConfig = ''
     Defaults lecture = never # rollback results in sudo lectures after each reboot, it's somewhat useless anyway
@@ -39,4 +41,10 @@
 
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
+
+  hostSpec = {
+      username = "osmo";
+      email = "osmo@osmo.zip";
+      handle = "osmo1";
+  };
 }

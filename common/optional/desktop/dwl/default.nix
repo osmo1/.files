@@ -1,4 +1,4 @@
-{ configLib, pkgs, ... }:
+{  pkgs, ... }:
 let
 
   dbus-dwl = pkgs.writeShellScriptBin "dbus-dwl" ''
@@ -9,7 +9,7 @@ in
   # TODO: DOES NOT WORK!
   # I can't seem to get the configuration or the session control working.
   # Requires some nix wizardry skills that I don't yet have
-  imports = (configLib.scanPaths ./.) ++ [ ../core ];
+  imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
   environment.systemPackages =
     (with pkgs.stable; [
       dwl
