@@ -17,10 +17,10 @@
       inherit (self) outputs;
       inherit (nixpkgs) lib;
       configVars = import ../mods/vars.nix { inherit inputs lib; };
-      configLib = import ../mods/lib.nix { inherit lib; };
+      lib.custom = import ../mods/lib.nix { inherit lib; };
       minimalConfigVars = lib.recursiveUpdate configVars { isMinimal = true; };
       minimalSpecialArgs = {
-        inherit inputs outputs configLib;
+        inherit inputs outputs lib.custom;
         configVars = minimalConfigVars;
       };
 
@@ -38,21 +38,21 @@
                 disko.devices = disks;
               }
 
-              (configLib.relativeToRoot "common/optional/disks/${disko}.nix")
+              (lib.custom.relativeToRoot "common/optional/disks/${disko}.nix")
               (
                 if grub == true then
-                  configLib.relativeToRoot "common/optional/grub.nix"
+                  lib.custom.relativeToRoot "common/optional/grub.nix"
                 else
-                  configLib.relativeToRoot "common/optional/systemd-boot.nix"
+                  lib.custom.relativeToRoot "common/optional/systemd-boot.nix"
               )
 
               ./minimal-configuration.nix
-              (configLib.relativeToRoot "hosts/${hostname}/hardware-configuration.nix")
+              (lib.custom.relativeToRoot "hosts/${hostname}/hardware-configuration.nix")
               { networking.hostName = hostname; }
             ]
-            ++ (if tpm == true then [ (configLib.relativeToRoot "common/optional/tpm.nix") ] else [ ])
-            ++ (if nbde == true then [ (configLib.relativeToRoot "common/optional/nbde.nix") ] else [ ])
-            ++ (if yubi == true then [ (configLib.relativeToRoot "common/optional/yubikey-boot.nix") ] else [ ]);
+            ++ (if tpm == true then [ (lib.custom.relativeToRoot "common/optional/tpm.nix") ] else [ ])
+            ++ (if nbde == true then [ (lib.custom.relativeToRoot "common/optional/nbde.nix") ] else [ ])
+            ++ (if yubi == true then [ (lib.custom.relativeToRoot "common/optional/yubikey-boot.nix") ] else [ ]);
         });
     in
     {

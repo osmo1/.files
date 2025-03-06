@@ -1,12 +1,12 @@
 {
   pkgs,
-  configLib,
+  
   lib,
   ...
 }:
 {
   imports = [
-    (configLib.relativeToRoot "common/core/users.nix")
+    (lib.custom.relativeToRoot "common/core/users.nix")
   ];
 
   fileSystems."/boot".options = [ "umask=0077" ]; # Removes permissions and security warnings.

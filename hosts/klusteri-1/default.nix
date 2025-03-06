@@ -1,13 +1,13 @@
 {
   config,
   lib,
-  configLib,
+  
   pkgs,
   ...
 }:
 
 {
-  imports = (configLib.scanPaths ./.) ++ [
+  imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
     ../../common/optional/podman.nix

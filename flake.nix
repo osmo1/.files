@@ -97,15 +97,14 @@
       ];
       inherit (nixpkgs) lib;
       configVars = import ./mods/vars.nix { inherit inputs lib; };
-      configLib = import ./mods/lib.nix { inherit lib; };
       specialArgs = {
         inherit
           inputs
           outputs
           configVars
-          configLib
           nixpkgs
           ;
+        lib = nixpkgs.lib.extend (self: super: { custom = import ./mods/lib.nix { inherit (nixpkgs) lib; }; });
       };
     in
     {
@@ -154,7 +153,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/2-btrfs.nix)
             {
@@ -168,7 +167,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
@@ -182,7 +181,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/vda"; }
@@ -193,7 +192,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.nixos-wsl.nixosModules.default
             ./hosts/nix-wsl
           ];
@@ -202,7 +201,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/2-luks-btrfs.nix)
             {
@@ -218,7 +217,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/4-luks-btrfs.nix)
             {
@@ -235,7 +234,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
@@ -247,7 +246,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
@@ -259,7 +258,7 @@
           inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
+            
             inputs.disko.nixosModules.default
             (import ./common/optional/disks/2-luks-btrfs.nix)
             {

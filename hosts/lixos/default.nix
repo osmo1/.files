@@ -1,5 +1,5 @@
 {
-  configLib,
+  
   ...
 }:
 let
@@ -12,7 +12,7 @@ let
   ];
 in
 {
-  imports = (configLib.scanPaths ./.) ++ [
+  imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
     ../../common/optional/desktop/plasma

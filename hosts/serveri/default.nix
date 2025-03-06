@@ -1,9 +1,9 @@
 {
-  configLib,
+  
   ...
 }:
 {
-  imports = (configLib.scanPaths ./.) ++ [
+  imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
     ../../common/optional/systemd-boot.nix

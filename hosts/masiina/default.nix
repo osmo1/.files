@@ -2,7 +2,7 @@
   pkgs,
   inputs,
   lib,
-  configLib,
+  
   ...
 }:
 let
@@ -19,7 +19,7 @@ let
   );
 in
 {
-  imports = (configLib.scanPaths ./.) ++ [
+  imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
     ../../common/optional/tpm.nix
@@ -32,6 +32,12 @@ in
     ../../common/optional/auto-login.nix
     ../../common/optional/podman.nix
   ];
+
+  hostSpec = {
+      desktop = "Plasma";
+      theme = "Classic";
+      colors = "Tokyo Night";
+  };
 
   system.stateVersion = "24.05";
 

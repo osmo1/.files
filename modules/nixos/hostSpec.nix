@@ -85,7 +85,7 @@
     };*/
     desktop = lib.mkOption {
       type = lib.types.str;
-      default = null;
+      default = "Plasma";
       description = "Used to indicate what window manager or desktop environment a host uses";
     };
     theme = lib.mkOption {
@@ -125,7 +125,5 @@
           message = "The classic theme is only available on Plasma and Gnome";
         }
       ];
-      imports = (if builtins.isNull config.hostSpec.desktop then [] else [ ../../common/optional/desktop/${config.hostSpec.desktop} ])
-                ++ (if config.hostSpec.isServer == true then [] else [ ../../common/optional/cli ]);
   };
 }
