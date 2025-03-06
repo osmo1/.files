@@ -33,5 +33,6 @@
       plasma-pa
       krfb
       kwallet-pam
+      plasma-vault
     ]);
 }

@@ -1,5 +1,5 @@
-{ configLib, ... }:
+{  ... }:
 {
   #TODO: Wow! Isn't my school conf huge
-  imports = (configLib.scanPaths ./.);
+  imports = (lib.custom.scanPaths ./.);
 }

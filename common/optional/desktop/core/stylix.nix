@@ -65,6 +65,7 @@
         targets = {
           nixvim.enable = false;
           alacritty.enable = true;
+          helix.enable = true;
         };
       };
       gtk.cursorTheme = {

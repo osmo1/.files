@@ -1,6 +1,6 @@
-{ configLib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
-  imports = (configLib.scanPaths ./.) ++ [ ../core ];
+  imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
 
   services.xserver.enable = false;
 

@@ -25,7 +25,6 @@ in
 
       # Coding
       vscodium # Needs further conf
-      helix
 
       # Tools
       flameshot
