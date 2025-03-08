@@ -6,9 +6,10 @@
   ...
 }:
 {
-  imports = (lib.custom.scanPaths ./.) 
-      ++ [ inputs.home-manager.nixosModules.home-manager ] 
-      ++ [ ../../modules/nixos ];
+  imports =
+    (lib.custom.scanPaths ./.)
+    ++ [ inputs.home-manager.nixosModules.home-manager ]
+    ++ [ ../../modules/nixos ];
 
   security.sudo.extraConfig = ''
     Defaults lecture = never # rollback results in sudo lectures after each reboot, it's somewhat useless anyway
@@ -29,8 +30,11 @@
 
   console.keyMap = "fi";
 
-  networking.networkmanager.enable = true;
-  networking.firewall.enable = true;
+  networking = {
+    networkmanager.enable = true;
+    firewall.enable = true;
+    hostName = config.hostSpec.hostName;
+  };
 
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;
@@ -39,12 +43,26 @@
     };
   };
 
+  sops.secrets = builtins.listToAttrs (
+    map (hostname: {
+      name = "nixos/${hostname}/ssh/private";
+      value = {
+        path = "/home/osmo/.ssh/${hostname}";
+        owner = "osmo";
+        group = "users";
+        mode = "600";
+      };
+    }) config.hostSpec.sshKeys
+  );
+
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
 
+  system.stateVersion = "24.05";
+
   hostSpec = {
-      username = "osmo";
-      email = "osmo@osmo.zip";
-      handle = "osmo1";
+    username = "osmo";
+    email = "osmo@osmo.zip";
+    handle = "osmo1";
   };
 }

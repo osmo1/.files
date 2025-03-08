@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
 

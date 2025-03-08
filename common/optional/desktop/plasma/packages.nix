@@ -5,7 +5,6 @@
     with pkgs;
     [
       haruna
-      # Tools
       libsForQt5.qt5ct
       xorg.xkbutils
     ]
