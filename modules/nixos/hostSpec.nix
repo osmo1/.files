@@ -50,6 +50,11 @@
       description = "The folder to persist data if impermenance is enabled";
       default = "";
     };
+    sshKeys = lib.mkOption {
+      type = lib.types.list;
+      default = null;
+      description = "What ssh keys the host should have in .ssh";
+    };
 
     # Configuration Settings
     isMinimal = lib.mkOption {
@@ -73,30 +78,30 @@
       description = "Used to indicate a host that uses work resources";
     };
 
-    isAutoStyled = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Used to indicate a host that wants auto styling like stylix";
-    };
-    /*useNeovimTerminal = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Used to indicate a host that uses neovim for terminals";
-    };*/
-    desktop = lib.mkOption {
+    /*
+      useNeovimTerminal = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Used to indicate a host that uses neovim for terminals";
+      };
+    */
+    style = lib.mkOption {
       type = lib.types.str;
-      default = "Plasma";
-      description = "Used to indicate what window manager or desktop environment a host uses";
+      default = "Classic";
+      description = "Used to indicate what theme a desktop uses";
     };
     theme = lib.mkOption {
-        type = lib.types.str;
-        default = "Classic";
-        description = "Used to indicate what theme a desktop uses";
+      type = lib.types.enum [
+        "Tokyo Night"
+        "Kanagawa"
+      ];
+      default = "Tokyo Night";
+      description = "Used to indicate what color theme a desktop uses";
     };
-    colors = lib.mkOption {
-        type = lib.types.enum [ "Tokyo Night" "Kanagawa" ];
-        default = "Tokyo Night";
-        description = "Used to indicate what color theme a desktop uses";
+    wallpaper = lib.mkOption {
+      type = lib.types.str;
+      default = "stolen/nixos-tokyo.png";
+      description = "Used to indicate what wallpaper a desktop uses";
     };
   };
 
@@ -118,10 +123,7 @@
           message = "config.system.impermanence.enable is true but no persistFolder path is provided";
         }
         {
-          assertion = 
-            builtins.isNull config.hostSpec.desktop 
-            || builtins.elem config.hostSpec.desktop [ "Plasma" "Gnome" ] 
-            || config.hostSpec.theme != "Classic";
+          assertion = !config.services.desktopManager.plasma6.enable || config.hostSpec.style == "Classic";
           message = "The classic theme is only available on Plasma and Gnome";
         }
       ];

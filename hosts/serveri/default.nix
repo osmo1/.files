@@ -1,7 +1,4 @@
-{
-  
-  ...
-}:
+{ lib, ... }:
 {
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
@@ -15,7 +12,8 @@
     ../../common/optional/nbde.nix
   ];
 
-  system.stateVersion = "24.05";
-
-  networking.hostName = "serveri";
+  hostSpec = {
+    hostName = "serveri";
+    isServer = true;
+  };
 }

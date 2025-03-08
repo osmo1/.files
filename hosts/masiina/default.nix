@@ -2,18 +2,9 @@
   pkgs,
   inputs,
   lib,
-  
   ...
 }:
 let
-  hostnames = [
-    "lixos"
-    "testeri"
-    "serveri"
-    "klusteri-0"
-    "klusteri-1"
-    "klusteri-2"
-  ];
   ryzen-undervolt = pkgs.writeScriptBin "ryzen-undervolt" (
     builtins.readFile "${inputs.ryzen-undervolt}/ruv.py"
   );
@@ -22,8 +13,8 @@ in
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    ../../common/optional/tpm.nix
     ../../common/optional/desktop/plasma
+    ../../common/optional/tpm.nix
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/gaming.nix
@@ -34,26 +25,22 @@ in
   ];
 
   hostSpec = {
-      desktop = "Plasma";
-      theme = "Classic";
-      colors = "Tokyo Night";
+    hostName = "masiina";
+
+    sshKeys = [
+      "lixos"
+      "serveri"
+      "klusteri-0"
+      "klusteri-1"
+      "klusteri-2"
+    ];
+
+    style = "Classic";
+    theme = "Tokyo Night";
+    wallpaper = "stolen/plasma2k.png";
   };
 
-  system.stateVersion = "24.05";
-
   restic.enable = true;
-
-  sops.secrets = builtins.listToAttrs (
-    map (hostname: {
-      name = "nixos/${hostname}/ssh/private";
-      value = {
-        path = "/home/osmo/.ssh/${hostname}";
-        owner = "osmo";
-        group = "users";
-        mode = "600";
-      };
-    }) hostnames
-  );
 
   networking.interfaces.enp5s0.wakeOnLan.enable = true;
 
@@ -70,7 +57,6 @@ in
     wantedBy = [ "default.target" ];
   };
 
-  networking.hostName = "masiina";
   environment.systemPackages = [
     ryzen-undervolt
     pkgs.python312Full

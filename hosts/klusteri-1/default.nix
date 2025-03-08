@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  
   pkgs,
   ...
 }:
@@ -17,9 +16,10 @@
     ../../common/optional/systemd-boot.nix
   ];
 
-  system.stateVersion = "24.05";
-
-  networking.hostName = "klusteri-1";
+  hostSpec = {
+    hostName = "klusteri-1";
+    isServer = true;
+  };
 
   hardware.opengl = {
     enable = true;

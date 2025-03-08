@@ -1,5 +1,5 @@
 {
-  
+
   ...
 }:
 
@@ -10,8 +10,10 @@
     ../../common/optional/cybersecurity.nix
   ];
 
-  system.stateVersion = "24.05";
+  hostSpec = {
+    hostName = "cbt";
 
-  networking.hostName = "cbt";
-  boot.loader.systemd-boot.enable = true;
+    theme = "Tokyo Night";
+    style = "";
+  };
 }

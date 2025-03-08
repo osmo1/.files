@@ -1,5 +1,5 @@
 {
-  
+  lib,
   ...
 }:
 
@@ -15,5 +15,8 @@
 
   system.stateVersion = "24.05";
 
-  networking.hostName = "klusteri-2";
+  hostSpec = {
+    hostName = "klusteri-2";
+    isServer = true;
+  };
 }

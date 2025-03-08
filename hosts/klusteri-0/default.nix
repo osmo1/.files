@@ -1,8 +1,4 @@
-{
-  
-  ...
-}:
-
+{ lib, ... }:
 {
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
@@ -14,7 +10,8 @@
     ../../common/optional/systemd-boot.nix
   ];
 
-  system.stateVersion = "24.05";
-
-  networking.hostName = "klusteri-0";
+  hostSpec = {
+    hostName = "klusteri-0";
+    isServer = true;
+  };
 }

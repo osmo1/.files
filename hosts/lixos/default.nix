@@ -1,16 +1,4 @@
-{
-  
-  ...
-}:
-let
-  hostnames = [
-    "masiina"
-    "serveri"
-    "klusteri-0"
-    "klusteri-1"
-    "klusteri-2"
-  ];
-in
+{ lib, ... }:
 {
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
@@ -23,20 +11,16 @@ in
     ../../common/optional/auto-login.nix
   ];
 
-  system.stateVersion = "24.05";
+  hostSpec = {
+    hostName = "lixos";
+    isLaptop = true;
 
-  # TODO: Where to put this?
-  sops.secrets = builtins.listToAttrs (
-    map (hostname: {
-      name = "nixos/${hostname}/ssh/private";
-      value = {
-        path = "/home/osmo/.ssh/${hostname}";
-        owner = "osmo";
-        group = "users";
-        mode = "600";
-      };
-    }) hostnames
-  );
-
-  networking.hostName = "lixos";
+    sshKeys = [
+      "masiina"
+      "serveri"
+      "klusteri-0"
+      "klusteri-1"
+      "klusteri-2"
+    ];
+  };
 }
