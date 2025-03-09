@@ -51,7 +51,7 @@
       default = "";
     };
     sshKeys = lib.mkOption {
-      type = lib.types.list;
+      type = lib.types.listOf lib.types.str;
       default = null;
       description = "What ssh keys the host should have in .ssh";
     };

@@ -1,4 +1,9 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}:
 {
   imports = [ inputs.spicetify-nix.nixosModules.default ];
   programs.spicetify =
@@ -22,6 +27,6 @@
       ];
 
       theme = spicePkgs.themes.text;
-      colorScheme = "TokyoNight";
+      colorScheme = if config.hostSpec.theme == "Tokyo Night" then "TokyoNight" else "Kanagawa";
     };
 }

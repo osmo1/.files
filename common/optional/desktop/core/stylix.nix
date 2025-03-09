@@ -95,6 +95,7 @@ in
           nixvim.enable = false;
           alacritty.enable = true;
           helix.enable = true;
+          kde.enable = true;
         };
       };
       # The cursor on plasma behaves a bit wierd without this

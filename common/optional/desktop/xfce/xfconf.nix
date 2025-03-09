@@ -8,8 +8,8 @@
     {
       xfconf.settings = {
         xsettings = {
-          "Net/ThemeName" = "Tokyonight-Dark-BL";
-          "Net/IconThemeName" = "Papirus-Dark";
+          #"Net/ThemeName" = "Tokyonight-Dark-BL";
+          #"Net/IconThemeName" = "Papirus-Dark";
           "Net/DoubleClickTime" = null;
           "Net/DoubleClickDistance" = null;
           "Net/DndDragThreshold" = null;

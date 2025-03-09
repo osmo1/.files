@@ -36,7 +36,7 @@ in
     ];
 
     style = "Classic";
-    theme = "Tokyo Night";
+    theme = "Kanagawa";
     wallpaper = "stolen/plasma2k.png";
   };
 

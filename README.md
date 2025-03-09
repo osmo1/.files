@@ -19,13 +19,13 @@ TODO
  - [ ] Installation instructions
  - [ ] Theming
    - [ ] Global shell theming
-   - [ ] Theme folders
-     - [ ] Tokyo night
-     - [ ] Kanagawa wave
+   - [ ] Theme ~folders~ options for stylix
+     - [x] Tokyo night
+     - [x] Kanagawa wave
  - [ ] Template host
  - [x] Flake refactor 
     - [x] Format similar to the minimal flake (opted to go for format similar to EmergentMind's)
-    - [ ] ConfigVars and options such as DE and theme
+    - [x] ConfigVars and options such as DE and theme
     - [ ] Template host
  - [x] Backup using ~borgbackup~ restic
  - [ ] All required permanence declarations exist only when impermanence is enabled
