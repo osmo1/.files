@@ -12,6 +12,7 @@
         config = {
           themeLinks = [
             "https://raw.githubusercontent.com/Dyzean/Tokyo-Night/main/themes/tokyo-night.theme.css"
+            "https://raw.githubusercontent.com/ardishko/KanagawaGTK-for-discord/refs/heads/main/theme.css"
           ];
           plugins = {
             ignoreActivities = {
