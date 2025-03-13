@@ -58,6 +58,8 @@
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
 
+  boot.kernel.sysctl."kernel.sysrq" = 1;
+
   system.stateVersion = "24.05";
 
   hostSpec = {

@@ -5,7 +5,6 @@
       neovim
       fastfetch
       git
-      tmux
       zip
       unzip
       tree
@@ -17,6 +16,7 @@
       tpm2-tss
       dust
       restic
+      age-plugin-yubikey
     ])
 
     ++
