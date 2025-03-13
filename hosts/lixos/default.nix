@@ -14,7 +14,9 @@
   hostSpec = {
     hostName = "lixos";
     isLaptop = true;
-
+      desktop = "Plasma";
+      theme = "Classic";
+      colors = "Tokyo Night";
     sshKeys = [
       "masiina"
       "serveri"
