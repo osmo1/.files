@@ -37,7 +37,7 @@ in
 
     style = "Classic";
     theme = "Kanagawa";
-    wallpaper = "stolen/plasma2k.png";
+    wallpaper = "stolen/staircase.png";
   };
 
   restic.enable = true;

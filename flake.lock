@@ -1022,10 +1022,10 @@
     "wallpapers": {
       "flake": false,
       "locked": {
-        "lastModified": 1731011177,
-        "narHash": "sha256-gimp4M008uQe1/H0H1rLwtAy0JwWrBe8KoG4ummzlMw=",
+        "lastModified": 1741811314,
+        "narHash": "sha256-G6SI8xhrzkPNzqTUiIIm7tLhSUomuY/ctY8H+/TvBzQ=",
         "ref": "main",
-        "rev": "00a74538b9d2c9e1afbf549c8567ce9185ea269c",
+        "rev": "8c152cece52395b99c4c5641c937c51a89c1f260",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/osmo1/.wallpapers.git"
