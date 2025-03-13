@@ -11,4 +11,8 @@
       ];
     };
   };
+  fileSystems."/backups" = {
+    device = "/home/osmo/extra/backups";
+    options = [ "bind" ];
+  };
 }
