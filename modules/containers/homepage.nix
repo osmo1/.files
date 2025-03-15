@@ -10,7 +10,7 @@ let
 in
 {
   options.services.containers.homepage = {
-    enable = mkEnableOption "Enable homepage minecraft controller";
+    enable = mkEnableOption "Enable homepage, a dashboard for your services";
     version = mkOption {
       type = types.str;
       default = "latest";

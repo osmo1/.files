@@ -36,8 +36,9 @@ in
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options = {
-    };
+    options =
+      {
+      };
   };
 
   config = mkIf cfg.enable {
@@ -52,7 +53,7 @@ in
 
     containers.home-assistant = {
       autoStart = true;
-      hostAddress = "192.168.11.11";
+      hostAddress = "192.168.11.10";
       localAddress = "192.168.11.21";
       privateNetwork = true;
 
