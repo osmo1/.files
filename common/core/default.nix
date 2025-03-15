@@ -43,7 +43,7 @@
     };
   };
 
-  sops.secrets = builtins.listToAttrs (
+  sops.secrets = (if config.hostSpec != [] then builtins.listToAttrs (
     map (hostname: {
       name = "nixos/${hostname}/ssh/private";
       value = {
@@ -53,7 +53,7 @@
         mode = "600";
       };
     }) config.hostSpec.sshKeys
-  );
+  ) else {});
 
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
