@@ -14,4 +14,12 @@
     hostName = "klusteri-0";
     isServer = true;
   };
+
+  restic = {
+    enable = true;
+    extraExcludes = [
+      "/home/osmo/tmp"
+      "/home/osmo/vanha"
+    ];
+  };
 }

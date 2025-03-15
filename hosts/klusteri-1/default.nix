@@ -21,6 +21,13 @@
     isServer = true;
   };
 
+  restic = {
+    enable = true;
+    extraExcludes = [
+      "/home/osmo/tmp"
+    ];
+  };
+
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
