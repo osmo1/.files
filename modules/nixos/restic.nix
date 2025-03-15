@@ -57,7 +57,7 @@ in
           "--read-concurrency 20"
         ];
         timerConfig = {
-          OnCalendar = "19:00";
+          OnCalendar = if config.hostSpec.isServer != true then "19:00" else "00:00";
           Persistent = true;
         };
         pruneOpts = [
@@ -87,6 +87,9 @@ in
           "$(journalctl -u restic-backups-daily -n 5 -o cat)"
       '';
     };
-    environment.systemPackages = with pkgs; [ restic libnotify ];
+    environment.systemPackages = with pkgs; [
+      restic
+      libnotify
+    ];
   };
 }
