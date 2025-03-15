@@ -12,6 +12,19 @@
               select = "underline";
             };
             line-number = "relative";
+            statusline = {
+              left = [
+                "read-only-indicator"
+                "mode"
+                "file-name"
+                "file-modification-indicator"
+              ];
+              center = [ ];
+              right = [
+                "position"
+                "total-line-numbers"
+              ];
+            };
           };
         };
         languages.language = [
