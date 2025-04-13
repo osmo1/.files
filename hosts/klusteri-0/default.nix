@@ -8,6 +8,7 @@
     ../../common/optional/ssh.nix
     ../../common/optional/nfs-mount.nix
     ../../common/optional/systemd-boot.nix
+    ../../common/optional/syncthing.nix
   ];
 
   hostSpec = {

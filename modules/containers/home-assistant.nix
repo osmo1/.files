@@ -36,9 +36,17 @@ in
         default = "klusteri-0.kotiserweri.zip";
       };
     };
-    options =
-      {
+    options = {
+      bindDataLocation = mkOption {
+        type = types.str;
+        default = "${config.users.users.osmo}/home-assistant";
       };
+      enableBind = mkOption {
+        type = types.bool;
+        default = enable;
+        description = "Systemd container bind mounts use the containers permissions and ownership. This will mount the bad permissions elsewhere and then bind it with correct ownership in the right location.";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -124,7 +132,7 @@ in
         traefikConf =
           { config, lib, ... }:
           {
-            home.activation.myActivationAction =
+            home.activation.home-assistant-file =
               let
                 nconfig = ''
                   http:
@@ -153,5 +161,20 @@ in
       {
         osmo = lib.mkIf cfg.traefik.enable traefikConf;
       };
+
+    fileSystems."${cfg.options.bindDataLocation}" = {
+      device = "${cfg.dataLocation}";
+      fsType = "bindfs";
+      options = [
+        "bind"
+        "mode=754"
+      ];
+    };
+    assertions = [
+      {
+        assertion = (cfg.options.bindDataLocation != cfg.dataLocation) && cfg.options.enableBind == true;
+        message = "bindDataLocation and dataLocation can't be same while enableBind is enabled.";
+      }
+    ];
   };
 }

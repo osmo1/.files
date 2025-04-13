@@ -164,7 +164,7 @@ in
         traefikConf =
           { config, lib, ... }:
           {
-            home.activation.myActivationAction =
+            home.activation.nextcloud-file =
               let
                 nconfig = ''
                   http:

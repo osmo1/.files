@@ -58,10 +58,14 @@
       enable = true;
       version = "latest";
       uiPort = 980;
-      dataLocation = "/home/osmo/home-assistant";
+      dataLocation = "/home/osmo/sontainers/home-assistant";
       enableHomePage = true;
       traefik = {
         enable = true;
+      };
+      options = {
+        enableBind = true;
+        bindDataLocation = "/home/osmo/home-assistant";
       };
     };
   };
