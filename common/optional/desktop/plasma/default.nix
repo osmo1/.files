@@ -91,6 +91,7 @@
               }
               "org.kde.plasma.panelspacer"
               "org.kde.plasma.pager"
+              (if config.services.syncthing.enable == true then "martchus.syncthingplasmoid" else "")
               {
                 systemTray.items = {
                   shown = [
