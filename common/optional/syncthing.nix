@@ -32,7 +32,7 @@ in
           devices = [
             "serveri"
             "kanny"
-            #"lixos"
+            "koulu-kone"
             "masiina"
           ];
           label = "koulu";
@@ -42,6 +42,7 @@ in
         masiina.id = "HJ2ZJAJ-PZEIBRO-X4OBUPJ-KNCZG74-E64UE2D-6SI5VPI-SMW2ZYV-L4GHCAD";
         kanny.id = "KUABWRX-SKPHZ4Y-DVOLV74-X3EQQCZ-733DD6M-4XUJCML-UMLUO4M-W6JSHAQ";
         serveri.id = "QKL76IT-JCH32JW-D4EUCYL-3EY2ILY-T6LWDXC-W4HHPM4-KH4J5WU-LG666QY";
+        koulu-kone.id = "HAXX6CR-APH3FMS-K6XIJ7-ZCMSN6R-GBV6T6X-NHWETSU-TVQ6M4T-MSYBIWB";
       };
       /*
         "${syncFolder}/koulu" = {
@@ -57,7 +58,10 @@ in
     };
   } // (if config.hostSpec.isServer == true then { guiAddress = "192.168.11.10:8384"; } else { });
 
-  networking.firewall.allowedTCPPorts = [ 8384 ];
+  networking.firewall.allowedTCPPorts = [
+    8384
+    22000
+  ];
   users.users.osmo.packages = (
     if config.hostSpec.isServer == false then [ pkgs.syncthingtray ] else [ ]
   );
