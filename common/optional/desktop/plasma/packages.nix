@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   # TODO: I had planned alphabethical ordering and categories but was too lazy
   users.users.osmo.packages =
@@ -7,7 +7,6 @@
       haruna
       libsForQt5.qt5ct
       xorg.xkbutils
-      inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
     ]
     ++ (with kdePackages; [
       okular

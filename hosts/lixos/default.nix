@@ -5,6 +5,8 @@
     ../../common/optional/cli
     ../../common/optional/desktop/plasma
     ../../common/optional/grub.nix
+    ../../common/optional/gaming.nix
+    ../../common/optional/syncthing.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/ssh.nix
     ../../common/optional/yubikey-boot.nix
@@ -14,9 +16,9 @@
   hostSpec = {
     hostName = "lixos";
     isLaptop = true;
-      desktop = "Plasma";
-      theme = "Classic";
-      colors = "Tokyo Night";
+    style = "Classic";
+    theme = "Tokyo Night";
+    wallpaper = "stolen/plasma2k.png";
     sshKeys = [
       "masiina"
       "serveri"
