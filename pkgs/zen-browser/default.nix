@@ -11,10 +11,10 @@
 stdenv.mkDerivation rec {
   pname = "zen-browser";
 
-  version = "1.7b";
+  version = "1.10.3b";
   src = builtins.fetchTarball {
-    url = "https://github.com/zen-browser/desktop/releases/download/${version}/zen.linux-x86_64.tar.bz2";
-    sha256 = "sha256:0aig890fcynxwi7xi8jzd1w2gzg47n0jqfq76wvnkwcam611b2bp";
+    url = "https://github.com/zen-browser/desktop/releases/download/${version}/zen.linux-x86_64.tar.xz";
+    sha256 = "sha256:1vrxm5m4pylzhs6bilqswis0klkq7xcriwdkfl7dyv8lq4cafz1p";
   };
 
   # Optionally include a separate src for the specific or generic variant
