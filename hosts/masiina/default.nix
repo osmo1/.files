@@ -22,6 +22,8 @@ in
     ../../common/optional/starcitizen.nix
     ../../common/optional/auto-login.nix
     ../../common/optional/podman.nix
+    ../../common/optional/syncthing.nix
+    ../../common/optional/desktop/optional/virtmanager.nix
   ];
 
   hostSpec = {
@@ -62,6 +64,8 @@ in
     pkgs.python312Full
     pkgs.looking-glass-client
     pkgs.swtpm
+    pkgs.daisy
+    pkgs.qalculate-qt
   ];
   systemd.services.ryzen-undervolt = {
     description = "Ryzen 5700x3D undervolting service";
