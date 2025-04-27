@@ -11,5 +11,6 @@
   home-manager.users.osmo = {
     programs.btop.enable = true;
     programs.bat.enable = true;
+    programs.zellij.enable = true;
   };
 }

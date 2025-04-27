@@ -37,10 +37,41 @@
               unit = "  ";
             };
           }
+          {
+            name = "javascript";
+            indent = {
+              tab-width = 4;
+              unit = "    ";
+            };
+          }
+          {
+            name = "java";
+            scope = "source.java";
+            file-types = [ "java" ];
+            auto-format = true;
+            indent = {
+              tab-width = 4;
+              unit = "    ";
+            };
+            language-servers = [ "${pkgs.jdt-language-server}/bin/jdtls" ];
+          }
+          {
+            name = "rust";
+            auto-format = true;
+            indent = {
+              tab-width = 4;
+              unit = "    ";
+            };
+            language-servers = [ "${pkgs.rust-analyzer}/bin/rust-analyzer" ];
+          }
         ];
         extraPackages = with pkgs; [
           marksman
           nil
+          jdt-language-server
+          typescript-language-server
+          rust-analyzer
+          lldb
         ];
       };
     };
