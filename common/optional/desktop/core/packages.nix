@@ -22,6 +22,8 @@ in
       pomodoro-gtk
       freecad-wayland
       speedcrunch
+      rustdesk-flutter
+      localsend
 
       # Coding
       vscodium # Needs further conf
@@ -35,7 +37,6 @@ in
     ])
     ++ (with pkgs.unstable; [
       zed-editor
-      rustdesk-flutter
       #spotify
     ]);
   programs.kdeconnect.enable = true;
