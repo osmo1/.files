@@ -21,7 +21,13 @@
 
   time.timeZone = lib.mkDefault "Europe/Helsinki";
 
-  i18n.defaultLocale = lib.mkDefault "en_IE.UTF-8";
+  #i18n.defaultLocale = lib.mkDefault "en_IE.UTF-8";
+  i18n.defaultLocale = (
+    if config.hostSpec.isServer == false then
+      (lib.mkDefault "de_CH.UTF-8")
+    else
+      (lib.mkDefault "en_IE.UTF-8")
+  );
 
   environment.sessionVariables = {
     FLAKE = "/home/osmo/.files";
@@ -43,17 +49,22 @@
     };
   };
 
-  sops.secrets = (if config.hostSpec != [] then builtins.listToAttrs (
-    map (hostname: {
-      name = "nixos/${hostname}/ssh/private";
-      value = {
-        path = "/home/osmo/.ssh/${hostname}";
-        owner = "osmo";
-        group = "users";
-        mode = "600";
-      };
-    }) config.hostSpec.sshKeys
-  ) else {});
+  sops.secrets = (
+    if config.hostSpec != [ ] then
+      builtins.listToAttrs (
+        map (hostname: {
+          name = "nixos/${hostname}/ssh/private";
+          value = {
+            path = "/home/osmo/.ssh/${hostname}";
+            owner = "osmo";
+            group = "users";
+            mode = "600";
+          };
+        }) config.hostSpec.sshKeys
+      )
+    else
+      { }
+  );
 
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;

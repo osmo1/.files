@@ -17,6 +17,7 @@
       dust
       restic
       age-plugin-yubikey
+      file
     ])
 
     ++
