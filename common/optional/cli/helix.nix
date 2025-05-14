@@ -57,12 +57,15 @@
           }
           {
             name = "rust";
+            scope = "source.rust";
+            file-types = [ "rs" ];
             auto-format = true;
             indent = {
               tab-width = 4;
               unit = "    ";
             };
-            language-servers = [ "${pkgs.rust-analyzer}/bin/rust-analyzer" ];
+            language-servers = [ "rust-analyzer" ];
+            formatter.command = "${pkgs.rustfmt}/bin/rustfmt";
           }
         ];
         extraPackages = with pkgs; [
@@ -72,6 +75,7 @@
           typescript-language-server
           rust-analyzer
           lldb
+          rustfmt
         ];
       };
     };

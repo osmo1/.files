@@ -24,6 +24,7 @@ in
     ../../common/optional/podman.nix
     ../../common/optional/syncthing.nix
     ../../common/optional/desktop/optional/virtmanager.nix
+    ../../common/optional/desktop/optional/sunshine.nix
   ];
 
   hostSpec = {
@@ -59,14 +60,21 @@ in
     wantedBy = [ "default.target" ];
   };
 
-  environment.systemPackages = [
-    ryzen-undervolt
-    pkgs.python312Full
-    pkgs.looking-glass-client
-    pkgs.swtpm
-    pkgs.daisy
-    pkgs.qalculate-qt
-  ];
+  environment.systemPackages =
+    [
+      ryzen-undervolt
+
+    ]
+    ++ (with pkgs.stable; [
+      python312Full
+      looking-glass-client
+      swtpm
+      qalculate-qt
+      cargo
+      rustc
+      gcc14
+    ]);
+
   systemd.services.ryzen-undervolt = {
     description = "Ryzen 5700x3D undervolting service";
     wantedBy = [ "multi-user.target" ];
