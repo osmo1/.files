@@ -30,7 +30,7 @@
   );
 
   environment.sessionVariables = {
-    FLAKE = "/home/osmo/.files";
+    NH_FLAKE = "/home/osmo/.files";
     EDITOR = "nvim";
   };
 
