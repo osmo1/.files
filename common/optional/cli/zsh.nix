@@ -13,7 +13,14 @@
         syntaxHighlighting.enable = true;
 
         shellAliases = {
-          ll = "ls -l";
+          cat = "bat";
+          diff = "batdiff";
+          man = "batman";
+          less = "batpipe";
+          grep = "rg";
+          ll = "eza -l";
+          ls = "eza";
+          dua = "dua interactive";
         };
         history = {
           size = 10000;

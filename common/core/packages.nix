@@ -2,7 +2,8 @@
 {
   environment.systemPackages =
     (with pkgs.stable; [
-      neovim
+      (lib.hiPrio uutils-coreutils-noprefix)
+      helix
       fastfetch
       git
       zip
@@ -18,6 +19,7 @@
       restic
       age-plugin-yubikey
       file
+      dig
     ])
 
     ++
