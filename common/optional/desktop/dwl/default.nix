@@ -1,6 +1,5 @@
-{  pkgs, ... }:
+{ pkgs, ... }:
 let
-
   dbus-dwl = pkgs.writeShellScriptBin "dbus-dwl" ''
     "dbus-run-session ${pkgs.stable.dwl}/bin/dwl > ~/.dwl_info"
   '';
