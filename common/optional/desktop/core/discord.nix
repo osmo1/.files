@@ -1,13 +1,16 @@
 {
   home-manager.users.osmo =
-    { inputs, ... }:
+    { inputs, pkgs, ... }:
     {
       imports = [
         inputs.nixcord.homeManagerModules.nixcord
       ];
       programs.nixcord = {
         enable = true;
-        discord.enable = false;
+        discord = {
+          enable = false;
+          package = pkgs.unstable.discord;
+        };
         vesktop.enable = true;
         config = {
           enabledThemes = [
