@@ -56,15 +56,15 @@ in
         fonts = {
           monospace = {
             name = "FiraCode Nerd Font";
-            package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+            package = pkgs.nerd-fonts.fira-code;
           };
           sansSerif = {
             name = "Hack Nerd Font";
-            package = pkgs.nerdfonts.override { fonts = [ "Hack" ]; };
+            package = pkgs.nerd-fonts.hack;
           };
           serif = {
             name = "DejaVu Sans Mono";
-            package = pkgs.nerdfonts.override { fonts = [ "DejaVuSansMono" ]; };
+            package = pkgs.nerd-fonts.dejavu-sans-mono;
           };
           # TODO: Laptop sizes, requires testing
           sizes =

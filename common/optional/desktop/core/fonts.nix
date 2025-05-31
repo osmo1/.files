@@ -4,13 +4,9 @@
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji
-    (nerdfonts.override {
-      fonts = [
-        "FiraCode"
-        "Hack"
-        "FiraMono"
-      ];
-    })
-    # "ComicShans" does not exist?
+    nerd-fonts.fira-code
+    nerd-fonts.hack
+    nerd-fonts.fira-mono
+    nerd-fonts.comic-shanns-mono
   ];
 }
