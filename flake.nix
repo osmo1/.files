@@ -122,7 +122,7 @@
       containerModules = import ./modules/containers;
 
       # Custom modifications/overrides to upstream packages.
-      overlays = import ./mods/overlays.nix { inherit inputs outputs; };
+      overlays = import ./mods/overlays.nix { inherit inputs; };
 
       # Custom packages to be shared or upstreamed.
       packages = forAllSystems (

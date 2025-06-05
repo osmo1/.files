@@ -1,8 +1,5 @@
 { inputs, ... }:
 let
-  patches-path = builtins.toString inputs.dwl-patches;
-in
-{
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs { pkgs = final; };
 
@@ -10,26 +7,14 @@ in
   # You can change versions, add patches, set compilation flags, anything really.
   # https://wiki.nixos.org/wiki/Overlays
   modifications = final: prev: {
-    dwl = prev.dwl.overrideAttrs {
-      conf = ../common/optional/dwl/config.h;
-      postInstall =
-        let
-          dwl-session = ''
-            [Desktop Entry]
-            Name=dwl
-            Comment=Dwm but wayland
-            Exec=dbus-dwl
-            Type=Application
-          '';
-        in
-        ''
-          mkdir -p $out/share/wayland-sessions
-          echo "${dwl-session}" > $out/share/wayland-sessions/dwl.desktop
-        '';
-      passthru.providedSessions = [ "dwl" ];
-      patches = [ "${patches-path}/movestack.patch" ];
-      #passthru.providedSessions = [ "dwl" "dbus-dwl" ];
-    };
+    /*
+      dwl = prev.dwl.override {
+        #src = ../../dwl;
+        configH = builtins.toPath ../common/optional/desktop/dwl/config.h;
+        #conf = builtins.toPath ../common/optional/dwl/config.h;
+        #patches = [ "${patches-path}/movestack.patch" ];
+      };
+    */
   };
 
   # Convenient access to stable or unstable nixpkgs regardless
@@ -41,6 +26,28 @@ in
     stable = import inputs.nixpkgs {
       system = final.system;
       config.allowUnfree = true;
+      #overlays = modifications;
+      overlays =
+        let
+          patches-path = builtins.toString inputs.dwl-patches;
+        in
+        [
+          (prev: final: {
+            dwl = (final.dwl.override { configH = ../common/optional/desktop/dwl/config.h; }).overrideAttrs {
+              patches = [
+                "${patches-path}/gaps.patch"
+                "${patches-path}/cfact-v0.7-gaps.patch"
+                "${patches-path}/pointer-gestures-unstable-v1.patch"
+                "${patches-path}/gestures.patch"
+                "${patches-path}/movestack.patch"
+                "${patches-path}/shiftview.patch"
+                "${patches-path}/smartborders.patch"
+                "${patches-path}/swallow.patch"
+                "${patches-path}/unclutter.patch"
+              ];
+            };
+          })
+        ];
     };
   };
   unstable-packages = final: _prev: {
@@ -49,4 +56,13 @@ in
       config.allowUnfree = true;
     };
   };
+in
+{
+  default =
+    final: prev:
+
+    (additions final prev)
+    // (modifications final prev)
+    // (stable-packages final prev)
+    // (unstable-packages final prev);
 }

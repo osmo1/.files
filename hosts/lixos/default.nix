@@ -3,14 +3,17 @@
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    ../../common/optional/desktop/plasma
+    #../../common/optional/desktop/plasma
+    ../../common/optional/desktop/dwl
+    #../../common/optional/desktop/core
+    ../../common/optional/desktop/optional/sddm.nix
     ../../common/optional/grub.nix
     ../../common/optional/gaming.nix
     ../../common/optional/syncthing.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/ssh.nix
     ../../common/optional/yubikey-boot.nix
-    ../../common/optional/auto-login.nix
+    #../../common/optional/auto-login.nix
   ];
 
   hostSpec = {

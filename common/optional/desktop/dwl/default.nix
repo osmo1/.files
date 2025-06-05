@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   dbus-dwl = pkgs.writeShellScriptBin "dbus-dwl" ''
     "dbus-run-session ${pkgs.stable.dwl}/bin/dwl > ~/.dwl_info"
@@ -26,23 +26,25 @@ in
 
       (with pkgs.unstable; [
       ]);
-  services.displayManager.sessionPackages = [ pkgs.dwl ];
-  services.gnome.gnome-keyring.enable = true;
-  systemd = {
-    user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
+  #services.displayManager.sessionPackages = [ pkgs.dwl ];
+  /*
+    services.gnome.gnome-keyring.enable = true;
+    systemd = {
+      user.services.polkit-gnome-authentication-agent-1 = {
+        description = "polkit-gnome-authentication-agent-1";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          Restart = "on-failure";
+          RestartSec = 1;
+          TimeoutStopSec = 10;
+        };
       };
     };
-  };
+  */
   environment.variables = {
     XDG_RUNTIME_DIR = "/run/user/1000";
   };
@@ -55,7 +57,8 @@ in
     #extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  home-manager.users.osmo =
+  /*
+    home-manager.users.osmo =
     { config, ... }:
     {
       systemd.user.targets = {
@@ -76,7 +79,6 @@ in
           Exec=${pkgs.fnott}/bin/fnott
           SystemdService=fnott.service
         '';
-      */
       systemd.user.services = {
         ## Notification daemon
         /*
@@ -94,7 +96,6 @@ in
               ExecStart="${pkgs.fnott}/bin/fnott";
             };
           };
-        */
 
         ## Automatic display configuration
         kanshi = {
@@ -200,7 +201,7 @@ in
 
             Install.WantedBy = [ "dwl-session.target" ];
           };
-        */
       };
     };
+  */
 }

@@ -158,10 +158,10 @@
     "dwl-patches": {
       "flake": false,
       "locked": {
-        "lastModified": 1731512259,
-        "narHash": "sha256-GpF2VkUIF3nRfEopdCZYIrWQoWf8yuH3QwH47Ma+8CY=",
+        "lastModified": 1749139317,
+        "narHash": "sha256-h2tE/5qIWBNcqa8p9FIRZQL//E4nwIorr67kqajMHxY=",
         "ref": "main",
-        "rev": "29f9d411294b4802c42e57fff7aa7f176158c6d5",
+        "rev": "2dda090044054a3792f90ddb47027e583c912332",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/osmo1/dwl-patches.git"

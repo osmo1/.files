@@ -1,5 +1,6 @@
-{ pkgs, unstable-pkgs, ... }:
+{ pkgs, ... }:
 {
   users.users.osmo.packages = with pkgs; [
+    foot
   ];
 }
