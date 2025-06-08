@@ -45,7 +45,23 @@ let
                 "${patches-path}/swallow.patch"
                 "${patches-path}/unclutter.patch"
               ];
+              postInstall =
+                let
+                  dwlSession = ''
+                    [Desktop Entry]
+                    Name=dwl
+                    Comment=Dynamic Wayland compositor
+                    Exec=dwl
+                    Type=Application
+                  '';
+                in
+                ''
+                  mkdir -p $out/share/wayland-sessions
+                  echo "${dwlSession}" > $out/share/wayland-sessions/dwl.desktop
+                '';
+              passthru.providedSessions = [ "dwl" ];
             };
+            somebar = final.somebar.overrideAttrs { conf = ../common/optional/desktop/dwl/somebar.hpp; };
           })
         ];
     };
