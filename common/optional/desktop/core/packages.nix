@@ -34,6 +34,7 @@ in
       capitaine-cursors
       xdg-desktop-portal-gtk
       openrgb
+      pango
     ])
     ++ (with pkgs.unstable; [
       zed-editor

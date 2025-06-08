@@ -8,17 +8,17 @@
         window.blur = true;
         font = {
           #size = 14;
-          normal.family = lib.mkForce "FiraCode Nerd Font";
+          normal.family = lib.mkForce "FiraMono Nerd Font";
           bold = {
-            family = "FiraCode Nerd Font";
+            family = "FiraMono Nerd Font";
             style = "Bold";
           };
           italic = {
-            family = "FiraCode Nerd Font";
+            family = "FiraMono Nerd Font";
             style = "Italic";
           };
           bold_italic = {
-            family = "FiraCode Nerd Font";
+            family = "FiraMono Nerd Font";
             style = "Bold Italic";
           };
         };

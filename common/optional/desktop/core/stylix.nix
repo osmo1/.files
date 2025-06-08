@@ -3,10 +3,6 @@ let
   cursor-size = if !config.hostSpec.isLaptop == true then 24 else 12;
 in
 {
-  system.activationScripts.gtkFix.text = ''
-    #!/bin/bash
-    rm -rf ~/.gtkrc-2.0*
-  '';
   home-manager.users.osmo =
     { inputs, pkgs, ... }:
     {
@@ -55,16 +51,16 @@ in
             };
         fonts = {
           monospace = {
-            name = "FiraCode Nerd Font";
-            package = pkgs.nerd-fonts.fira-code;
+            name = "FiraMono Nerd Font";
+            package = pkgs.nerd-fonts.fira-mono;
           };
           sansSerif = {
-            name = "Hack Nerd Font";
-            package = pkgs.nerd-fonts.hack;
+            name = "Cantarell";
+            package = pkgs.cantarell-fonts;
           };
           serif = {
-            name = "DejaVu Sans Mono";
-            package = pkgs.nerd-fonts.dejavu-sans-mono;
+            name = "Cantarell";
+            package = pkgs.cantarell-fonts;
           };
           # TODO: Laptop sizes, requires testing
           sizes =
