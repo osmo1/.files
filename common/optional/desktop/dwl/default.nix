@@ -5,9 +5,7 @@ let
   '';
 in
 {
-  # TODO: DOES NOT WORK!
-  # I can't seem to get the configuration or the session control working.
-  # Requires some nix wizardry skills that I don't yet have
+  # TODO: DOES WORK! :)
   imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
   environment.systemPackages =
     (with pkgs.stable; [
@@ -26,7 +24,18 @@ in
 
       (with pkgs.unstable; [
       ]);
-  #services.displayManager.sessionPackages = [ pkgs.dwl ];
+
+  # Needed for dwl (maybe?)
+  environment.variables = {
+    XDG_RUNTIME_DIR = "/run/user/1000";
+  };
+
+  # Add dwl to sddm
+  services.displayManager = {
+    sessionPackages = [ pkgs.stable.dwl ];
+    sddm.settings.General.DefaultSession = "dwl.desktop";
+  };
+
   /*
     services.gnome.gnome-keyring.enable = true;
     systemd = {
@@ -45,163 +54,160 @@ in
       };
     };
   */
-  environment.variables = {
-    XDG_RUNTIME_DIR = "/run/user/1000";
-  };
 
-  services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    #wlr.enable = true;
-    # gtk portal needed to make gtk apps happy
-    #extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
-  /*
-    home-manager.users.osmo =
+  home-manager.users.osmo =
     { config, ... }:
     {
-      systemd.user.targets = {
-        dwl-session = {
-          Unit = {
-            Description = "dwl compositor session";
-            Documentation = "man:systemd.special(7)";
-            BindsTo = "graphical-session.target";
-            Wants = "graphical-session-pre.target";
-            After = "graphical-session-pre.target";
-          };
+      # Bar
+      programs.bemenu = {
+        enable = true;
+        settings = {
+          line-height = 28;
+          prompt = "open";
+          ignorecase = true;
         };
       };
       /*
-        xdg.dataFile."dbus-1/services/fnott.service".text = ''
-          [D-BUS Service]
-          Name=org.freedesktop.Notifications
-          Exec=${pkgs.fnott}/bin/fnott
-          SystemdService=fnott.service
-        '';
-      systemd.user.services = {
-        ## Notification daemon
-        /*
-          fnott = {
+        systemd.user.targets = {
+          dwl-session = {
             Unit = {
-              Description="Keyboard driven and lightweight Wayland notification daemon";
-              Documentation="man:fnott(1) man:fnott.ini(5)";
-              PartOf="graphical-session.target";
-              After="graphical-session-pre.target";
+              Description = "dwl compositor session";
+              Documentation = "man:systemd.special(7)";
+              BindsTo = "graphical-session.target";
+              Wants = "graphical-session-pre.target";
+              After = "graphical-session-pre.target";
+            };
+          };
+        };
+          xdg.dataFile."dbus-1/services/fnott.service".text = ''
+            [D-BUS Service]
+            Name=org.freedesktop.Notifications
+            Exec=${pkgs.fnott}/bin/fnott
+            SystemdService=fnott.service
+          '';
+        systemd.user.services = {
+          ## Notification daemon
+          /*
+            fnott = {
+              Unit = {
+                Description="Keyboard driven and lightweight Wayland notification daemon";
+                Documentation="man:fnott(1) man:fnott.ini(5)";
+                PartOf="graphical-session.target";
+                After="graphical-session-pre.target";
+              };
+
+              Service = {
+                Type="dbus";
+                BusName="org.freedesktop.Notifications";
+                ExecStart="${pkgs.fnott}/bin/fnott";
+              };
+            };
+
+          ## Automatic display configuration
+          kanshi = {
+            Unit = {
+              Description = "This is a Wayland equivalent for tools like autorandr.";
+              Documentation = "man:kanshi(1) man:kanshi(5)";
+              PartOf = "graphical-session.target";
             };
 
             Service = {
-              Type="dbus";
-              BusName="org.freedesktop.Notifications";
-              ExecStart="${pkgs.fnott}/bin/fnott";
+              Type = "simple";
+              ExecStart = "${pkgs.stable.kanshi}/bin/kanshi";
             };
+
+            Install.WantedBy = [ "dwl-session.target" ];
           };
 
-        ## Automatic display configuration
-        kanshi = {
-          Unit = {
-            Description = "This is a Wayland equivalent for tools like autorandr.";
-            Documentation = "man:kanshi(1) man:kanshi(5)";
-            PartOf = "graphical-session.target";
-          };
-
-          Service = {
-            Type = "simple";
-            ExecStart = "${pkgs.stable.kanshi}/bin/kanshi";
-          };
-
-          Install.WantedBy = [ "dwl-session.target" ];
-        };
-
-        ## Bluetooth management
-        blueman = {
-          Unit = {
-            Description = "Blueman is a GTK+ Bluetooth Manager";
-            Documentation = "man:blueman-applet(1)";
-            PartOf = "graphical-session.target";
-          };
-
-          Service = {
-            Type = "simple";
-            ExecStart = "${pkgs.blueman}/bin/blueman-applet";
-          };
-        };
-
-        ## Music/video player controller
-        playerctl = {
-          Unit = {
-            Description = "mpris media player command-line controller";
-            Documentation = "man:playerctl(1)";
-            PartOf = "graphical-session.target";
-          };
-
-          Service = {
-            Type = "simple";
-            ExecStart = "${pkgs.stable.playerctl}/bin/playerctld daemon";
-          };
-
-          Install.WantedBy = [ "dwl-session.target" ];
-        };
-
-        ## Swayidle for automatic locking
-        swayidle = {
-          Unit = {
-            Description = "Idle manager for Wayland";
-            Documentation = "man:swayidle(1)";
-            PartOf = "graphical-session.target";
-          };
-
-          Service = {
-            Type = "simple";
-            ExecStart = ''
-              ${pkgs.stable.swayidle}/bin/swayidle -w\
-                timeout 600 '/home/armeeh/Pkg/dwl/scripts/lock.sh' \
-                timeout 1200 'systemctl suspend-then-hibernate' \
-                before-sleep '/home/armeeh/Pkg/dwl/scripts/lock.sh'
-            '';
-          };
-
-          Install.WantedBy = [ "dwl-session.target" ];
-        };
-
-        ## Udiskie for automounting drives
-        udiskie = {
-          Unit = {
-            Description = "Automounter for removable media ";
-            Documentation = "https://github.com/coldfix/udiskie/wiki";
-            PartOf = "graphical-session.target";
-          };
-
-          Service = {
-            Type = "simple";
-            ExecStart = ''
-              ${pkgs.stable.udiskie}/bin/udiskie
-            '';
-          };
-
-          Install.WantedBy = [ "dwl-session.target" ];
-        };
-
-        ## Sway Audio Idle Inhibit
-        # The pkgs.nur is a great idea
-        /*
-          sway-audio-idle-inhibit = {
+          ## Bluetooth management
+          blueman = {
             Unit = {
-              Description="Automatically start idle inhibit when audio is playing";
-              Documentation="https://github.com/ErikReider/SwayAudioIdleInhibit";
-              PartOf="graphical-session.target";
+              Description = "Blueman is a GTK+ Bluetooth Manager";
+              Documentation = "man:blueman-applet(1)";
+              PartOf = "graphical-session.target";
             };
 
             Service = {
-              Type="simple";
-              ExecStart=''
-                ${pkgs.nur.repos."999eagle".swayaudioidleinhibit}/bin/sway-audio-idle-inhibit
+              Type = "simple";
+              ExecStart = "${pkgs.blueman}/bin/blueman-applet";
+            };
+          };
+
+          ## Music/video player controller
+          playerctl = {
+            Unit = {
+              Description = "mpris media player command-line controller";
+              Documentation = "man:playerctl(1)";
+              PartOf = "graphical-session.target";
+            };
+
+            Service = {
+              Type = "simple";
+              ExecStart = "${pkgs.stable.playerctl}/bin/playerctld daemon";
+            };
+
+            Install.WantedBy = [ "dwl-session.target" ];
+          };
+
+          ## Swayidle for automatic locking
+          swayidle = {
+            Unit = {
+              Description = "Idle manager for Wayland";
+              Documentation = "man:swayidle(1)";
+              PartOf = "graphical-session.target";
+            };
+
+            Service = {
+              Type = "simple";
+              ExecStart = ''
+                ${pkgs.stable.swayidle}/bin/swayidle -w\
+                  timeout 600 '/home/armeeh/Pkg/dwl/scripts/lock.sh' \
+                  timeout 1200 'systemctl suspend-then-hibernate' \
+                  before-sleep '/home/armeeh/Pkg/dwl/scripts/lock.sh'
               '';
             };
 
             Install.WantedBy = [ "dwl-session.target" ];
           };
-      };
+
+          ## Udiskie for automounting drives
+          udiskie = {
+            Unit = {
+              Description = "Automounter for removable media ";
+              Documentation = "https://github.com/coldfix/udiskie/wiki";
+              PartOf = "graphical-session.target";
+            };
+
+            Service = {
+              Type = "simple";
+              ExecStart = ''
+                ${pkgs.stable.udiskie}/bin/udiskie
+              '';
+            };
+
+            Install.WantedBy = [ "dwl-session.target" ];
+          };
+
+          ## Sway Audio Idle Inhibit
+          # The pkgs.nur is a great idea
+          /*
+            sway-audio-idle-inhibit = {
+              Unit = {
+                Description="Automatically start idle inhibit when audio is playing";
+                Documentation="https://github.com/ErikReider/SwayAudioIdleInhibit";
+                PartOf="graphical-session.target";
+              };
+
+              Service = {
+                Type="simple";
+                ExecStart=''
+                  ${pkgs.nur.repos."999eagle".swayaudioidleinhibit}/bin/sway-audio-idle-inhibit
+                '';
+              };
+
+              Install.WantedBy = [ "dwl-session.target" ];
+            };
+        };
+      */
     };
-  */
 }
