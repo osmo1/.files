@@ -92,6 +92,7 @@ in
           alacritty.enable = true;
           helix.enable = true;
           kde.enable = true;
+          starship.enable = false;
         };
       };
       # The cursor on plasma behaves a bit wierd without this

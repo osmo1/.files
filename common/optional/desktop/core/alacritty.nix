@@ -25,5 +25,5 @@
       };
     };
   };
-  users.users.osmo.packages = [ pkgs.alacritty-theme ];
+  # users.users.osmo.packages = [ pkgs.alacritty-theme ];
 }
