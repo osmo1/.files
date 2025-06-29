@@ -8,22 +8,21 @@
         window.blur = true;
         font = {
           #size = 14;
-          normal.family = lib.mkForce "FiraMono Nerd Font";
+          normal.family = lib.mkForce "ComicShannsMono Nerd Font";
           bold = {
-            family = "FiraMono Nerd Font";
+            family = "ComicShannsMono Nerd Font";
             style = "Bold";
           };
           italic = {
-            family = "FiraMono Nerd Font";
+            family = "ComicShannsMono Nerd Font";
             style = "Italic";
           };
           bold_italic = {
-            family = "FiraMono Nerd Font";
+            family = "ComicShannsMono Nerd Font";
             style = "Bold Italic";
           };
         };
       };
     };
   };
-  # users.users.osmo.packages = [ pkgs.alacritty-theme ];
 }
