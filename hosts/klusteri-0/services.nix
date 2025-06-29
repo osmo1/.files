@@ -7,7 +7,7 @@
     dockerproxy.enable = true;
     pihole = {
       enable = true;
-      version = "development";
+      version = "2025.06.2";
       uiPort = 380;
       dataLocation = "/home/osmo/pihole";
       enableTraefik = true;
@@ -16,7 +16,7 @@
     homepage = {
       enable = true;
       enableTraefik = true;
-      version = "v0.10.9";
+      version = "v1.3.2";
       uiPort = 180;
       dataLocation = "/home/osmo/homepage";
       options = {
@@ -25,7 +25,7 @@
     };
     traefik = {
       enable = true;
-      version = "v3.1";
+      version = "v3.4.3";
       uiPort = 280;
       dataLocation = "/home/osmo/traefik";
       options = {
@@ -34,7 +34,7 @@
     };
     wireguard = {
       enable = true;
-      version = "latest";
+      version = "15.0.0";
       uiPort = 480;
       dataLocation = "/home/osmo/wireguard";
       enableHomePage = true;
@@ -44,7 +44,7 @@
     };
     rss = {
       enable = true;
-      version = "latest";
+      version = "1.26.3";
       morssUiPort = 580;
       freshUiPort = 680;
       dockerssUiPort = 780;
@@ -56,7 +56,6 @@
     };
     home-assistant = {
       enable = true;
-      version = "latest";
       uiPort = 980;
       dataLocation = "/home/osmo/sontainers/home-assistant";
       enableHomePage = true;
