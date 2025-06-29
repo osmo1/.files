@@ -6,7 +6,6 @@
       heroic
       mangohud
       lutris-free
-      min-ed-launcher
     ])
     ++ (with pkgs.unstable; [
       nexusmods-app-unfree
