@@ -43,6 +43,8 @@ in
     wallpaper = "stolen/staircase.png";
   };
 
+  services.hardware.openrgb.enable = true;
+
   restic.enable = true;
 
   networking.interfaces.enp5s0.wakeOnLan.enable = true;

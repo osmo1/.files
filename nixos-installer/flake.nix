@@ -17,10 +17,10 @@
       inherit (self) outputs;
       inherit (nixpkgs) lib;
       configVars = import ../mods/vars.nix { inherit inputs lib; };
-      lib.custom = import ../mods/lib.nix { inherit lib; };
+      #lib.custom = import ../mods/lib.nix { inherit lib; };
       minimalConfigVars = lib.recursiveUpdate configVars { isMinimal = true; };
       minimalSpecialArgs = {
-        inherit inputs outputs lib.custom;
+        inherit inputs outputs lib;
         configVars = minimalConfigVars;
       };
 
@@ -52,7 +52,9 @@
             ]
             ++ (if tpm == true then [ (lib.custom.relativeToRoot "common/optional/tpm.nix") ] else [ ])
             ++ (if nbde == true then [ (lib.custom.relativeToRoot "common/optional/nbde.nix") ] else [ ])
-            ++ (if yubi == true then [ (lib.custom.relativeToRoot "common/optional/yubikey-boot.nix") ] else [ ]);
+            ++ (
+              if yubi == true then [ (lib.custom.relativeToRoot "common/optional/yubikey-boot.nix") ] else [ ]
+            );
         });
     in
     {
