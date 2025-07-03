@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.containers.wireguard;
@@ -47,6 +52,7 @@ in
         image = "ghcr.io/wg-easy/wg-easy:${cfg.version}";
         volumes = [
           "${cfg.dataLocation}:/etc/wireguard"
+          #"/lib/modules:/lib/modules:ro"
         ];
         ports = [
           "${toString cfg.uiPort}:51821"
@@ -54,20 +60,20 @@ in
         ];
         environment = {
           #TZ = "${cfg.timeZone}";
-          WG_HOST = "80.222.53.107";
-          WG_PERSISTENT_KEEPALIVE = "25";
-          WG_DEFAULT_DNS = "192.168.11.10";
-          UI_TRAFFIC_STATS = "true";
-          WG_ALLOWED_IPS = "0.0.0.0/0, ::/0, 10.8.0.0/24, 10.8.0.0/32";
-          WG_MTU = "1412";
         };
         extraOptions = [
           "--sysctl=net.ipv4.ip_forward=1"
           "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
+          "--sysctl=net.ipv6.conf.all.disable_ipv6=0"
+          "--sysctl=net.ipv6.conf.all.forwarding=1"
+          "--sysctl=net.ipv6.conf.default.forwarding=1"
           "--cap-add=NET_ADMIN"
           "--cap-add=SYS_MODULE"
           "--cap-add=NET_RAW"
+          "--ip6=fdcc:ad94:bacf:61a3::2a"
+          "--ip=10.42.42.42"
         ];
+        networks = [ "wireguard_wg" ];
         labels =
           (
             if cfg.enableHomePage == true then
@@ -95,6 +101,20 @@ in
           );
       };
     };
+    systemd.services."podman-network-wireguard_wg" = {
+      path = [ pkgs.podman ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStop = "podman network rm -f wireguard_wg";
+      };
+      script = ''
+        podman network inspect wireguard_wg || podman network create wireguard_wg --driver=bridge --subnet=10.42.42.0/24 --subnet=fdcc:ad94:bacf:61a3::/64 --ipv6
+      '';
+      partOf = [ "default.target" ];
+      wantedBy = [ "default.target" ];
+    };
+
     networking.firewall = {
       allowedTCPPorts = [ cfg.uiPort ];
       allowedUDPPorts = [ 51820 ];
@@ -102,9 +122,17 @@ in
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
     ];
-    networking.nat = {
-      enable = true;
-      enableIPv6 = true;
+    networking = {
+      nat = {
+        enable = true;
+      };
+    };
+    environment.systemPackages = [ pkgs.wireguard-tools ];
+    boot = {
+      kernelModules = [
+        "nft_masq"
+        "wireguard"
+      ];
     };
   };
 }

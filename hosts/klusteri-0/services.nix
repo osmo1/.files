@@ -34,7 +34,7 @@
     };
     wireguard = {
       enable = true;
-      version = "15.0.0";
+      version = "15.1.0";
       uiPort = 480;
       dataLocation = "/home/osmo/wireguard";
       enableHomePage = true;

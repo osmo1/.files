@@ -37,6 +37,10 @@
     #     setSocketVariable = true;
     # };
 
+    defaultNetwork.settings = {
+      # Required for container networking to be able to use names.
+      dns_enabled = true;
+    };
   };
 
   environment.systemPackages = (with pkgs; [ slirp4netns ]);
@@ -45,4 +49,5 @@
     	export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
           fi
   '';
+  networking.firewall.interfaces."podman+".allowedUDPPorts = [ 53 ];
 }
