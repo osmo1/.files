@@ -1,11 +1,32 @@
 { pkgs, lib, ... }:
 let
   dbus-dwl = pkgs.writeShellScriptBin "dbus-dwl" ''
-    "dbus-run-session ${pkgs.stable.dwl}/bin/dwl > ~/.dwl_info"
+    dbus-run-session -- bash -s << 'EOF'
+      update_dwlb() {
+        while ${pkgs.stable.procps}/bin/pidof ${pkgs.stable.dwl}/bin/dwl > /dev/null; do
+          cpu_usage=$(${pkgs.coreutils}/bin/env LANG=C ${pkgs.procps}/bin/top -bn1 | ${pkgs.gnugrep}/bin/grep "Cpu(s)" | ${pkgs.gawk}/bin/awk '{print 100 - $8"%"}')
+          ram_usage=$(${pkgs.coreutils}/bin/env LANG=C ${pkgs.procps}/bin/free -m | ${pkgs.gawk}/bin/awk '/Mem:/ { printf("%.2f%%", $3/$2 * 100.0) }')
+          disk_usage=$(${pkgs.stable.coreutils}/bin/df -h / | ${pkgs.stable.gawk}/bin/awk 'NR==2 {print $5}')
+          system_time=$(${pkgs.stable.coreutils}/bin/date +"%Y-%m-%d %H:%M")
+          battery_info=$(${pkgs.stable.acpi}/bin/acpi -b | ${pkgs.stable.gawk}/bin/awk '{print $4}' | ${pkgs.stable.gnused}/bin/sed 's/,//')
+          cpu_temp=$(${pkgs.stable.lm_sensors}/bin/sensors | ${pkgs.stable.gawk}/bin/awk '/^Package id 0:/ {print $4}')
+          battery_level=$(${pkgs.stable.gnused}/bin/sed 's/%//' <<<"$battery_info")
+          if [ "$battery_level" -gt 80 ]; then battery_icon=""
+          elif [ "$battery_level" -gt 60 ]; then battery_icon=""
+          elif [ "$battery_level" -gt 40 ]; then battery_icon=""
+          elif [ "$battery_level" -gt 20 ]; then battery_icon=""
+          else battery_icon=""; fi
+          dwlb -status all " $cpu_usage $cpu_temp |  $ram_usage |  $disk_usage | $battery_icon $battery_info | $system_time"
+          ${pkgs.stable.coreutils}/bin/sleep 10
+        done
+      }
+      update_dwlb &
+      exec ${pkgs.stable.dwl}/bin/dwl -s dwlb
+    EOF
+    exit 0
   '';
 in
 {
-  # TODO: DOES WORK! :)
   imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
   environment.systemPackages =
     (with pkgs.stable; [
@@ -18,6 +39,7 @@ in
       playerctl
       swayidle
       udiskie
+      dwlb
     ])
 
     ++
@@ -36,6 +58,7 @@ in
     sddm.settings.General.DefaultSession = "dwl.desktop";
   };
 
+  programs.light.enable = true;
   /*
     services.gnome.gnome-keyring.enable = true;
     systemd = {
@@ -59,12 +82,14 @@ in
     { config, ... }:
     {
       # Bar
-      programs.bemenu = {
-        enable = true;
-        settings = {
-          line-height = 28;
-          prompt = "open";
-          ignorecase = true;
+      programs = {
+        bemenu = {
+          enable = true;
+          settings = {
+            line-height = 28;
+            prompt = "open";
+            ignorecase = true;
+          };
         };
       };
       /*
