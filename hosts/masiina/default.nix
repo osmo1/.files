@@ -14,7 +14,6 @@ in
     ../../common/core
     ../../common/optional/cli
     ../../common/optional/desktop/plasma
-    ../../common/optional/tpm.nix
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/gaming.nix

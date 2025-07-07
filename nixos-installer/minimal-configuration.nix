@@ -1,6 +1,5 @@
 {
   pkgs,
-  
   lib,
   ...
 }:
@@ -36,10 +35,10 @@
   # this potentially causes a security issue that we mitigated above
   security.pam = {
     sshAgentAuth.enable = true;
-      services.sudo = {
-        u2fAuth = true;
-        sshAgentAuth = true;
-      };
+    services.sudo = {
+      u2fAuth = true;
+      sshAgentAuth = true;
+    };
   };
 
   environment.systemPackages = builtins.attrValues {

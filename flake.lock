@@ -90,10 +90,10 @@
     "dwl-patches": {
       "flake": false,
       "locked": {
-        "lastModified": 1749139317,
-        "narHash": "sha256-h2tE/5qIWBNcqa8p9FIRZQL//E4nwIorr67kqajMHxY=",
+        "lastModified": 1751829203,
+        "narHash": "sha256-c5wxcGJyIhtsZxFGKLy9XV+AokfzU1q5f8HH+KRjGtY=",
         "ref": "main",
-        "rev": "2dda090044054a3792f90ddb47027e583c912332",
+        "rev": "94be031b5fef3256ec2832156e0724112971fc29",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/osmo1/dwl-patches.git"
@@ -545,11 +545,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1750969886,
-        "narHash": "sha256-zW/OFnotiz/ndPFdebpo3X0CrbVNf22n4DjN2vxlb58=",
+        "lastModified": 1751211869,
+        "narHash": "sha256-1Cu92i1KSPbhPCKxoiVG5qnoRiKTgR5CcGSRyLpOd7Y=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a676066377a2fe7457369dd37c31fd2263b662f4",
+        "rev": "b43c397f6c213918d6cfe6e3550abfe79b5d1c51",
         "type": "github"
       },
       "original": {
@@ -581,11 +581,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1751192809,
-        "narHash": "sha256-teyOuaalHJZew/V5W+1tOEJ+3huxsftZqFkbMHPGGQE=",
+        "lastModified": 1751289650,
+        "narHash": "sha256-fuorKSFGL8rD9KKUS84ClOmqicrgv3Z4iTJ71cbg4ok=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "6cdcb7d256105cca3a7c2a05e652651c290e30d5",
+        "rev": "79df9ab345440eb0154f5e7f39f497c15ba7fa04",
         "type": "github"
       },
       "original": {
@@ -686,10 +686,10 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1740840472,
-        "narHash": "sha256-KAxkU+Ugx+UfhPKPV8+ZaDgQhMEQIOiZtTEoE2jf3jM=",
+        "lastModified": 1751461248,
+        "narHash": "sha256-TBO2qIN1sQS8XeXltZl8RA+yfZNwaKKJSd0DLxe1MHI=",
         "ref": "main",
-        "rev": "ddcaa0c70354f57483f20ad72060094f631531d8",
+        "rev": "47226ba0c2d81cd0811985e147b520e3fe0942c8",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@codeberg.org/osmo1/.secrets.git"

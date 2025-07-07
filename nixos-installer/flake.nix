@@ -2,7 +2,7 @@
   description = "Minimal NixOS configuration for bootstrapping systems";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     disko.url = "github:nix-community/disko";
   };
@@ -15,17 +15,17 @@
     }@inputs:
     let
       inherit (self) outputs;
-      inherit (nixpkgs) lib;
+      #inherit (nixpkgs) lib;
+      lib = nixpkgs.lib.extend (
+        self: super: { custom = import ../mods/lib.nix { inherit (nixpkgs) lib; }; }
+      );
       configVars = import ../mods/vars.nix { inherit inputs lib; };
-      #lib.custom = import ../mods/lib.nix { inherit lib; };
       minimalConfigVars = lib.recursiveUpdate configVars { isMinimal = true; };
       minimalSpecialArgs = {
         inherit inputs outputs lib;
         configVars = minimalConfigVars;
       };
 
-      # FIXME: Specify arch eventually probably
-      # This mkHost is way better: https://github.com/linyinfeng/dotfiles/blob/8785bdb188504cfda3daae9c3f70a6935e35c4df/flake/hosts.nix#L358
       newConfig =
         hostname: disko: disks: tpm: nbde: grub: yubi:
         (nixpkgs.lib.nixosSystem {
@@ -59,11 +59,11 @@
     in
     {
       nixosConfigurations = {
-        # host     = newConfig "hostname"   "disko file name" "disks"                             tpm   nbde  grub
+        # host     = newConfig "hostname"   "disko file name" "disks"                             tpm   nbde  grub yubi
         masiina = newConfig "masiina" "2-btrfs" [ "sda" "nvme0n1" ] false false true false;
         lixos = newConfig "lixos" "1-luks-btrfs" {
           disk.main.device = "/dev/nvme0n1";
-        } true false true true;
+        } false false true false;
         cbt = newConfig "cbt" "1-luks-btrfs" [ "vda" ] true false true false;
         serveri = newConfig "serveri" "4-luks-btrfs" {
           disk.main.device = "/dev/nvme0n1";
