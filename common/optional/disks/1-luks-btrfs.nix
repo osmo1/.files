@@ -29,7 +29,7 @@
             content = {
               type = "luks";
               name = "crypted";
-              passwordFile = "/tmp/disko-password";
+              #passwordFile = "/tmp/disko-password";
               settings = {
                 allowDiscards = true;
               };

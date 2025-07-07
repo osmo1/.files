@@ -1,9 +1,10 @@
+{ config, ... }:
 {
   boot = {
     initrd.systemd.enable = true;
     loader = {
       efi.canTouchEfiVariables = true;
-      timeout = 0;
+      timeout = (if !config.hostSpec.isLaptop then 0 else 5);
       grub = {
         enable = true;
         device = "nodev"; # GRUB menu generated without installing GRUB on a device
@@ -14,7 +15,4 @@
       };
     };
   };
-
-  # For dual-booting time issues
-  time.hardwareClockInLocalTime = true;
 }
