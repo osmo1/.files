@@ -44,6 +44,7 @@ let
                 "${patches-path}/smartborders.patch"
                 "${patches-path}/swallow.patch"
                 "${patches-path}/unclutter.patch"
+                "${patches-path}/ipc.patch"
               ];
               postInstall =
                 let
@@ -51,7 +52,7 @@ let
                     [Desktop Entry]
                     Name=dwl
                     Comment=Dynamic Wayland compositor
-                    Exec=dwl
+                    Exec=dbus-dwl
                     Type=Application
                   '';
                 in
@@ -61,7 +62,11 @@ let
                 '';
               passthru.providedSessions = [ "dwl" ];
             };
-            somebar = final.somebar.overrideAttrs { conf = ../common/optional/desktop/dwl/somebar.hpp; };
+            dwlb = (
+              final.dwlb.override {
+                configH = ../common/optional/desktop/dwl/dwlb.h;
+              }
+            );
           })
         ];
     };
