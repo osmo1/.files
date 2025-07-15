@@ -44,7 +44,11 @@
     };
     rss = {
       enable = true;
-      version = "1.26.3";
+      version = {
+        fresh = "1.26.3";
+        morss = "latest"; # Pretty much discontinued but still works
+        dockerss = "0.6.1"; # Same thing here
+      };
       morssUiPort = 580;
       freshUiPort = 680;
       dockerssUiPort = 780;

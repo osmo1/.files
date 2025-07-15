@@ -6,9 +6,19 @@ in
 {
   options.services.containers.rss = {
     enable = mkEnableOption "Enable full text rss and rss sync services";
-    version = mkOption {
-      type = types.str;
-      default = "latest";
+    version = {
+      fresh = mkOption {
+        type = types.str;
+        default = "latest";
+      };
+      morss = mkOption {
+        type = types.str;
+        default = "latest";
+      };
+      dockerss = mkOption {
+        type = types.str;
+        default = "latest";
+      };
     };
     morssUiPort = mkOption {
       type = types.port;
@@ -52,7 +62,7 @@ in
     virtualisation.oci-containers = {
       containers.morss = {
         hostname = "morss";
-        image = "pictuga/morss:${cfg.version}";
+        image = "pictuga/morss:${cfg.version.morss}";
         volumes = [
         ];
         ports = [
@@ -90,7 +100,7 @@ in
       };
       containers.fresh = {
         hostname = "fresh";
-        image = "lscr.io/linuxserver/freshrss:${cfg.version}";
+        image = "lscr.io/linuxserver/freshrss:${cfg.version.fresh}";
         volumes = [
           "${cfg.dataLocation}:/config"
         ];
@@ -132,7 +142,7 @@ in
       };
       containers.dockerss = {
         hostname = "dockerss";
-        image = "theconnman/docker-hub-rss:${cfg.version}";
+        image = "theconnman/docker-hub-rss:${cfg.version.dockerss}";
 
         ports = [
           "${toString cfg.dockerssUiPort}:3000"
