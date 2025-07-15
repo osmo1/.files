@@ -49,8 +49,8 @@ in
           "${cfg.dataLocation}/dnsmasq.d:/etc/dnsmasq.d"
         ];
         ports = [
-          "53:53"
-          "53:53/udp"
+          # "53:53"
+          # "53:53/udp"
           "${toString cfg.uiPort}:80"
         ];
         environment = {
@@ -58,6 +58,11 @@ in
         };
         extraOptions = [
           "--network=default"
+          "--publish=192.168.11.10:53:53"
+          "--publish=192.168.11.10:53:53/udp"
+          # "--network=net_macvlan"
+          # "--ip=192.168.11.10"
+          # "--mac-address=32:ce:89:84:8c:69"
         ];
         labels =
           (
@@ -92,6 +97,19 @@ in
 
       };
     };
+    # To edit use your text editor application, for example Nano
+    # systemd.services."podman-network-pihole" = {
+    #   path = [ pkgs.podman ];
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     RemainAfterExit = true;
+    #     ExecStop = "podman network rm -f net_macvlan";
+    #   };
+    #   partOf = [ "default.target" ];
+    #   wantedBy = [ "default.target" ];
+    #   script = ''podman network exists net_macvlan || podman network create --driver=macvlan --gateway=192.168.11.2 --subnet=192.168.11.0/24 -o parent=eno2 net_macvlan'';
+    # };
+
     networking.firewall.allowedTCPPorts = [ cfg.uiPort ];
     systemd.tmpfiles.rules = [
       "d ${cfg.dataLocation} 0770 osmo users - -"
