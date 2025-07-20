@@ -78,7 +78,7 @@
 
   hostSpec = {
     username = "osmo";
-    email = "osmo@osmo.zip";
+    email.personal = "osmo@osmo.zip";
     handle = "osmo1";
   };
 }
