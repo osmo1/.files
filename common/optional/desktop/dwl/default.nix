@@ -1,33 +1,51 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  config,
+  ...
+}:
 let
-  dbus-dwl = pkgs.writeShellScriptBin "dbus-dwl" ''
-    dbus-run-session -- bash -s << 'EOF'
-      update_dwlb() {
-        while ${pkgs.stable.procps}/bin/pidof ${pkgs.stable.dwl}/bin/dwl > /dev/null; do
-          cpu_usage=$(${pkgs.coreutils}/bin/env LANG=C ${pkgs.procps}/bin/top -bn1 | ${pkgs.gnugrep}/bin/grep "Cpu(s)" | ${pkgs.gawk}/bin/awk '{print 100 - $8"%"}')
-          ram_usage=$(${pkgs.coreutils}/bin/env LANG=C ${pkgs.procps}/bin/free -m | ${pkgs.gawk}/bin/awk '/Mem:/ { printf("%.2f%%", $3/$2 * 100.0) }')
-          disk_usage=$(${pkgs.stable.coreutils}/bin/df -h / | ${pkgs.stable.gawk}/bin/awk 'NR==2 {print $5}')
-          system_time=$(${pkgs.stable.coreutils}/bin/date +"%Y-%m-%d %H:%M")
-          battery_info=$(${pkgs.stable.acpi}/bin/acpi -b | ${pkgs.stable.gawk}/bin/awk '{print $4}' | ${pkgs.stable.gnused}/bin/sed 's/,//')
-          cpu_temp=$(${pkgs.stable.lm_sensors}/bin/sensors | ${pkgs.stable.gawk}/bin/awk '/^Package id 0:/ {print $4}')
-          battery_level=$(${pkgs.stable.gnused}/bin/sed 's/%//' <<<"$battery_info")
-          if [ "$battery_level" -gt 80 ]; then battery_icon=""
-          elif [ "$battery_level" -gt 60 ]; then battery_icon=""
-          elif [ "$battery_level" -gt 40 ]; then battery_icon=""
-          elif [ "$battery_level" -gt 20 ]; then battery_icon=""
-          else battery_icon=""; fi
-          dwlb -status all " $cpu_usage $cpu_temp |  $ram_usage |  $disk_usage | $battery_icon $battery_info | $system_time"
-          ${pkgs.stable.coreutils}/bin/sleep 10
-        done
-      }
-      update_dwlb &
+  dbus-dwl =
+    let
+      wallpapersPath = builtins.toString inputs.wallpapers;
+    in
+    pkgs.writeShellScriptBin "dbus-dwl" ''
+      dbus-run-session -- bash -s << 'EOF'
+        update_dwlb() {
+          while ${pkgs.stable.procps}/bin/pidof ${pkgs.stable.dwl}/bin/dwl > /dev/null; do
+            cpu_usage=$(${pkgs.coreutils}/bin/env LANG=C ${pkgs.procps}/bin/top -bn1 | ${pkgs.gnugrep}/bin/grep "Cpu(s)" | ${pkgs.gawk}/bin/awk '{print 100 - $8"%"}')
+            ram_usage=$(${pkgs.coreutils}/bin/env LANG=C ${pkgs.procps}/bin/free -m | ${pkgs.gawk}/bin/awk '/Mem:/ { printf("%.2f%%", $3/$2 * 100.0) }')
+            disk_usage=$(${pkgs.stable.coreutils}/bin/df -h / | ${pkgs.stable.gawk}/bin/awk 'NR==2 {print $5}')
+            system_time=$(${pkgs.stable.coreutils}/bin/date +"%Y-%m-%d %H:%M")
+            battery_info=$(${pkgs.stable.acpi}/bin/acpi -b | ${pkgs.stable.gawk}/bin/awk '{print $4}' | ${pkgs.stable.gnused}/bin/sed 's/,//')
+            cpu_temp=$(${pkgs.stable.lm_sensors}/bin/sensors | ${pkgs.stable.gawk}/bin/awk '/^Tctl:/ {print substr($2, 2)}')
+            battery_level=$(${pkgs.stable.gnused}/bin/sed 's/%//' <<<"$battery_info")
+            if [ "$battery_level" -gt 80 ]; then battery_icon=""
+            elif [ "$battery_level" -gt 60 ]; then battery_icon=""
+            elif [ "$battery_level" -gt 40 ]; then battery_icon=""
+            elif [ "$battery_level" -gt 20 ]; then battery_icon=""
+            else battery_icon=""; fi
+            dwlb -status all " $cpu_usage $cpu_temp |  $ram_usage |  $disk_usage | $battery_icon $battery_info | $system_time"
+            ${pkgs.stable.coreutils}/bin/sleep 10
+          done
+        }
+        update_dwlb &
+
+      (
+        ${pkgs.stable.coreutils}/bin/sleep 0.5
+        ${pkgs.stable.swaybg}/bin/swaybg -i ${wallpapersPath}/${config.hostSpec.wallpaper}
+      ) &
+
       exec ${pkgs.stable.dwl}/bin/dwl -s dwlb
-    EOF
-    exit 0
-  '';
+      EOF
+      exit 0
+    '';
 in
 {
-  imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
+  imports = (lib.custom.scanPaths ./.) ++ [
+    ../core
+  ];
   environment.systemPackages =
     (with pkgs.stable; [
       dwl
@@ -40,11 +58,15 @@ in
       swayidle
       udiskie
       dwlb
+      swaybg
+      nautilus
     ])
 
     ++
 
-      (with pkgs.unstable; [
+      (with pkgs; [
+        tokyo-night-icons
+
       ]);
 
   # Needed for dwl (maybe?)
@@ -58,7 +80,10 @@ in
     sddm.settings.General.DefaultSession = "dwl.desktop";
   };
 
-  programs.light.enable = true;
+  programs = {
+    light.enable = true;
+  };
+  security.pam.services.swaylock = { };
   /*
     services.gnome.gnome-keyring.enable = true;
     systemd = {
@@ -85,13 +110,63 @@ in
       programs = {
         bemenu = {
           enable = true;
-          settings = {
-            line-height = 28;
-            prompt = "open";
-            ignorecase = true;
-          };
+          settings =
+            {
+              line-height = 2;
+              prompt = "open";
+              ignorecase = true;
+              auto-select = true;
+              bottom = true;
+              b = true;
+            }
+            // lib.mkForce {
+              tb = "#1a1b26";
+              tf = "#f7768e";
+              fb = "#1f2335";
+              ff = "#a9b1d6";
+              cb = "#f7768e";
+              cf = "#1a1b26";
+              nb = "#1a1b26";
+              nf = "#a9b1d6";
+              hb = "#292e42";
+              hf = "#f7768e";
+              fbb = "#1f2335";
+              fbf = "#f7768e";
+              sb = "#f7768e";
+              sf = "#1a1b26";
+              ab = "#292e42";
+              af = "#a9b1d6";
+              scb = "#414868";
+              scf = "#f7768e";
+            };
+        };
+        swaylock = {
+          enable = true;
+        };
+        fuzzel = {
+          enable = true;
         };
       };
+      stylix = {
+        targets = {
+          gtk.enable = true;
+          gnome.enable = true;
+        };
+        iconTheme = {
+          enable = true;
+          package = pkgs.tokyo-night-icons;
+          # dark = "TokyoNight-SE";
+          # light = "TokyoNight-SE";
+          dark = "tokyo-night";
+          light = "tokyo-night";
+        };
+      };
+      # gtk = {
+      #   iconTheme = {
+      #     package = pkgs.tokyonight-icons;
+      #     name = "Tokyonight icons";
+      #   };
+      # };
       /*
         systemd.user.targets = {
           dwl-session = {
