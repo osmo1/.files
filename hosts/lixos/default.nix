@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
@@ -21,7 +21,7 @@
     isLaptop = true;
     style = "Classic";
     theme = "Tokyo Night";
-    wallpaper = "stolen/plasma2k.png";
+    wallpaper = "stolen/nixos-tokyo.png";
     sshKeys = [
       "masiina"
       "serveri"
@@ -30,4 +30,11 @@
       "klusteri-2"
     ];
   };
+
+  environment.systemPackages = with pkgs.stable; [
+    cargo
+    rustc
+    gcc14
+  ];
+  services.resolved.enable = true;
 }

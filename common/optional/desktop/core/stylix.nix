@@ -93,6 +93,7 @@ in
           helix.enable = true;
           kde.enable = true;
           starship.enable = false;
+          swaylock.enable = true;
         };
       };
       # The cursor on plasma behaves a bit wierd without this

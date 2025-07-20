@@ -1,26 +1,39 @@
 {
   stdenvNoCC,
   fetchFromGitHub,
+  pkgs,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "tokyo-night-icons";
   version = "2.0";
   dontBuild = true;
   src = fetchFromGitHub {
-    owner = "ljmill";
-    repo = "tokyo-night-icons";
-    rev = "8bccfa14e3327acbc99b3ce5a7712b3a6c865f7b";
-    sha256 = "sha256-yvVopLBSMd8RD6E1YiOJx8I4LdVxlQo28lzyPJ6PSJk=";
+    owner = "Fausto-Korpsvart";
+    repo = "Tokyonight-GTK-Theme";
+    rev = "006154c78dde52b5851347a7e91f924af62f1b8f";
+    sha256 = "sha256-h5k9p++zjzxGFkTK/6o/ISl/Litgf6fzy8Jf6Ikt5V8=";
   };
-  nativeBuildInputs = [
-  ];
 
   propagatedUserEnvPkgs = [
   ];
+  nativeBuildInputs = [ pkgs.gtk3 ];
+
+  # installPhase = ''
+  #   mkdir -p $out/share/icons
+  #   cp -aR $src $out/share/icons/tokyo-night
+  # '';
+
+  propagatedBuildInputs = [
+    pkgs.gnome-icon-theme
+    pkgs.hicolor-icon-theme
+  ];
 
   installPhase = ''
-    mkdir -p $out/share/icons
-    cp -aR $src $out/share/icons/tokyo-night
+    mkdir -p $out/share/icons/
+    cp -aR $src/icons/Tokyonight-Dark $out/share/icons
+    # gtk-update-icon-cache $out/share/icons/Tokyonight-Dark
   '';
+
+  dontDropIconThemeCache = true;
 
 }
