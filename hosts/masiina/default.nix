@@ -13,13 +13,13 @@ in
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    ../../common/optional/desktop/plasma
+    ../../common/optional/desktop/gnome
     ../../common/optional/grub.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/gaming.nix
     ../../common/optional/nvidia.nix
     ../../common/optional/starcitizen.nix
-    ../../common/optional/auto-login.nix
+    # ../../common/optional/auto-login.nix
     ../../common/optional/podman.nix
     ../../common/optional/syncthing.nix
     ../../common/optional/desktop/optional/virtmanager.nix

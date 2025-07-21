@@ -11,7 +11,7 @@
       nexusmods-app-unfree
       protontricks
       prismlauncher
-      (glfw3.override { withMinecraftPatch = true; })
+      #(glfw3.override { withMinecraftPatch = true; }) # Still needed?
     ]);
 
   programs.steam = {

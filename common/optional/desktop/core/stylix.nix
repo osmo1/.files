@@ -95,6 +95,13 @@ in
           starship.enable = false;
           swaylock.enable = true;
         };
+        # I've set icons in the desktops themselves but this is here as a note to remeber to include the icon package also in the envirnoment.systemPackages
+        # iconTheme = {
+        #   enable = true;
+        #   package = pkgs.stable.morewaita-icon-theme;
+        #   light = "MoreWaita";
+        #   dark = "MoreWaita";
+        # };
       };
       # The cursor on plasma behaves a bit wierd without this
       gtk.cursorTheme = {

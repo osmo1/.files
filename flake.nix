@@ -104,6 +104,15 @@
           configVars
           nixpkgs
           ;
+        # lib =
+        #   nixpkgs.lib.extend
+        #     (self: super: {
+        #       custom = import ./mods/lib.nix { inherit (nixpkgs) lib; };
+        #     }).extend
+        #     (self: super: home-manager.lib);
+        # lib = nixpkgs.lib.extend (self: super: home-manager.lib).extend (
+        #   self: super: { custom = import ./mods/lib.nix { inherit (nixpkgs) lib; }; }
+        # );
         lib = nixpkgs.lib.extend (
           self: super: { custom = import ./mods/lib.nix { inherit (nixpkgs) lib; }; }
         );
@@ -149,7 +158,6 @@
       );
 
       nixosConfigurations = {
-        # TODO: I have great plans for this including themes but don't yet know how
         # Main
         masiina = lib.nixosSystem {
           inherit specialArgs;

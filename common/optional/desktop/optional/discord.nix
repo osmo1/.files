@@ -9,7 +9,6 @@
         enable = true;
         discord = {
           enable = false;
-          package = pkgs.unstable.discord;
         };
         vesktop.enable = true;
         config = {

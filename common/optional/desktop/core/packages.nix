@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, config, ... }:
 let
   zen-browser = pkgs.callPackage ../../../../pkgs/zen-browser { };
 in
@@ -29,7 +29,7 @@ in
       vscodium # Needs further conf
 
       # Tools
-      flameshot
+      (flameshot.override { enableWlrSupport = true; })
       wireguard-tools
       capitaine-cursors
       xdg-desktop-portal-gtk
@@ -40,5 +40,7 @@ in
       zed-editor
       #spotify
     ]);
-  programs.kdeconnect.enable = true;
+  programs.kdeconnect.enable = (
+    if config.services.xserver.desktopManager.gnome.enable == true then false else true
+  );
 }
