@@ -279,6 +279,20 @@
             ./hosts/klusteri-2
           ];
         };
+        oraakeli = lib.nixosSystem {
+          inherit specialArgs;
+          modules = [
+            home-manager.nixosModules.home-manager
+
+            inputs.disko.nixosModules.default
+            (import ./common/optional/disks/old.nix)
+            {
+              disko.devices.disk.main.device = "/dev/sda";
+            }
+            inputs.impermanence.nixosModules.default
+            ./hosts/oraakeli
+          ];
+        };
       };
     };
 }
