@@ -579,7 +579,8 @@ in
             "3334:3334/udp"
           ];
           environment = {
-            POSTGRES_HOST = "10.88.0.162"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+            # Ok, I should really figure this out
+            POSTGRES_HOST = "10.88.0.5"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
             POSTGRES_PASSWORD = "postgres";
           };
           cmd = [
