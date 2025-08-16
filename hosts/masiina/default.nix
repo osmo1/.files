@@ -24,6 +24,7 @@ in
     ../../common/optional/syncthing.nix
     ../../common/optional/desktop/optional/virtmanager.nix
     ../../common/optional/desktop/optional/sunshine.nix
+    ../../common/optional/desktop/optional/discord.nix
   ];
 
   hostSpec = {
@@ -35,6 +36,7 @@ in
       "klusteri-0"
       "klusteri-1"
       "klusteri-2"
+      "oraakeli"
     ];
 
     style = "Classic";
@@ -64,9 +66,9 @@ in
   environment.systemPackages =
     [
       ryzen-undervolt
-
     ]
     ++ (with pkgs.stable; [
+      swtpm
       python312Full
       looking-glass-client
       swtpm
@@ -92,4 +94,5 @@ in
   systemd.services.NetworkManager-wait-online.enable = false;
   systemd.services.NetworkManager.wantedBy = [ "multi-user.target" ];
   systemd.targets.network-online.wantedBy = lib.mkForce [ ];
+  networking.firewall.enable = lib.mkForce false;
 }

@@ -26,6 +26,7 @@
 
       (with pkgs.unstable; [
         nh
+        nix-output-monitor
         fzf
       ]);
   services.fwupd.enable = true;

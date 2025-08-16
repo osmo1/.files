@@ -393,6 +393,7 @@
           prefs-default-width = 1256;
           show-indicator = "never";
           user-enabled = true;
+          inhibit-apps = [ "org.gnome.Shell.desktop" ];
         };
 
         "org/gnome/shell/extensions/dash-to-dock" = {

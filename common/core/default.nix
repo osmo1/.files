@@ -31,7 +31,8 @@
 
   environment.sessionVariables = {
     NH_FLAKE = "/home/osmo/.files";
-    EDITOR = "nvim";
+    EDITOR = "hx";
+    SOPS_EDITOR = "hx";
   };
 
   console.keyMap = "fi";

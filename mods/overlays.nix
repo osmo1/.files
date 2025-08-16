@@ -67,6 +67,17 @@ let
                 configH = ../common/optional/desktop/dwl/dwlb.h;
               }
             );
+            usbmuxd = (
+              final.usbmuxd.overrideAttrs {
+                src = final.fetchFromGitHub {
+                  owner = "libimobiledevice";
+                  repo = "usbmuxd";
+                  rev = "523f7004dce885fe38b4f80e34a8f76dc8ea98b5";
+                  hash = "sha256-U8SK1n1fLjYqlzAH2eU4MLBIM+QMAt35sEbY9EVGrfQ=";
+                };
+
+              }
+            );
           })
         ];
     };
