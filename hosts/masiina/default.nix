@@ -46,7 +46,10 @@ in
 
   services.hardware.openrgb.enable = true;
 
-  restic.enable = true;
+  restic = {
+    enable = true;
+    remote = true;
+  };
 
   networking.interfaces.enp5s0.wakeOnLan.enable = true;
 
@@ -63,20 +66,24 @@ in
     wantedBy = [ "default.target" ];
   };
 
-  environment.systemPackages =
-    [
-      ryzen-undervolt
-    ]
-    ++ (with pkgs.stable; [
-      swtpm
-      python312Full
-      looking-glass-client
-      swtpm
-      qalculate-qt
-      cargo
-      rustc
-      gcc14
-    ]);
+  environment.systemPackages = [
+    ryzen-undervolt
+  ]
+  ++ (with pkgs.stable; [
+    swtpm
+    python312Full
+    looking-glass-client
+    swtpm
+    qalculate-qt
+    cargo
+    rustc
+    gcc14
+    mariadb
+  ])
+  ++ [
+    inputs.blender-cuda.packages.x86_64-linux.default
+
+  ];
 
   systemd.services.ryzen-undervolt = {
     description = "Ryzen 5700x3D undervolting service";
@@ -95,4 +102,28 @@ in
   systemd.services.NetworkManager.wantedBy = [ "multi-user.target" ];
   systemd.targets.network-online.wantedBy = lib.mkForce [ ];
   networking.firewall.enable = lib.mkForce false;
+
+  # DB
+  services.mysql = {
+    enable = true;
+    package = pkgs.stable.mariadb;
+    # user = "osmo";
+    # group = "users";
+    # dataDir = "/home/osmo/misc/chatroom-rs/mysql";
+    ensureUsers = [
+      # {
+      #   name = "osmo";
+      #   ensurePermissions = {
+      #     "*.*" = "ALL PRIVILEGES";
+      #   };
+      # }
+    ];
+    initialDatabases = [ { name = "chatroom"; } ];
+    settings = {
+      mysqld = {
+        port = "6969";
+        bind-address = "127.0.0.1";
+      };
+    };
+  };
 }

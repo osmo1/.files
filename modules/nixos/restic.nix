@@ -21,6 +21,16 @@ in
       default = { };
       description = "Extra backup configurations";
     };
+    local = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable local (server) backup";
+    };
+    remote = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable remote backup";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -47,13 +57,24 @@ in
           "/home/osmo/.cache"
           "/home/osmo/.steam"
           "/home/osmo/.local/share/Steam"
-        ] ++ cfg.extraExcludes;
+        ]
+        ++ cfg.extraExcludes;
         initialize = true;
         passwordFile = config.sops.secrets.restic-age.path;
-        repository = "sftp:restic@192.168.11.12:/backups/${config.networking.hostName}-home";
-        extraOptions = [ "sftp.command='ssh restic@192.168.11.12 -i /home/osmo/.ssh/restic -s sftp'" ];
+        repository = (
+          if cfg.local == true then
+            "sftp:restic@192.168.11.12:/backups/${config.networking.hostName}-home"
+          else
+            "sftp:u488001@u488001.your-storagebox.de:/backups/${config.networking.hostName}-home"
+        );
+        extraOptions = (
+          if cfg.local then
+            [ "sftp.command='ssh restic@192.168.11.12 -i /home/osmo/.ssh/restic -s sftp'" ]
+          else
+            [ "sftp.command='ssh -i /home/osmo/.ssh/restic u488001@u488001.your-storagebox.de -s sftp'" ]
+        );
         extraBackupArgs = [
-          "--compression auto"
+          "--compression max"
           "--read-concurrency 20"
         ];
         timerConfig = {
@@ -67,7 +88,8 @@ in
           "--keep-monthly 1"
         ];
       };
-    } // cfg.extraBackups;
+    }
+    // cfg.extraBackups;
 
     systemd.services.restic-backups-main-backup.unitConfig.OnFailure = "notify-backup-failed.service";
     systemd.services."notify-backup-failed" = {
@@ -90,6 +112,12 @@ in
     environment.systemPackages = with pkgs; [
       restic
       libnotify
+    ];
+    assertions = [
+      {
+        assertion = cfg.remote || cfg.local;
+        message = "Either a remote or a local backup needs to be enabled";
+      }
     ];
   };
 }
