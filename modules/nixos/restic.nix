@@ -77,6 +77,7 @@ in
           "--compression max"
           "--read-concurrency 20"
         ];
+        progressFps = 0.1;
         timerConfig = {
           OnCalendar = if config.hostSpec.isServer != true then "19:00" else "00:00";
           Persistent = true;
