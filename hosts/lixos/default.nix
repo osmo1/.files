@@ -3,12 +3,13 @@
   imports = (lib.custom.scanPaths ./.) ++ [
     ../../common/core
     ../../common/optional/cli
-    #../../common/optional/desktop/plasma
+    # ../../common/optional/desktop/plasma
     ../../common/optional/desktop/dwl
     #../../common/optional/desktop/core
     ../../common/optional/desktop/optional/tuigreet.nix
+    # ../../common/optional/desktop/optional/sddm.nix
     ../../common/optional/grub.nix
-    ../../common/optional/gaming.nix
+    # ../../common/optional/gaming.nix
     #../../common/optional/syncthing.nix
     ../../common/optional/plymouth.nix
     ../../common/optional/ssh.nix
@@ -37,4 +38,5 @@
     gcc14
   ];
   services.resolved.enable = true;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
 }
