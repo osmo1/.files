@@ -11,6 +11,7 @@ static const int smartgaps                 = 1;  /* 1 means no outer gap when th
 static int gaps                            = 1;  /* 1 means gaps between windows are added */
 static const unsigned int gappx            = 5; /* gap pixel between windows */
 static const unsigned int borderpx         = 1;  /* border pixel of windows */
+/* Hardcoded unfortunately */
 static const float rootcolor[]             = COLOR(0x222222ff);
 static const float bordercolor[]           = COLOR(0x444444ff);
 static const float focuscolor[]            = COLOR(0x7aa2f7ff);
@@ -138,7 +139,7 @@ static const int cursor_timeout = 5;
 /* commands */
 static const char *termcmd[] = { "alacritty", NULL };
 // static const char *menucmd[] = { "bemenu-run", NULL };
-static const char *menucmd[] = { "fuzzel", NULL };
+static const char *menucmd[] = { "rofi" ,"-show", "drun", NULL };
 static const char *browsercmd[] = { "zen", NULL };
 
 #include "shiftview.c"
@@ -180,7 +181,6 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_8, XKB_KEY_asterisk,                   7),
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
-
 	{ MODKEY,                    XKB_KEY_s,     spawn,               {.v = browsercmd} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_L,     spawn,               {.v = (const char*[]){ "swaylock", NULL }} },
 

@@ -23,7 +23,7 @@
 
   #i18n.defaultLocale = lib.mkDefault "en_IE.UTF-8";
   i18n.defaultLocale = (
-    if config.hostSpec.isServer == false then
+    if config.hostSpec.isServer == false && config.hostSpec.isLaptop == false then
       (lib.mkDefault "de_CH.UTF-8")
     else
       (lib.mkDefault "en_IE.UTF-8")
