@@ -74,6 +74,10 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # This is for 5800x3d but as I undestood it, it should work for any am4 x3d chips
     ryzen-undervolt = {
@@ -182,6 +186,7 @@
             (import ./common/optional/disks/1-luks-btrfs.nix)
             { disko.devices.disk.main.device = "/dev/nvme0n1"; }
             inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e495
+
             inputs.impermanence.nixosModules.default
             ./hosts/lixos
           ];

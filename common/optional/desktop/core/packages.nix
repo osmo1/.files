@@ -1,12 +1,8 @@
 { pkgs, config, ... }:
-let
-  zen-browser = pkgs.callPackage ../../../../pkgs/zen-browser { };
-in
 {
   users.users.osmo.packages =
     (with pkgs.stable; [
       # General
-      zen-browser
       ungoogled-chromium
       bitwarden
       whatsapp-for-linux
