@@ -26,7 +26,7 @@
         pointer
       ];
 
-      theme = spicePkgs.themes.text;
-      colorScheme = if config.hostSpec.theme == "Tokyo Night" then "TokyoNight" else "Kanagawa";
+      # theme = spicePkgs.themes.text;
+      # colorScheme = if config.hostSpec.theme == "Tokyo Night" then "TokyoNight" else "Kanagawa";
     };
 }
