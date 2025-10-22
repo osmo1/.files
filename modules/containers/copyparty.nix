@@ -1,11 +1,16 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
 let
-  cfg = config.services.containers.rss;
+  cfg = config.services.containers.copyparty;
 in
 {
-  options.services.containers.rss = {
-    enable = mkEnableOption "Enable full text rss and rss sync services";
+  options.services.containers.copyparty = {
+    enable = mkEnableOption "Enable the copyparty fileserver";
     version = mkOption {
       type = types.str;
       default = "latest";
@@ -118,7 +123,7 @@ in
     };
 
     systemd.services."podman-network-copyparty_default" = {
-      path = [ pkgs.podman ];
+      path = [ pkgs.stable.podman ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -137,5 +142,11 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
+
+    networking.firewall.allowedTCPPorts = builtins.attrValues cfg.ports;
+    systemd.tmpfiles.rules = [
+      "d ${cfg.volumes.config} 0770 osmo users - -"
+      "d ${cfg.volumes.data} 0770 osmo users - -"
+    ];
   };
 }
