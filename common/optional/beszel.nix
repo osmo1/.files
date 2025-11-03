@@ -4,6 +4,9 @@
   config,
   ...
 }:
+let
+  hostname = config.hostSpec.hostName;
+in
 {
   systemd.services."beszel-agent" = {
     description = "Beszel Agent Service";
@@ -15,7 +18,9 @@
       Environment = [
         "LISTEN=45876"
         "KEY=\"${
-          if config.hostSpec.hostName == "klusteri-0" then
+          if hostname == "klusteri-0" then
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
+          else if hostname == "klusteri-1" then
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
           else
             ""
