@@ -24,11 +24,13 @@ in
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
           else if hostname == "klusteri-2" then
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
+          else if hostname == "serveri" then
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
           else
             ""
         }\""
-        # "EXTRA_FILESYSTEMS=sdb"
-      ];
+      ]
+      ++ (if hostname == "serveri" then [ "EXTRA_FILESYSTEMS=/home/osmo/data" ] else [ ]);
       Restart = "on-failure";
       RestartSec = 5;
       StateDirectory = "beszel-agent";
