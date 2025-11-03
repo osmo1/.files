@@ -22,6 +22,8 @@ in
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
           else if hostname == "klusteri-1" then
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
+          else if hostname == "klusteri-2" then
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiaMAO8HC+3WoA2JV6gvLyBf++9DGpDPOv4pbxODzq9"
           else
             ""
         }\""
