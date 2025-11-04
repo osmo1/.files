@@ -8,13 +8,14 @@ let
   hostname = config.hostSpec.hostName;
 in
 {
-  systemd.services."beszel-agent" = {
+  systemd.user.services."beszel-agent" = {
+    # systemd.services."beszel-agent" = {
     description = "Beszel Agent Service";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
 
     serviceConfig = {
-      ExecStart = "${lib.getExe' pkgs.stable.beszel "beszel-agent"}";
+      ExecStart = "${lib.getExe' pkgs.unstable.beszel "beszel-agent"}";
       Environment = [
         "LISTEN=45876"
         "KEY=\"${
@@ -29,11 +30,41 @@ in
           else
             ""
         }\""
+        "LOG_LEVEL=debug"
       ]
-      ++ (if hostname == "serveri" then [ "EXTRA_FILESYSTEMS=/home/osmo/data" ] else [ ]);
+      ++ (if hostname == "serveri" then [ "EXTRA_FILESYSTEMS=/dev/dm-1" ] else [ ]);
       Restart = "on-failure";
       RestartSec = 5;
       StateDirectory = "beszel-agent";
+
+      AmbientCapabilities = [
+        "CAP_SYS_RAWIO"
+        "CAP_SYS_ADMIN"
+      ];
+      CapabilityBoundingSet = [
+        "CAP_SYS_RAWIO"
+        "CAP_SYS_ADMIN"
+      ];
+      DeviceAllow = [
+      ]
+      ++ (
+        if hostname == "klusteri-0" then
+          [ "/dev/nvme0n1 r" ]
+        else if hostname == "klusteri-1" then
+          [ "/dev/nvme0n1 r" ]
+        else if hostname == "klusteri-2" then
+          [ "/dev/nvme0n1 r" ]
+        else if hostname == "serveri" then
+          [
+            "/dev/nvme0n1 r"
+            "/dev/sda r"
+            "/dev/sdb r"
+            "/dev/dm-1 r"
+          ]
+        else
+          [ ]
+      );
+      PrivateDevices = false;
 
       KeyringMode = "private";
       LockPersonality = true;
