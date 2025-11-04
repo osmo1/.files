@@ -20,6 +20,7 @@
       age-plugin-yubikey
       file
       dig
+      smartmontools
     ])
 
     ++

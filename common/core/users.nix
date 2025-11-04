@@ -22,6 +22,7 @@
         "input"
         "seat"
         "libvirtd"
+        "disk"
       ];
     };
   };
