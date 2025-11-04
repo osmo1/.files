@@ -51,10 +51,18 @@
     nixcord = {
       url = "github:kaylorben/nixcord";
     };
+    blender-cuda = {
+      url = "github:adithyagenie/blender-cuda";
+    };
 
+    # Dev
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     plasma-manager = {
