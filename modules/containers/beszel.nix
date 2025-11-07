@@ -35,7 +35,7 @@ in
       };
       urlBase = mkOption {
         type = types.str;
-        default = "klusteri-0.kotiserweri.zip";
+        default = "klusteri-0.serweri.zip";
       };
     };
     options = {
@@ -62,7 +62,7 @@ in
               "homepage.name" = "beszel";
               "homepage.icon" = "beszel";
               "homepage.href" = "https://beszel.${cfg.traefik.urlBase}";
-              "homepage.description" = "beszel file server";
+              "homepage.description" = "Beszel monitoring server";
             }
           else
             { }

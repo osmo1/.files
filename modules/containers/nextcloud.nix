@@ -43,7 +43,7 @@ in
       };
       urlBase = mkOption {
         type = types.str;
-        default = "serveri.kotiserweri.zip";
+        default = "serveri.serweri.zip";
       };
     };
     options = {
@@ -109,7 +109,7 @@ in
               home = "/config";
               datadir = "/data";
 
-              hostName = "nextcloud.serveri.kotiserweri.zip";
+              hostName = "nextcloud.serveri.serweri.zip";
               extraApps = {
                 inherit (pkgs.nextcloud30Packages.apps) calendar;
                 music = pkgs.fetchNextcloudApp {
@@ -129,8 +129,8 @@ in
               appstoreEnable = false;
               database.createLocally = true;
               settings = {
-                trusted_domains = [ "nextcloud.serveri.kotiserweri.zip" ];
-                trusted_proxies = [ "traefik.serveri.kotiserweri.zip" ];
+                trusted_domains = [ "nextcloud.serveri.serweri.zip" ];
+                trusted_proxies = [ "traefik.serveri.serweri.zip" ];
                 overwrite.cli.url = "https://nextcloud.${cfg.traefik.urlBase}";
                 overwriteprotocol = "https";
               };

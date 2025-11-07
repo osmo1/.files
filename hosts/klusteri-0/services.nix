@@ -10,17 +10,22 @@
       version = "2025.06.2";
       uiPort = 380;
       dataLocation = "/home/osmo/pihole";
-      enableTraefik = true;
       enableHomePage = true;
+      traefik = {
+        enable = true;
+        baseUrl = "klusteri-0.serweri.zip";
+      };
     };
     homepage = {
       enable = true;
-      enableTraefik = true;
       version = "v1.3.2";
       uiPort = 180;
       dataLocation = "/home/osmo/homepage";
+      traefik = {
+        enable = true;
+        baseUrl = "klusteri-0.serweri.zip";
+      };
       options = {
-        url = "home.klusteri-0.kotiserweri.zip";
       };
     };
     traefik = {
@@ -29,7 +34,7 @@
       uiPort = 280;
       dataLocation = "/home/osmo/traefik";
       options = {
-        url = "klusteri-0.kotiserweri.zip";
+        url = "klusteri-0.serweri.zip";
       };
     };
     wireguard = {
@@ -40,6 +45,7 @@
       enableHomePage = true;
       traefik = {
         enable = true;
+        urlBase = "klusteri-0.serweri.zip";
       };
     };
     rss = {
@@ -56,10 +62,11 @@
       enableHomePage = true;
       traefik = {
         enable = true;
+        urlBase = "klusteri-0.serweri.zip";
       };
     };
     home-assistant = {
-      enable = true;
+      enable = false;
       uiPort = 980;
       dataLocation = "/home/osmo/sontainers/home-assistant";
       enableHomePage = true;
@@ -69,6 +76,34 @@
       options = {
         enableBind = true;
         bindDataLocation = "/home/osmo/home-assistant";
+      };
+    };
+    anisette = {
+      enable = true;
+    };
+    beszel = {
+      enable = true;
+      version = "0.15.3";
+      ports.ui = 1080;
+      volume = "/home/osmo/beszel";
+      enableHomePage = true;
+      traefik = {
+        enable = true;
+        urlBase = "klusteri-0.serweri.zip";
+      };
+    };
+    ntfy = {
+      enable = true;
+      version = "v2.14.0";
+      ports.ui = 1180;
+      volumes = {
+        config = "/home/osmo/ntfy/server.yml";
+        cache = "/home/osmo/ntfy/cache";
+      };
+      enableHomePage = true;
+      traefik = {
+        enable = true;
+        urlBase = "klusteri-0.serweri.zip";
       };
     };
   };

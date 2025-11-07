@@ -101,7 +101,7 @@ in
     options = {
       urlBase = mkOption {
         type = types.str;
-        default = "klusteri-1.kotiserweri.zip";
+        default = "klusteri-1.serweri.zip";
       };
       mediaLocation = mkOption {
         type = types.str;

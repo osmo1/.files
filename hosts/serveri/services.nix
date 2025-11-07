@@ -18,7 +18,7 @@
       uiPort = 280;
       dataLocation = "/home/osmo/traefik";
       options = {
-        url = "serveri.kotiserweri.zip";
+        url = "serveri.serweri.zip";
       };
     };
   };

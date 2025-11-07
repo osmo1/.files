@@ -38,7 +38,7 @@ in
       };
       urlBase = mkOption {
         type = types.str;
-        default = "klusteri-0.kotiserweri.zip";
+        default = "klusteri-0.serweri.zip";
       };
     };
     options = {

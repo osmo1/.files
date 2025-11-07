@@ -81,7 +81,7 @@ in
           "homepage.group" = "Misc";
           "homepage.name" = "luanti";
           "homepage.icon" = "luanti.png";
-          "homepage.href" = "https://luanti.klusteri-1.kotiserweri.zip";
+          "homepage.href" = "https://luanti.klusteri-1.serweri.zip";
           "homepage.description" = "Luanti server";
         };
       };

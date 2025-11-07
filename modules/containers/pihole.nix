@@ -32,9 +32,15 @@ in
       type = types.bool;
       default = true;
     };
-    enableTraefik = mkOption {
-      type = types.bool;
-      default = true;
+    traefik = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+      };
+      baseUrl = mkOption {
+        type = types.str;
+        default = "klusteri-0.serweri.zip";
+      };
     };
     options = { };
   };
@@ -71,7 +77,7 @@ in
                 "homepage.group" = "Network";
                 "homepage.name" = "Pihole";
                 "homepage.icon" = "pihole";
-                "homepage.href" = "https://pihole.klusteri-0.kotiserweri.zip"; # TODO: Change this.
+                "homepage.href" = "https://pihole.${cfg.traefik.baseUrl}";
                 "homepage.description" = "DNS blocking";
               }
             else
@@ -80,10 +86,10 @@ in
           //
 
             (
-              if cfg.enableTraefik == true then
+              if cfg.traefik.enable == true then
                 {
                   "traefik.enable" = "true";
-                  "traefik.http.routers.pihole.rule" = "Host(`pihole.klusteri-0.kotiserweri.zip`)";
+                  "traefik.http.routers.pihole.rule" = "Host(`pihole.${cfg.traefik.baseUrl}`)";
                   "traefik.http.routers.pihole.entrypoints" = "websecure";
                   "traefik.http.routers.pihole.tls.certresolver" = "porkbun";
                   "traefik.http.services.pihole.loadbalancer.server.port" = "80";

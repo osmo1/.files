@@ -9,6 +9,7 @@
     ../../common/optional/nfs-mount.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/syncthing.nix
+    ../../common/optional/beszel.nix
   ];
 
   hostSpec = {
@@ -18,6 +19,7 @@
 
   restic = {
     enable = true;
+    remote = true;
     extraExcludes = [
       "/home/osmo/tmp"
       "/home/osmo/vanha"

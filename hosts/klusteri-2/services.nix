@@ -16,7 +16,7 @@
       enableHomePage = true;
       traefik = {
         enable = true;
-        urlBase = "klusteri-2.kotiserweri.zip";
+        urlBase = "klusteri-2.serweri.zip";
       };
     };
     traefik = {
@@ -25,7 +25,7 @@
       uiPort = 180;
       dataLocation = "/home/osmo/traefik";
       options = {
-        url = "klusteri-2.kotiserweri.zip";
+        url = "klusteri-2.serweri.zip";
       };
     };
   };

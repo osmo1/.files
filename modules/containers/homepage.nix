@@ -24,15 +24,17 @@ in
       type = types.port;
       default = 80;
     };
-    enableTraefik = mkOption {
-      type = types.bool;
-      default = true;
+    traefik = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+      };
+      baseUrl = mkOption {
+        type = types.str;
+        default = "klusteri-0.serweri.zip";
+      };
     };
     options = {
-      url = mkOption {
-        type = types.str;
-        default = "home.klusteri-0.kotiserweri.zip";
-      };
     };
   };
 
@@ -47,9 +49,12 @@ in
         ports = [
           "${toString cfg.uiPort}:3000"
         ];
+        environment = {
+          HOMEPAGE_ALLOWED_HOSTS = "home.${cfg.traefik.baseUrl},192.168.11.10:180";
+        };
         labels = {
           "traefik.enable" = "true";
-          "traefik.http.routers.homepage.rule" = "Host(`${cfg.options.url}`)";
+          "traefik.http.routers.homepage.rule" = "Host(`home.${cfg.traefik.baseUrl}`)";
           "traefik.http.routers.homepage.entrypoints" = "websecure";
           "traefik.http.routers.homepage.tls.certresolver" = "porkbun";
           "traefik.http.services.homepage.loadbalancer.server.port" = "3000";

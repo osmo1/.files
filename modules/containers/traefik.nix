@@ -29,7 +29,7 @@ in
     options = {
       url = mkOption {
         type = types.str;
-        default = "kotiserweri.zip";
+        default = "serweri.zip";
       };
     };
   };
@@ -85,14 +85,14 @@ in
           "--entrypoints.web.http.redirections.entrypoint.to=websecure"
           "--entrypoints.websecure.address=:443"
           "--entrypoints.websecure.http.tls=true"
-          "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
+          "--entrypoints.websecure.http.tls.certResolver=porkbun"
           "--entrypoints.websecure.address=:443"
           "--certificatesresolvers.porkbun.acme.email=osmo@osmo.zip"
           "--certificatesresolvers.porkbun.acme.storage=/letsencrypt/acme.json"
           "--certificatesresolvers.porkbun.acme.dnschallenge.provider=porkbun"
           "--certificatesresolvers.porkbun.acme.dnschallenge.delaybeforecheck=120"
           "--certificatesresolvers.porkbun.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
-          "--log.level=DEBUG"
+          "--log.level=WARN"
         ];
         labels =
           (

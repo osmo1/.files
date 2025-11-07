@@ -30,7 +30,7 @@
         stump = "nightly";
       };
       options = {
-        urlBase = "klusteri-1.kotiserweri.zip";
+        urlBase = "klusteri-1.serweri.zip";
         mediaLocation = "/mnt/media";
       };
     };
@@ -42,7 +42,7 @@
       uiPort = 280;
       dataLocation = "/home/osmo/traefik";
       options = {
-        url = "klusteri-1.kotiserweri.zip";
+        url = "klusteri-1.serweri.zip";
       };
     };
   };
