@@ -79,7 +79,7 @@ let
             );
             beszel =
               let
-                version = "0.15.3";
+                version = "0.16.1";
               in
               (final.beszel.override {
                 buildGoModule = final.buildGoModule.override { go = final.go_1_25; };
@@ -90,10 +90,10 @@ let
                     owner = "henrygd";
                     repo = "beszel";
                     tag = "v${version}";
-                    hash = "sha256-BG457HIwbk+axZ4opTU9bSWq6YLNM8L/GVe2eQOab/s=";
+                    hash = "sha256-fPVjJfMaTSPolB6l2t1b2CjSaX3Gc4/0Nruy4OY9RAc=";
                   };
                   sourceRoot = "";
-                  vendorHash = "sha256-MP06kn8iFpz9AOv3LQqSGGSe4c7JvP/Kp4Nmsuga99o=";
+                  vendorHash = "sha256-fXiCddu7DE6NLNJkYupQsAK0xMBoL0K5T7Ig0IuIbD4=";
                   subPackages = [ "internal/cmd/agent" ];
                   postInstall = ''
                     mkdir -p $out/bin

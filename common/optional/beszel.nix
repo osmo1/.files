@@ -9,13 +9,16 @@ let
 in
 {
 
-  systemd.user.services."beszel-agent" = {
-    # systemd.services."beszel-agent" = {
+  # systemd.user.services."beszel-agent" = {
+  systemd.services."beszel-agent" = {
     description = "Beszel Agent Service";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
 
     serviceConfig = {
+      User = "osmo";
+      # Group = "users";
+      Group = "disk";
       ExecStart = "${lib.getExe' pkgs.stable.beszel "beszel-agent"}";
       Environment = [
         "LISTEN=45876"
@@ -31,9 +34,8 @@ in
           else
             ""
         }\""
-        # "DOCKER_HOST=\"http://localhost:2375\""
-        "DOCKER_HOST=\"unix:///run/podman/podman.sock\""
-        "LOG_LEVEL=debug"
+        "DOCKER_HOST=\"http://${hostname}:2375\""
+        # "LOG_LEVEL=debug"
         "PATH=/run/current-system/sw/bin"
       ]
       ++ (
@@ -62,35 +64,35 @@ in
         "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
-      DeviceAllow = [
-      ]
-      ++ (
-        if hostname == "klusteri-0" then
-          [
-            "/dev/nvme0n1 r"
-          ]
-        else if hostname == "klusteri-1" then
-          [
-            "/dev/nvme0n1 r"
-            "/dev/renderD128 r"
-            "/dev/card0 r"
-          ]
-        else if hostname == "klusteri-2" then
-          [
-            "/dev/nvme0n1 r"
-            "/dev/renderD128 r"
-            "/dev/card0 r"
-          ]
-        else if hostname == "serveri" then
-          [
-            "/dev/nvme0n1 r"
-            "/dev/sda r"
-            "/dev/sdb r"
-            "/dev/dm-1 r"
-          ]
-        else
-          [ ]
-      );
+      # DeviceAllow = [
+      # ]
+      # ++ (
+      #   if hostname == "klusteri-0" then
+      #     [
+      #       "/dev/nvme0n1 r"
+      #     ]
+      #   else if hostname == "klusteri-1" then
+      #     [
+      #       "/dev/nvme0n1 r"
+      #       "/dev/renderD128 r"
+      #       "/dev/card0 r"
+      #     ]
+      #   else if hostname == "klusteri-2" then
+      #     [
+      #       "/dev/nvme0n1 r"
+      #       "/dev/renderD128 r"
+      #       "/dev/card0 r"
+      #     ]
+      #   else if hostname == "serveri" then
+      #     [
+      #       "/dev/nvme0n1 r"
+      #       "/dev/sda r"
+      #       "/dev/sdb r"
+      #       "/dev/dm-1 r"
+      #     ]
+      #   else
+      #     [ ]
+      # );
       PrivateDevices = false;
 
       KeyringMode = "private";
@@ -125,13 +127,20 @@ in
       else
         [ ]
     );
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", GROUP="disk", MODE="0660"
+  '';
+
   security.wrappers = {
     smartctl = {
       source = "${lib.getExe pkgs.smartmontools}";
       owner = "root";
       group = "disk";
-      permissions = "u=rwx,g=rwx,o=rx";
-      capabilities = "cap_sys_rawio+ep";
+      # permissions = "u=rwx,g=rwx,o=rx";
+      permissions = "u+rx,g+rx";
+      # capabilities = "cap_sys_rawio+ep";
+      capabilities = "cap_sys_admin=ep";
     };
   }
   // (

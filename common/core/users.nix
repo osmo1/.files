@@ -25,7 +25,6 @@
         "libvirtd"
         "disk"
       ];
-      linger = (if config.hostSpec.isServer == true then true else false);
     };
   };
   # FIXME: Impermanence trickery, no idea if this safe but the fucking passwords don't want to work

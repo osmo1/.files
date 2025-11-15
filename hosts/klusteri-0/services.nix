@@ -52,17 +52,22 @@
       enable = true;
       version = {
         fresh = "1.26.3";
-        morss = "latest"; # Pretty much discontinued but still works
-        dockerss = "0.6.1"; # Same thing here
+        full-text = "3.8.1";
+        dockerss = "0.6.1"; # Pretty much discontinued but still works
       };
-      morssUiPort = 580;
-      freshUiPort = 680;
-      dockerssUiPort = 780;
-      dataLocation = "/home/osmo/fresh";
+      ports = {
+        full-textUi = 580;
+        freshUi = 680;
+        dockerssUi = 780;
+      };
+      volumes = {
+        fresh = "/home/osmo/fresh";
+        full-text = "/home/osmo/ftrss";
+      };
       enableHomePage = true;
       traefik = {
         enable = true;
-        urlBase = "klusteri-0.serweri.zip";
+        baseUrl = "klusteri-0.serweri.zip";
       };
     };
     home-assistant = {
@@ -83,7 +88,7 @@
     };
     beszel = {
       enable = true;
-      version = "0.15.3";
+      version = "0.16.1";
       ports.ui = 1080;
       volume = "/home/osmo/beszel";
       enableHomePage = true;
