@@ -22,12 +22,26 @@
   time.timeZone = lib.mkDefault "Europe/Helsinki";
 
   #i18n.defaultLocale = lib.mkDefault "en_IE.UTF-8";
-  i18n.defaultLocale = (
-    if config.hostSpec.isServer == false && config.hostSpec.isLaptop == false then
-      (lib.mkDefault "de_CH.UTF-8")
-    else
-      (lib.mkDefault "en_IE.UTF-8")
-  );
+  i18n = {
+    defaultLocale = (
+      if config.hostSpec.isServer == false && config.hostSpec.isLaptop == false then
+        (lib.mkDefault "de_CH.UTF-8")
+      else
+        (lib.mkDefault "en_IE.UTF-8")
+    );
+
+    extraLocaleSettings = {
+      LC_ADDRESS = "de_CH.UTF-8";
+      LC_IDENTIFICATION = "de_CH.UTF-8";
+      LC_MEASUREMENT = "de_CH.UTF-8";
+      LC_MONETARY = "de_CH.UTF-8";
+      LC_NAME = "de_CH.UTF-8";
+      LC_NUMERIC = "de_CH.UTF-8";
+      LC_PAPER = "de_CH.UTF-8";
+      LC_TELEPHONE = "de_CH.UTF-8";
+      LC_TIME = "de_CH.UTF-8";
+    };
+  };
 
   environment.sessionVariables = {
     NH_FLAKE = "/home/osmo/.files";
