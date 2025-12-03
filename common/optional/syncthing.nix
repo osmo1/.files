@@ -25,6 +25,7 @@ in
       // (
         if config.hostSpec.isServer == false then { apikey = "vL9oVF5sHQXxveNqvKLUzft6QSufPMZr"; } else { }
       );
+      options.localAnnounceEnabled = true;
       folders = {
         "${syncFolder}/koulu" = {
           id = "koulu";
@@ -62,10 +63,13 @@ in
 
   networking.firewall = {
     allowedTCPPorts = [
-      8384
       22000
+    ]
+    ++ (lib.mkOptional config.hostSpec.isServer [ 8384 ]);
+    allowedUDPPorts = [
+      22000
+      21027
     ];
-    allowedUDPPorts = [ 22000 ];
   };
   users.users.osmo.packages = (
     if config.hostSpec.isServer == false then [ pkgs.syncthingtray ] else [ ]
