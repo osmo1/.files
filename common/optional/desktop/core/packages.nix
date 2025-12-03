@@ -4,19 +4,17 @@
     (with pkgs.stable; [
       # General
       ungoogled-chromium
-      bitwarden
-      whatsapp-for-linux
+      bitwarden-desktop
+      wasistlos
       obsidian
       anytype
       libreoffice-qt6-fresh
       aseprite
-      blender
       thunderbird
       anki
       element-desktop
       yubioath-flutter
       pomodoro-gtk
-      freecad-wayland
       speedcrunch
       rustdesk-flutter
       localsend
@@ -31,12 +29,14 @@
       xdg-desktop-portal-gtk
       openrgb
       pango
+      vial
     ])
     ++ (with pkgs.unstable; [
       zed-editor
+      # freecad-wayland
       #spotify
     ]);
   programs.kdeconnect.enable = (
-    if config.services.xserver.desktopManager.gnome.enable == true then false else true
+    if config.services.desktopManager.gnome.enable == true then false else true
   );
 }

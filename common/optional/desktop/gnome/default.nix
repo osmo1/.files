@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }:
 {
@@ -9,17 +8,17 @@
   imports = (lib.custom.scanPaths ./.) ++ [ ../core ];
 
   services = {
+    displayManager.gdm.enable = true;
+    desktopManager.gnome = {
+      enable = true;
+      extraGSettingsOverridePackages = [ pkgs.mutter ];
+      extraGSettingsOverrides = ''
+        [org.gnome.mutter]
+        experimental-features=['scale-monitor-framebuffer']
+      '';
+    };
     xserver = {
       enable = true;
-      displayManager.gdm.enable = true;
-      desktopManager.gnome = {
-        enable = true;
-        extraGSettingsOverridePackages = [ pkgs.mutter ];
-        extraGSettingsOverrides = ''
-          [org.gnome.mutter]
-          experimental-features=['scale-monitor-framebuffer']
-        '';
-      };
       xkb = {
         layout = "fi";
         variant = "winkeys";
@@ -67,6 +66,9 @@
       impatience
       alphabetical-app-grid
       just-perfection
+    ])
+    ++ (with pkgs.unstable; [
+      clapper
     ]);
   services.dbus.packages = with pkgs.stable; [ gnome2.GConf ]; # Shouldn't matter
   services.sysprof.enable = true;
@@ -94,11 +96,12 @@
             just-perfection.extensionUuid
           ];
           favorite-apps = [
-            "zen.desktop"
+            "zen-beta.desktop"
             "Alacritty.desktop"
             "org.gnome.Nautilus.desktop"
             "steam.desktop"
             "spotify.desktop"
+            "element.desktop"
           ];
           last-selected-power-profile = "performance";
           welcome-dialog-last-shown-version = "48.2";
@@ -259,7 +262,7 @@
         };
 
         "org/gnome/eog/view" = {
-          background-color = "#1f1f28";
+          # background-color = "#1f1f28";
         };
 
         "org/gnome/evolution-data-server" = {
@@ -293,7 +296,10 @@
         };
 
         "org/gnome/settings-daemon/plugins/power" = {
-          sleep-inactive-ac-type = "nothing";
+          sleep-inactive-ac-type = lib.gvariant.mkString "nothing";
+          sleep-inactive-battery-type = lib.gvariant.mkString "nothing";
+          sleep-inactive-ac-timeout = lib.gvariant.mkInt32 0;
+          sleep-inactive-battery-timeout = lib.gvariant.mkInt32 0;
         };
 
         "org/gnome/shell/extensions/advanced-alt-tab-window-switcher" = {
@@ -388,11 +394,11 @@
 
         "org/gnome/shell/extensions/caffeine" = {
           enable-mpris = true;
+          user-enabled = true;
           indicator-position-max = 2;
           prefs-default-height = 1405;
           prefs-default-width = 1256;
           show-indicator = "never";
-          user-enabled = true;
           inhibit-apps = [ "org.gnome.Shell.desktop" ];
         };
 
@@ -561,15 +567,6 @@
           mode = "none";
         };
       };
-    };
-    stylix.iconTheme = {
-      enable = true;
-      # package = pkgs.stable.adwaita-icon-theme;
-      # light = "Adwaita";
-      # dark = "Adwaita";
-      package = pkgs.stable.morewaita-icon-theme;
-      light = "MoreWaita";
-      dark = "MoreWaita";
     };
   };
 }

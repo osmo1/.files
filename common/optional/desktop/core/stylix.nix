@@ -100,6 +100,9 @@ in
     };
     targets = {
       plymouth.logoAnimated = false;
+      # Leaving this commented when using gnome gives a warning
+      # But using this results in broken looking qt apps on gnome
+      # qt.platform = lib.mkForce "qtct";
     };
   };
   environment.systemPackages = with pkgs.stable; [

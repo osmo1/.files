@@ -8,13 +8,23 @@
   home-manager.users.osmo = {
     programs.ssh = {
       enable = true;
-
-      # req'd for enabling yubikey-agent
-      extraConfig = ''
-        AddKeysToAgent yes
-      '';
+      enableDefaultConfig = false;
 
       matchBlocks = {
+        # Default values
+        "*" = {
+          forwardAgent = false;
+          addKeysToAgent = "yes";
+          compression = false;
+          serverAliveInterval = 0;
+          serverAliveCountMax = 3;
+          hashKnownHosts = false;
+          userKnownHostsFile = "~/.ssh/known_hosts";
+          controlMaster = "no";
+          controlPath = "~/.ssh/master-%r@%n:%p";
+          controlPersist = "no";
+        };
+        # Custom blocks
         "git" = {
           host = "github.com codeberg.org";
           user = "git";
@@ -29,14 +39,12 @@
           identitiesOnly = true;
           identityFile = [ "~/.ssh/restic" ];
         };
-        # "klusteri-1" = {
-        #   host = "klusteri-1 192.168.11.11";
-        #   user = "osmo";
-        #   forwardAgent = true;
-        #   identitiesOnly = true;
-        #   identityFile = [ "~/.ssh/klusteri-1" ];
-        # };
       };
+
+      # req'd for enabling yubikey-agent
+      extraConfig = ''
+        AddKeysToAgent yes
+      '';
     };
   };
   sops.secrets = {

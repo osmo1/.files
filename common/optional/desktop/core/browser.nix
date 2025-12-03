@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 {
   users.users.osmo.packages = with pkgs.stable; [
-    inputs.zen-browser.packages."${system}".default
+    inputs.zen-browser.packages."${stdenv.hostPlatform.system}".default
   ];
 
   home-manager.users.osmo = {
@@ -43,6 +43,7 @@
           };
           ExtensionSettings = mkExtensionSettings {
             "uBlock0@raymondhill.net" = "ublock-origin";
+            # "{5d361540-70a6-4ffe-b799-0a202b9c8d1e}" = "adnauseam";
             "{446900e4-71c2-419f-a6a7-df9c091e268b}" = "bitwarden-password-manager";
             "addon@darkreader.org" = "darkreader";
             "{762f9885-5a13-4abd-9c77-433dcd38b8fd}" = "return-youtube-dislikes";
@@ -53,12 +54,11 @@
           };
         };
     };
-    # Not in this stylix release yet
-    # stylix.targets.zen-browser = {
-    #   enable = true;
-    #   profileNames = [
-    #     "Default Profile"
-    #   ];
-    # };
+    stylix.targets.zen-browser = {
+      enable = true;
+      profileNames = [
+        "Default Profile"
+      ];
+    };
   };
 }

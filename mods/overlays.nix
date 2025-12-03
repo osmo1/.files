@@ -24,7 +24,7 @@ let
   # will be accessible through 'pkgs.unstable'
   stable-packages = final: _prev: {
     stable = import inputs.nixpkgs {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
       #overlays = modifications;
       overlays =
@@ -101,12 +101,13 @@ let
                   '';
                 };
           })
+          inputs.rust-overlay.overlays.default
         ];
     };
   };
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
     };
   };

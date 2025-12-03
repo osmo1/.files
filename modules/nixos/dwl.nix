@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.programs.dwl;
+  cfg = config.custom.programs.dwl;
 in
 {
-  options.programs.dwl = {
+  options.custom.programs.dwl = {
     enable = lib.mkEnableOption ''
       Dwl is a compact, hackable compositor for Wayland based on wlroots.
       You can manually launch Dwl by executing "exec dwl" on a TTY.

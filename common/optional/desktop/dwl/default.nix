@@ -14,7 +14,7 @@ in
     ../core
     ../wm
   ];
-  programs.dwl = {
+  custom.programs.dwl = {
     enable = true;
     package = pkgs.stable.dwl;
     extraSessionCommands = "dwlb &";

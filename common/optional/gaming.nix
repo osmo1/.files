@@ -2,16 +2,17 @@
 {
   users.users.osmo.packages =
     (with pkgs.stable; [
-      minetest
+      luanti
       heroic
       mangohud
       lutris-free
+      prismlauncher
+      atlauncher
     ])
     ++ (with pkgs.unstable; [
       nexusmods-app-unfree
       protontricks
-      prismlauncher
-      #(glfw3.override { withMinecraftPatch = true; }) # Still needed?
+      (glfw3.override { withMinecraftPatch = true; }) # Still needed?
     ]);
 
   programs.steam = {

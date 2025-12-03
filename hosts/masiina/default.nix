@@ -18,13 +18,14 @@ in
     ../../common/optional/plymouth.nix
     ../../common/optional/gaming.nix
     ../../common/optional/nvidia.nix
-    ../../common/optional/starcitizen.nix
+    # ../../common/optional/starcitizen.nix
     # ../../common/optional/auto-login.nix
     ../../common/optional/podman.nix
     ../../common/optional/syncthing.nix
     ../../common/optional/desktop/optional/virtmanager.nix
     ../../common/optional/desktop/optional/sunshine.nix
     ../../common/optional/desktop/optional/discord.nix
+    ../../common/optional/dev/rust.nix
   ];
 
   hostSpec = {
@@ -71,14 +72,25 @@ in
   ]
   ++ (with pkgs.stable; [
     swtpm
-    python312Full
+    # python312Full
+    (python3.withPackages (
+      python-pkgs: with python-pkgs; [
+        requests
+      ]
+    ))
     looking-glass-client
     swtpm
     qalculate-qt
-    cargo
-    rustc
-    gcc14
     mariadb
+    fractal
+    # cinny-desktop
+    mesa
+    libglvnd
+    librewolf
+    vivaldi
+    # jellyfin-media-player
+  ])
+  ++ (with pkgs.unstable; [
   ])
   ++ [
     inputs.blender-cuda.packages.x86_64-linux.default
@@ -88,10 +100,10 @@ in
   systemd.services.ryzen-undervolt = {
     description = "Ryzen 5700x3D undervolting service";
     wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.python312Full ];
+    path = [ pkgs.python312 ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${lib.getExe pkgs.python312Full} ${lib.getExe ryzen-undervolt} -c 8 -o -15";
+      ExecStart = "${lib.getExe pkgs.python312} ${lib.getExe ryzen-undervolt} -c 8 -o -15";
     };
   };
   hardware.cpu.amd = {
@@ -126,4 +138,5 @@ in
       };
     };
   };
+  hardware.graphics.enable = true;
 }
