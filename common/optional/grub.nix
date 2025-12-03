@@ -13,7 +13,17 @@
         efiSupport = true;
         useOSProber = true;
         # timeoutStyle = "hidden";
-      };
+
+      }
+      // (
+        if config.hostSpec.hostName == "masiina" then
+          {
+            gfxmodeEfi = "2560x1440";
+            gfxpayloadEfi = "keep";
+          }
+        else
+          { }
+      );
     };
   };
 }
