@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   config,
+  lib,
   ...
 }:
 {
@@ -12,11 +13,12 @@
     in
     {
       enable = true;
+      spotifyPackage = pkgs.unstable.spotify;
 
       enabledExtensions = with spicePkgs.extensions; [
         adblock
         hidePodcasts
-        shuffle # shuffle+ (special characters are sanitized out of extension names)
+        shuffle
       ];
       enabledCustomApps = with spicePkgs.apps; [
         newReleases
@@ -26,7 +28,9 @@
         pointer
       ];
 
-      # theme = spicePkgs.themes.text;
-      # colorScheme = if config.hostSpec.theme == "Tokyo Night" then "TokyoNight" else "Kanagawa";
+      theme = lib.mkForce spicePkgs.themes.text;
+      colorScheme = lib.mkForce (
+        if config.hostSpec.theme == "Tokyo Night" then "TokyoNight" else "Kanagawa"
+      );
     };
 }
