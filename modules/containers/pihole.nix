@@ -22,7 +22,7 @@ in
     };
     uiPort = mkOption {
       type = types.port;
-      default = 480;
+      default = 8080;
     };
     timeZone = mkOption {
       type = types.str;

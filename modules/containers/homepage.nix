@@ -43,6 +43,7 @@ in
       containers.homepage = {
         hostname = "homepage";
         image = "ghcr.io/gethomepage/homepage:${cfg.version}";
+        podman.user = "osmo";
         volumes = [
           "${cfg.dataLocation}:/app/config"
         ];

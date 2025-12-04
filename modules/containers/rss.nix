@@ -11,7 +11,7 @@ in
         type = types.str;
         default = "latest";
       };
-      morss = mkOption {
+      full-text = mkOption {
         type = types.str;
         default = "latest";
       };
@@ -20,21 +20,29 @@ in
         default = "latest";
       };
     };
-    morssUiPort = mkOption {
-      type = types.port;
-      default = 80;
+    ports = {
+      full-textUi = mkOption {
+        type = types.port;
+        default = 80;
+      };
+      freshUi = mkOption {
+        type = types.port;
+        default = 180;
+      };
+      dockerssUi = mkOption {
+        type = types.port;
+        default = 280;
+      };
     };
-    freshUiPort = mkOption {
-      type = types.port;
-      default = 180;
-    };
-    dockerssUiPort = mkOption {
-      type = types.port;
-      default = 280;
-    };
-    dataLocation = mkOption {
-      type = types.str;
-      default = "${config.users.users.osmo.home}/fresh";
+    volumes = {
+      fresh = mkOption {
+        type = types.str;
+        default = "${config.users.users.osmo.home}/fresh";
+      };
+      full-text = mkOption {
+        type = types.str;
+        default = "${config.users.users.osmo.home}/ftrss";
+      };
     };
     timeZone = mkOption {
       type = types.str;
@@ -49,7 +57,7 @@ in
         type = types.bool;
         default = true;
       };
-      urlBase = mkOption {
+      baseUrl = mkOption {
         type = types.str;
         default = "klusteri-0.serweri.zip";
       };
@@ -59,27 +67,30 @@ in
   };
 
   config = mkIf cfg.enable {
-    virtualisation.oci-containers = {
-      containers.morss = {
-        hostname = "morss";
-        image = "pictuga/morss:${cfg.version.morss}";
+    virtualisation.oci-containers.containers = {
+      full-text = {
+        hostname = "full-text";
+        image = "heussd/fivefilters-full-text-rss:${cfg.version.full-text}";
         volumes = [
+          "${cfg.volumes.full-text}:/var/www/html/cache/rss"
         ];
         ports = [
-          "${toString cfg.morssUiPort}:8000"
+          "${toString cfg.ports.full-textUi}:80"
         ];
         environment = {
+          FTR_ADMIN_PASSWORD = "test";
         };
         extraOptions = [
         ];
+        # user = "1000:100";
         labels =
           (
             if cfg.enableHomePage == true then
               {
                 "homepage.group" = "RSS";
-                "homepage.name" = "Morss";
-                "homepage.icon" = "morss";
-                "homepage.href" = "https://morss.${cfg.traefik.urlBase}";
+                "homepage.name" = "Full text rss";
+                "homepage.icon" = "full-text-rss";
+                "homepage.href" = "https://ftrss.${cfg.traefik.baseUrl}";
                 "homepage.description" = "Full text rss generator";
               }
             else
@@ -89,23 +100,23 @@ in
             if cfg.traefik.enable == true then
               {
                 "traefik.enable" = "true";
-                "traefik.http.routers.morss.rule" = "Host(`morss.${cfg.traefik.urlBase}`)";
-                "traefik.http.routers.morss.entrypoints" = "websecure";
-                "traefik.http.routers.morss.tls.certresolver" = "porkbun";
-                "traefik.http.services.morss.loadbalancer.server.port" = "8000";
+                "traefik.http.routers.full-text.rule" = "Host(`ftrss.${cfg.traefik.baseUrl}`)";
+                "traefik.http.routers.full-text.entrypoints" = "websecure";
+                "traefik.http.routers.full-text.tls.certresolver" = "porkbun";
+                "traefik.http.services.full-text.loadbalancer.server.port" = "80";
               }
             else
               { }
           );
       };
-      containers.fresh = {
+      fresh = {
         hostname = "fresh";
         image = "lscr.io/linuxserver/freshrss:${cfg.version.fresh}";
         volumes = [
-          "${cfg.dataLocation}:/config"
+          "${cfg.volumes.fresh}:/config"
         ];
         ports = [
-          "${toString cfg.freshUiPort}:80"
+          "${toString cfg.ports.freshUi}:80"
         ];
         environment = {
           PUID = "1000";
@@ -121,7 +132,7 @@ in
                 "homepage.group" = "RSS";
                 "homepage.name" = "Fresh rss";
                 "homepage.icon" = "freshrss";
-                "homepage.href" = "https://fresh.${cfg.traefik.urlBase}";
+                "homepage.href" = "https://fresh.${cfg.traefik.baseUrl}";
                 "homepage.description" = "RSS feed aggregator";
               }
             else
@@ -131,7 +142,7 @@ in
             if cfg.traefik.enable == true then
               {
                 "traefik.enable" = "true";
-                "traefik.http.routers.fresh.rule" = "Host(`fresh.${cfg.traefik.urlBase}`)";
+                "traefik.http.routers.fresh.rule" = "Host(`fresh.${cfg.traefik.baseUrl}`)";
                 "traefik.http.routers.fresh.entrypoints" = "websecure";
                 "traefik.http.routers.fresh.tls.certresolver" = "porkbun";
                 "traefik.http.services.fresh.loadbalancer.server.port" = "80";
@@ -140,12 +151,12 @@ in
               { }
           );
       };
-      containers.dockerss = {
+      dockerss = {
         hostname = "dockerss";
         image = "theconnman/docker-hub-rss:${cfg.version.dockerss}";
 
         ports = [
-          "${toString cfg.dockerssUiPort}:3000"
+          "${toString cfg.ports.dockerssUi}:3000"
         ];
 
         labels =
@@ -155,7 +166,7 @@ in
                 "homepage.group" = "RSS";
                 "homepage.name" = "dockerss";
                 "homepage.icon" = "dockerss";
-                "homepage.href" = "https://dockerss.${cfg.traefik.urlBase}";
+                "homepage.href" = "https://dockerss.${cfg.traefik.baseUrl}";
                 "homepage.description" = "RSS feed aggregator";
               }
             else
@@ -165,7 +176,7 @@ in
             if cfg.traefik.enable == true then
               {
                 "traefik.enable" = "true";
-                "traefik.http.routers.dockerss.rule" = "Host(`dockerss.${cfg.traefik.urlBase}`)";
+                "traefik.http.routers.dockerss.rule" = "Host(`dockerss.${cfg.traefik.baseUrl}`)";
                 "traefik.http.routers.dockerss.entrypoints" = "websecure";
                 "traefik.http.routers.dockerss.tls.certresolver" = "porkbun";
                 "traefik.http.services.dockerss.loadbalancer.server.port" = "3000";
@@ -175,12 +186,10 @@ in
           );
       };
     };
-    networking.firewall.allowedTCPPorts = [
-      cfg.morssUiPort
-      cfg.freshUiPort
-    ];
+    networking.firewall.allowedTCPPorts = builtins.attrValues cfg.ports;
     systemd.tmpfiles.rules = [
-      "d ${cfg.dataLocation} 0770 osmo users - -"
+      "d ${cfg.volumes.fresh} 0770 osmo users - -"
+      "d ${cfg.volumes.full-text} 0770 osmo users - -"
     ];
   };
 }
