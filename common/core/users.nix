@@ -10,6 +10,7 @@
     mutableUsers = false;
     users.osmo = {
       isNormalUser = true;
+      uid = 1000;
       # FIXME: Impermanence trickery
       #initialPassword = "osmo";
       # Sops (user secrets) does not want to work with impermanence so im (not) using git-agecrypt
@@ -25,8 +26,10 @@
         "libvirtd"
         "disk"
       ];
+      linger = false;
     };
   };
+  users.groups.users.gid = 100;
   # FIXME: Impermanence trickery, no idea if this safe but the fucking passwords don't want to work
   #     environment.persistence."/persist" = {
   #         directories = [ "/run/secrets-for-users"  ];
