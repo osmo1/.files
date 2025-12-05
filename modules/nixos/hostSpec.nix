@@ -24,6 +24,10 @@
       type = lib.types.attrsOf lib.types.anything;
       description = "An attribute set of work-related information if isWork is true";
     };
+    ip = lib.mkOption {
+      type = lib.types.str;
+      description = "The ip of the host, used for hosting services, does not set ip";
+    };
     domain = lib.mkOption {
       type = lib.types.str;
       description = "The domain of the host";
