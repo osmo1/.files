@@ -4,7 +4,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.stable.greetd.tuigreet}/bin/tuigreet --time";
+        command = "${pkgs.stable.tuigreet}/bin/tuigreet --time";
         user = "${config.hostSpec.username}";
       };
     };

@@ -3,7 +3,7 @@
   home-manager.users.osmo = {
     programs.rofi = {
       enable = true;
-      package = pkgs.stable.rofi-wayland;
+      package = pkgs.stable.rofi;
     };
   };
 }
