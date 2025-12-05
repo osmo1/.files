@@ -11,12 +11,13 @@
     ../../common/optional/tpm.nix
     ../../common/optional/ssh.nix
     ../../common/optional/systemd-boot.nix
+    ../../common/optional/restic.nix
+    ../../common/optional/beszel.nix
   ];
-
-  system.stateVersion = "24.05";
 
   hostSpec = {
     hostName = "klusteri-2";
     isServer = true;
+    ip = "192.168.11.12";
   };
 }

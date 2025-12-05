@@ -14,4 +14,5 @@
   services.cachefilesd = {
     enable = true;
   };
+  boot.supportedFilesystems = [ "nfs" ];
 }
