@@ -14,6 +14,7 @@
     ../../common/optional/ssh.nix
     ../../common/optional/nfs-mount.nix
     ../../common/optional/systemd-boot.nix
+    ../../common/optional/beszel.nix
   ];
 
   hostSpec = {
@@ -23,20 +24,22 @@
 
   restic = {
     enable = true;
+    remote = true;
     extraExcludes = [
       "/home/osmo/tmp"
     ];
   };
 
+  # This should be moved to a module for the klusteris
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-sdk
+      # intel-media-sdk # Insecure, still unsure if replacement needed
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       libvdpau-va-gl
       intel-ocl
       intel-vaapi-driver
-      vaapiVdpau
+      libva-vdpau-driver
       intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
     ];
   };

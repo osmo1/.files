@@ -57,10 +57,6 @@ in
         type = types.str;
         default = "latest";
       };
-      readarr = mkOption {
-        type = types.str;
-        default = "latest";
-      };
       bazarr = mkOption {
         type = types.str;
         default = "latest";
@@ -81,7 +77,7 @@ in
         type = types.str;
         default = "latest";
       };
-      stump = mkOption {
+      booklore = mkOption {
         type = types.str;
         default = "latest";
       };
@@ -94,6 +90,14 @@ in
         default = "latest";
       };
       cross-seed = mkOption {
+        type = types.str;
+        default = "latest";
+      };
+      profilarr = mkOption {
+        type = types.str;
+        default = "latest";
+      };
+      ephemera = mkOption {
         type = types.str;
         default = "latest";
       };
@@ -135,6 +139,7 @@ in
           extraOptions = [
             "--network=container:gluetun"
           ];
+          dependsOn = [ "gluetun" ];
 
           labels =
             (
@@ -367,54 +372,6 @@ in
                 { }
             );
         };
-      containers.readarr =
-        let
-          port = toString (cfg.uiPortStart + 600);
-        in
-        {
-          hostname = "readarr";
-          image = "lscr.io/linuxserver/readarr:${cfg.version.readarr}";
-
-          volumes = [
-            "${cfg.dataLocation}/readarr:/config"
-            "${cfg.options.mediaLocation}/books:/books"
-            "${cfg.options.mediaLocation}/downloads:/downloads"
-          ];
-          ports = [
-            "${port}:8787"
-          ];
-          environment = {
-            PUID = "1000";
-            PGID = "100";
-            TZ = "${cfg.timeZone}";
-          };
-
-          labels =
-            (
-              if cfg.enableHomePage == true then
-                {
-                  "homepage.group" = "*arr";
-                  "homepage.name" = "Readarr";
-                  "homepage.icon" = "readarr";
-                  "homepage.href" = "https://readarr.${cfg.options.urlBase}";
-                  "homepage.description" = "Downloads and organizes literature";
-                }
-              else
-                { }
-            )
-            // (
-              if cfg.enableTraefik == true then
-                {
-                  "traefik.enable" = "true";
-                  "traefik.http.routers.readarr.rule" = "Host(`readarr.${cfg.options.urlBase}`)";
-                  "traefik.http.routers.readarr.entrypoints" = "websecure";
-                  "traefik.http.routers.readarr.tls.certresolver" = "porkbun";
-                  "traefik.http.services.readarr.loadbalancer.server.port" = "8787";
-                }
-              else
-                { }
-            );
-        };
       containers.bazarr =
         let
           port = toString (cfg.uiPortStart + 700);
@@ -524,7 +481,7 @@ in
         in
         {
           hostname = "jellyseerr";
-          image = "fallenbagel/jellyseerr:${cfg.version.jellyseerr}";
+          image = "ghcr.io/fallenbagel/jellyseerr:${cfg.version.jellyseerr}";
 
           volumes = [
             "${cfg.dataLocation}/jellyseerr:/app/config"
@@ -580,7 +537,7 @@ in
           ];
           environment = {
             # Ok, I should really figure this out
-            POSTGRES_HOST = "10.88.0.5"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
+            POSTGRES_HOST = "postgres-bit"; # I can't figure out why local hostnames don't work even thought they are on the same network (default because nixos doesnt allow declarative networks)
             POSTGRES_PASSWORD = "postgres";
           };
           cmd = [
@@ -593,6 +550,7 @@ in
           extraOptions = [
             "--network=container:gluetun"
           ];
+          dependsOn = [ "gluetun" ];
 
           labels =
             (
@@ -635,26 +593,38 @@ in
           POSTGRES_DB = "bitmagnet";
           PGUSER = "postgres";
         };
+        extraOptions = [
+          "--network=container:gluetun"
+          # "--network-alias=postgres-bit"
+        ];
+        dependsOn = [ "gluetun" ];
       };
-      containers.stump =
+      containers.booklore =
         let
           port = toString (cfg.uiPortStart + 1100);
         in
         {
-          hostname = "stump";
-          image = "aaronleopold/stump:${cfg.version.stump}";
+          hostname = "booklore";
+          image = "ghcr.io/booklore-app/booklore:${cfg.version.booklore}";
+          # user = "1000:100";
 
           volumes = [
-            "${cfg.dataLocation}/stump/config:/config"
-            "${cfg.dataLocation}/stump/data:/data"
-            "${cfg.options.mediaLocation}/books:/books"
+            "${cfg.dataLocation}/booklore/config:/app/data"
+            "${cfg.options.mediaLocation}/books/sorted:/books"
+            "${cfg.options.mediaLocation}/books/raw:/bookdrop"
           ];
           ports = [
-            "${port}:10801"
+            "${port}:6060"
           ];
           environment = {
             PUID = "1000";
             PGID = "100";
+            "TZ" = cfg.timeZone;
+            "DATABASE_URL" = "jdbc:mariadb://mariadb:3306/booklore";
+            "DATABASE_USERNAME" = "booklore";
+            "DATABASE_PASSWORD" = "your_secure_password";
+            "BOOKLORE_PORT" = "6060";
+            "SWAGGER_ENABLED" = "false";
           };
 
           labels =
@@ -662,9 +632,9 @@ in
               if cfg.enableHomePage == true then
                 {
                   "homepage.group" = "*arr";
-                  "homepage.name" = "stump";
-                  "homepage.icon" = "stump";
-                  "homepage.href" = "https://stump.${cfg.options.urlBase}";
+                  "homepage.name" = "booklore";
+                  "homepage.icon" = "booklore";
+                  "homepage.href" = "https://booklore.${cfg.options.urlBase}";
                   "homepage.description" = "ODPS server for ebooks";
                 }
               else
@@ -674,15 +644,38 @@ in
               if cfg.enableTraefik == true then
                 {
                   "traefik.enable" = "true";
-                  "traefik.http.routers.stump.rule" = "Host(`stump.${cfg.options.urlBase}`)";
-                  "traefik.http.routers.stump.entrypoints" = "websecure";
-                  "traefik.http.routers.stump.tls.certresolver" = "porkbun";
-                  "traefik.http.services.stump.loadbalancer.server.port" = "10801";
+                  "traefik.http.routers.booklore.rule" = "Host(`booklore.${cfg.options.urlBase}`)";
+                  "traefik.http.routers.booklore.entrypoints" = "websecure";
+                  "traefik.http.routers.booklore.tls.certresolver" = "porkbun";
+                  "traefik.http.services.booklore.loadbalancer.server.port" = "6060";
                 }
               else
                 { }
             );
         };
+      containers.mariadb = {
+        hostname = "mariadb";
+        image = "lscr.io/linuxserver/mariadb:11.4.5";
+
+        volumes = [
+          "${cfg.dataLocation}/mariadb:/config"
+        ];
+        ports = [
+          "5432:5432"
+        ];
+        environment = {
+          "PUID" = "1000";
+          "PGID" = "100";
+          "TZ" = cfg.timeZone;
+          "MYSQL_ROOT_PASSWORD" = "super_secure_password";
+          "MYSQL_DATABASE" = "booklore";
+          "MYSQL_USER" = "booklore";
+          "MYSQL_PASSWORD" = "your_secure_password";
+        };
+        extraOptions = [
+          "--network-alias=mariadb"
+        ];
+      };
       containers.gluetun = {
         hostname = "gluetun";
         image = "qmcgaw/gluetun:${cfg.version.gluetun}";
@@ -803,6 +796,103 @@ in
                 { }
             );
         };
+      containers.profilarr =
+        let
+          port = toString (cfg.uiPortStart + 1400);
+        in
+        {
+          hostname = "profilarr";
+          image = "santiagosayshey/profilarr:${cfg.version.profilarr}";
+
+          # user = "1000:100";
+          volumes = [
+            "${cfg.dataLocation}/profilarr:/config"
+          ];
+          ports = [
+            "${port}:6868"
+          ];
+          environment = {
+            TZ = "${cfg.timeZone}";
+          };
+
+          labels =
+            (
+              if cfg.enableHomePage == true then
+                {
+                  "homepage.group" = "*arr";
+                  "homepage.name" = "profilarr";
+                  "homepage.icon" = "profilarr";
+                  "homepage.href" = "https://profilarr.${cfg.options.urlBase}";
+                  "homepage.description" = "Automatically set profiles for radarr and sonarr";
+                }
+              else
+                { }
+            )
+            // (
+              if cfg.enableTraefik == true then
+                {
+                  "traefik.enable" = "true";
+                  "traefik.http.routers.profilarr.rule" = "Host(`profilarr.${cfg.options.urlBase}`)";
+                  "traefik.http.routers.profilarr.entrypoints" = "websecure";
+                  "traefik.http.routers.profilarr.tls.certresolver" = "porkbun";
+                  "traefik.http.services.profilarr.loadbalancer.server.port" = "6868";
+                }
+              else
+                { }
+            );
+        };
+      containers.ephemera =
+        let
+          port = toString (cfg.uiPortStart + 1500);
+        in
+        {
+          hostname = "ephemera";
+          image = "ghcr.io/orwellianepilogue/ephemera:${cfg.version.ephemera}";
+
+          # I need to setup rootless
+          # user = "1000:100";
+          volumes = [
+            "${cfg.dataLocation}/ephemera/data:/app/data"
+            "${cfg.dataLocation}/ephemera/downloads:/app/downloads"
+          ];
+          ports = [
+            "${port}:8286"
+          ];
+          environment = {
+            TZ = "${cfg.timeZone}";
+            AA_BASE_URL = "https://annas-archive.se";
+            FLARESOLVERR_URL = "http://flaresolverr:1280";
+            LG_BASE_URL = "https://libgen.li";
+            # PUID = "1000";
+            # PGID = "100";
+          };
+
+          labels =
+            (
+              if cfg.enableHomePage == true then
+                {
+                  "homepage.group" = "*arr";
+                  "homepage.name" = "Ephemera";
+                  "homepage.icon" = "ephemera";
+                  "homepage.href" = "https://ephemera.${cfg.options.urlBase}";
+                  "homepage.description" = "Book archive downloader";
+                }
+              else
+                { }
+            )
+            // (
+              if cfg.enableTraefik == true then
+                {
+                  "traefik.enable" = "true";
+                  "traefik.http.routers.ephemera.rule" = "Host(`ephemera.${cfg.options.urlBase}`)";
+                  "traefik.http.routers.ephemera.entrypoints" = "websecure";
+                  "traefik.http.routers.ephemera.tls.certresolver" = "porkbun";
+                  "traefik.http.services.ephemera.loadbalancer.server.port" = "8286";
+                }
+              else
+                { }
+            );
+        };
     };
     networking.firewall.allowedTCPPorts = [ cfg.uiPortStart ];
     systemd.tmpfiles.rules = [
@@ -813,21 +903,25 @@ in
       "d ${cfg.dataLocation}/sonarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/radarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/lidarr 0770 osmo users - -"
-      "d ${cfg.dataLocation}/readarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/bazarr 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin/cache 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyfin/config 0770 osmo users - -"
       "d ${cfg.dataLocation}/jellyseerr 0770 osmo users - -"
       "d ${cfg.dataLocation}/postgres 0770 osmo users - -"
-      "d ${cfg.dataLocation}/stump 0770 osmo users - -"
-      "d ${cfg.dataLocation}/stump/config 0770 osmo users - -"
-      "d ${cfg.dataLocation}/stump/data 0770 osmo users - -"
+      "d ${cfg.dataLocation}/booklore 0770 osmo users - -"
+      "d ${cfg.dataLocation}/booklore/config 0770 osmo users - -"
+      "d ${cfg.dataLocation}/booklore/data 0770 osmo users - -"
       "d ${cfg.dataLocation}/gluetun 0770 osmo users - -"
       "d ${cfg.dataLocation}/autobrr 0770 osmo users - -"
       "d ${cfg.dataLocation}/cross-seed 0770 osmo users - -"
       "d ${cfg.dataLocation}/cross-seed/config 0770 osmo users - -"
       "d ${cfg.dataLocation}/cross-seed/output 0770 osmo users - -"
+      "d ${cfg.dataLocation}/mariadb 0770 osmo users - -"
+      "d ${cfg.dataLocation}/profilarr 0770 osmo users - -"
+      "d ${cfg.dataLocation}/ephemera 0770 osmo users - -"
+      "d ${cfg.dataLocation}/ephemera/data 0770 osmo users - -"
+      "d ${cfg.dataLocation}/ephemera/downloads 0770 osmo users - -"
     ];
     #services.resolved.enable = true;
   };
